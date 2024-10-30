@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dio: ^5.7.0
+  shared_preferences: ^2.3.2
+  encrypt: ^5.0.3
+  pointycastle: ^3.9.1
 
 
   # The following adds the Cupertino Icons font to your application.
