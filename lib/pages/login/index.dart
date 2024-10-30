@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:linyu_mobile/api/user_api.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:pointycastle/asymmetric/api.dart';
 import '../../components/custom_text_field/index.dart';
+
+final _useApi = UserApi();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,16 +15,23 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() {
+  void _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
-
-    if (username == "admin" && password == "123456") {
+    final publicKeyResult = await _useApi.publicKey();
+    if (publicKeyResult['code'] != 0) {}
+    String key = publicKeyResult['data'];
+    final parsedKey = encrypt.RSAKeyParser().parse(key) as RSAPublicKey;
+    final encrypter = encrypt.Encrypter(encrypt.RSA(publicKey: parsedKey));
+    final encryptedPassword = encrypter.encrypt(password).base64;
+    final loginResult = await _useApi.login(username, encryptedPassword);
+    print(loginResult['code']);
+    if (loginResult['code'] == 0) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text("登录成功"),
-          content: Text("欢迎，$username!"),
+          content: Text("欢迎，${loginResult['data']}!"),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
