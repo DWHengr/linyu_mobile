@@ -40,13 +40,14 @@ class CustomTextField extends StatelessWidget {
               filled: true,
               // 填充背景
               fillColor: const Color(0xFFEDF2F9),
+              isDense: true,
               // 填充背景颜色
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide.none, // 去除边框
               ),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             ),
           ),
         ),
