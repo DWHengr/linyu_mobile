@@ -4,6 +4,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../navigation/index.dart';
 import '../../components/custom_text_field/index.dart';
 
 final _useApi = UserApi();
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-token', loginResult['data']['token']);
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => ChatListPage()),
+        MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
         (route) => false,
       );
     } else {
