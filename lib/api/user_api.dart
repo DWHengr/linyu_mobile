@@ -4,6 +4,13 @@ import 'package:linyu_mobile/api/Http.dart';
 
 class UserApi {
   final Dio _dio = Http().dio;
+  static final UserApi _instance = UserApi._internal();
+
+  UserApi._internal();
+
+  factory UserApi() {
+    return _instance;
+  }
 
   Future<Map<String, dynamic>> login(String account, String password) async {
     try {
