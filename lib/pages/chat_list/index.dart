@@ -79,78 +79,56 @@ class _ChatListPageState extends State<ChatListPage> {
         title: const Text('聊天列表'),
         backgroundColor: const Color(0xFFF9FBFF),
         actions: [
-          Theme(
-            data: Theme.of(context).copyWith(
-              splashColor: const Color(0xFFEAEAEA),
-              highlightColor: const Color(0xFFEAEAEA),
+          PopupMenuButton(
+            icon: const Icon(Icons.add, size: 32),
+            offset: const Offset(0, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
             ),
-            child: PopupMenuButton(
-              icon: const Icon(Icons.add, size: 32),
-              offset: const Offset(0, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
+            color: const Color(0xFFFFFFFF),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              PopupMenuItem(
+                value: 1,
+                height: 40,
+                onTap: () {},
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(IconData(0xe61e, fontFamily: 'IconFont'), size: 20),
+                    SizedBox(width: 12),
+                    Text('扫一扫', style: TextStyle(fontSize: 14)),
+                  ],
+                ),
               ),
-              color: const Color(0xFFFFFFFF),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                PopupMenuItem(
-                  value: 1,
-                  height: 40,
-                  onTap: () {},
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(IconData(0xe61e, fontFamily: 'IconFont'), size: 20),
-                      SizedBox(width: 12),
-                      Text('扫一扫', style: TextStyle(fontSize: 14)),
-                    ],
-                  ),
+              _buildPopupDivider(),
+              PopupMenuItem(
+                value: 1,
+                height: 40,
+                onTap: () {},
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person_add, size: 20),
+                    SizedBox(width: 12),
+                    Text('添加好友', style: TextStyle(fontSize: 14)),
+                  ],
                 ),
-                PopupMenuItem<int>(
-                  enabled: false,
-                  height: 1, // 禁用这个菜单项，以显示为分割线
-                  child: Container(
-                    height: 1,
-                    padding: const EdgeInsets.all(0),
-                    color: Colors.grey[300], // 设置分割线的颜色
-                  ),
+              ),
+              _buildPopupDivider(),
+              PopupMenuItem(
+                value: 2,
+                height: 40,
+                onTap: () {},
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.group_add, size: 20),
+                    SizedBox(width: 12),
+                    Text('创建群聊', style: TextStyle(fontSize: 14)),
+                  ],
                 ),
-                PopupMenuItem(
-                  value: 1,
-                  height: 40,
-                  onTap: () {},
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.person_add, size: 20),
-                      SizedBox(width: 12),
-                      Text('添加好友', style: TextStyle(fontSize: 14)),
-                    ],
-                  ),
-                ),
-                PopupMenuItem<int>(
-                  enabled: false,
-                  height: 1,
-                  child: Container(
-                    height: 1,
-                    padding: const EdgeInsets.all(0),
-                    color: Colors.grey[300],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 2,
-                  height: 40,
-                  onTap: () {},
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.group_add, size: 20),
-                      SizedBox(width: 12),
-                      Text('创建群聊', style: TextStyle(fontSize: 14)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -262,8 +240,6 @@ class _ChatListPageState extends State<ChatListPage> {
             // 添加点击事件
           },
           borderRadius: BorderRadius.circular(12),
-          splashColor: const Color(0xFFEAEAEA),
-          highlightColor: const Color(0xFFEAEAEA),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             decoration: BoxDecoration(
@@ -380,6 +356,18 @@ class _ChatListPageState extends State<ChatListPage> {
     );
   }
 
+  PopupMenuEntry<int> _buildPopupDivider() {
+    return PopupMenuItem<int>(
+      enabled: false,
+      height: 1,
+      child: Container(
+        height: 1,
+        padding: const EdgeInsets.all(0),
+        color: Colors.grey[200],
+      ),
+    );
+  }
+
   Widget _buildSearchItem(dynamic friend, String id) {
     return Material(
       borderRadius: BorderRadius.circular(12),
@@ -389,8 +377,6 @@ class _ChatListPageState extends State<ChatListPage> {
           // 添加点击事件
         },
         borderRadius: BorderRadius.circular(12),
-        splashColor: const Color(0xFFEAEAEA),
-        highlightColor: const Color(0xFFEAEAEA),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           decoration: BoxDecoration(
