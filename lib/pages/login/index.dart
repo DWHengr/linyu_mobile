@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/index.dart';
@@ -10,6 +9,8 @@ import '../../components/custom_text_field/index.dart';
 final _useApi = UserApi();
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("确定"),
+            child: const Text("确定"),
           ),
         ],
       ),
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-token', loginResult['data']['token']);
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
+        MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
         (route) => false,
       );
     } else {

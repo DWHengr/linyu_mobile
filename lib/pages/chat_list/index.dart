@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
@@ -199,7 +200,9 @@ class _ChatListPageState extends State<ChatListPage> {
           IconButton(
             icon: const Icon(Icons.add, size: 32),
             onPressed: () {
-              print('图标按钮被点击');
+              if (kDebugMode) {
+                print('图标按钮被点击');
+              }
             },
           ),
         ],
@@ -211,7 +214,9 @@ class _ChatListPageState extends State<ChatListPage> {
             CustomSearchBox(
               isCentered: false,
               onChanged: (value) {
-                print(value);
+                if (kDebugMode) {
+                  print(value);
+                }
               },
             ),
             Expanded(
@@ -266,7 +271,7 @@ class _ChatListPageState extends State<ChatListPage> {
           SlidableAction(
             padding: const EdgeInsets.all(0),
             onPressed: (context) => _toggleTopStatus(index),
-            backgroundColor: Color(0xFF4C9BFF),
+            backgroundColor: const Color(0xFF4C9BFF),
             foregroundColor: Colors.white,
             icon: chat.isTop ? Icons.push_pin_outlined : Icons.push_pin,
             label: chat.isTop ? '取消置顶' : '置顶',

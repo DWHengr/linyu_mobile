@@ -1,6 +1,7 @@
 // lib/services/user_service.dart
 import 'package:dio/dio.dart';
-import 'package:linyu_mobile/api/Http.dart';
+import 'package:flutter/foundation.dart';
+import 'package:linyu_mobile/api/http.dart';
 
 class UserApi {
   final Dio _dio = Http().dio;
@@ -13,7 +14,9 @@ class UserApi {
       );
       return response.data;
     } on DioException catch (e) {
-      print('Get profile error: ${e.message}');
+      if (kDebugMode) {
+        print('Get profile error: ${e.message}');
+      }
       rethrow;
     }
   }
