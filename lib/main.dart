@@ -8,9 +8,8 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('x-token');
   runApp(MyApp(
-      initialPage: token != null
-          ? const CustomBottomNavigationBar()
-          : LoginPage()));
+      initialPage:
+          token != null ? const CustomBottomNavigationBar() : LoginPage()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +29,8 @@ class MyApp extends StatelessWidget {
           primary: const Color(0xFF4C9BFF),
           onPrimary: Colors.white,
         ),
+        splashColor: const Color(0x80EAEAEA),
+        highlightColor: const Color(0x80EAEAEA),
         useMaterial3: true,
       ),
       home: initialPage,

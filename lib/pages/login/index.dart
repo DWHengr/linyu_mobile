@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/index.dart';
@@ -51,6 +50,9 @@ class _LoginPageState extends State<LoginPage> {
     if (loginResult['code'] == 0) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-token', loginResult['data']['token']);
+      await prefs.setString('username', loginResult['data']['username']);
+      await prefs.setString('account', loginResult['data']['account']);
+      await prefs.setString('portrait', loginResult['data']['portrait']);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
         (route) => false,
