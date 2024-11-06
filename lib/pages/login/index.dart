@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:linyu_mobile/api/user_api.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:linyu_mobile/pages/chat_list/index.dart';
+import 'package:pointycastle/asymmetric/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../navigation/index.dart';
 import '../../components/custom_text_field/index.dart';
+
+final _useApi = UserApi();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,38 +18,45 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() {
+  void _showDialog(String content, [String title = '登录失败']) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("确定"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
-
-    if (username == "admin" && password == "123456") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("登录成功"),
-          content: Text("欢迎，$username!"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("确定"),
-            ),
-          ],
-        ),
+    if (username.isEmpty || password.isEmpty) {
+      _showDialog("用户名或密码不能为空~");
+      return;
+    }
+    final publicKeyResult = await _useApi.publicKey();
+    if (publicKeyResult['code'] != 0) {}
+    String key = publicKeyResult['data'];
+    final parsedKey = encrypt.RSAKeyParser().parse(key) as RSAPublicKey;
+    final encrypter = encrypt.Encrypter(encrypt.RSA(publicKey: parsedKey));
+    final encryptedPassword = encrypter.encrypt(password).base64;
+    final loginResult = await _useApi.login(username, encryptedPassword);
+    if (loginResult['code'] == 0) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('x-token', loginResult['data']['token']);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
+        (route) => false,
       );
     } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("登录失败"),
-          content: Text("用户名或密码错误，请重试"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("确定"),
-            ),
-          ],
-        ),
-      );
+      _showDialog("用户名或密码错误，请重试尝试~");
     }
   }
 
