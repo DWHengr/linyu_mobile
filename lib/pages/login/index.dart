@@ -52,6 +52,9 @@ class _LoginPageState extends State<LoginPage> {
     if (loginResult['code'] == 0) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-token', loginResult['data']['token']);
+      await prefs.setString('username', loginResult['data']['username']);
+      await prefs.setString('account', loginResult['data']['account']);
+      await prefs.setString('portrait', loginResult['data']['portrait']);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
         (route) => false,
