@@ -29,4 +29,9 @@ class UserApi {
     final response = await _dio.get('/v1/api/login/public-key');
     return response.data;
   }
+
+  Future<Map<String, dynamic>> info() async {
+    final response = await _dio.get('/v1/api/user/info');
+    return response.data;
+  }
 }
