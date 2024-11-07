@@ -55,7 +55,7 @@ class _ChatListPageState extends State<ChatListPage> {
   }
 
   void _onSearchFriend(String friendInfo) {
-    if (friendInfo == null || friendInfo.trim() == '') {
+    if (friendInfo.trim() == '') {
       setState(() {
         _searchList = [];
       });

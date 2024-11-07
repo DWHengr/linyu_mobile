@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
-import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final _userApi = UserApi();
@@ -35,10 +35,11 @@ class _MinePageState extends State<Mine> {
   void _handlerLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-      (route) => false,
-    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(builder: (context) => LoginPage()),
+    //   (route) => false,
+    // );
+    Get.offAndToNamed('/login');
   }
 
   @override
@@ -78,12 +79,10 @@ class _MinePageState extends State<Mine> {
                     child: CachedNetworkImage(
                       imageUrl: currentUserInfo['portrait'] ?? '',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xffffffff),
-                            strokeWidth: 2,
-                          ),
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xffffffff),
+                          strokeWidth: 2,
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
@@ -180,7 +179,7 @@ class _MinePageState extends State<Mine> {
                   _leastSelectButton('切换账号', () {}),
                   const SizedBox(height: 2),
                   _leastSelectButton(
-                      '退出', color: const Color(0xFFFFF4C4C), _handlerLogout),
+                      '退出', color: const Color(0xfffff4c4c), _handlerLogout),
                 ],
               ),
             ),

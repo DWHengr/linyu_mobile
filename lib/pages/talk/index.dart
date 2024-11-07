@@ -308,9 +308,7 @@ class _TalkPageState extends State<Talk> {
                   ),
                 ),
               ),
-              errorWidget: (context, url, error) => Container(
-                child: Image.asset('assets/images/empty-bg.png'),
-              ),
+              errorWidget: (context, url, error) => Image.asset('assets/images/empty-bg.png'),
             );
           } else {
             return Container(

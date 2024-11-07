@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final String hintText;
+  final Widget? suffix;
 
   const CustomTextField({
     super.key,
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.hintText = '请输入内容',
     this.obscureText = false,
+    this.suffix,
   });
 
   @override
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hintText,
+              suffix: suffix,
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
               filled: true,
               // 填充背景

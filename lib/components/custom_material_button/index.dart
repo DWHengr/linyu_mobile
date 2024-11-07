@@ -1,5 +1,37 @@
 import 'package:flutter/material.dart';
 
+import '../../pages/register/logic.dart';
+import '../custom_text_field/index.dart';
+import '../getx_config/config.dart';
+
+class Countdown extends CustomWidget<RegisterPageLogic> {
+  Countdown({super.key});
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return CustomTextField(
+      labelText: '验证码',
+      hintText: "请输入验证码",
+      controller: controller.usernameController,
+      suffix: GestureDetector(
+        onTap: controller.onTapSendMail,
+        child: Text(
+          controller.countdownTime > 0
+              ? '${controller.countdownTime}后重新获取'
+              : '获取验证码',
+          style: TextStyle(
+            fontSize: 14,
+            color: controller.countdownTime > 0
+                ? const Color.fromARGB(255, 183, 184, 195)
+                : const Color.fromARGB(255, 17, 132, 255),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class CustomMaterialButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onTap;

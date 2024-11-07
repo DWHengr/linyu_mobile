@@ -36,6 +36,7 @@ dependencies:
   pointycastle: ^3.9.1
   flutter_slidable: ^3.1.1
   cached_network_image: ^3.4.1
+  get: ^4.6.6
 
 
   # The following adds the Cupertino Icons font to your application.
