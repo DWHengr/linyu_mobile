@@ -142,63 +142,85 @@ class _ChatListPageState extends State<ChatListPage> {
                 _onSearchFriend(value);
               },
             ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  _onGetChatList();
-                  return Future.delayed(const Duration(milliseconds: 700));
-                },
-                child: ListView(
-                  children: [
-                    if (_searchList.isNotEmpty) ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          "搜索结果",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C9BFF),
+            if (_searchList.isNotEmpty ||
+                _otherList.isNotEmpty ||
+                _topList.isNotEmpty)
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    _onGetChatList();
+                    return Future.delayed(const Duration(milliseconds: 700));
+                  },
+                  child: ListView(
+                    children: [
+                      if (_searchList.isNotEmpty) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            "搜索结果",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4C9BFF),
+                            ),
                           ),
                         ),
-                      ),
-                      ..._searchList.map((friend) =>
-                          _buildSearchItem(friend, friend['friendId'])),
-                    ],
-                    if (_topList.isNotEmpty) ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          "置顶",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C9BFF),
+                        ..._searchList.map((friend) =>
+                            _buildSearchItem(friend, friend['friendId'])),
+                      ],
+                      if (_topList.isNotEmpty) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            "置顶",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4C9BFF),
+                            ),
                           ),
                         ),
-                      ),
-                      ..._topList
-                          .map((chat) => _buildChatItem(chat, chat['id'])),
-                    ],
-                    if (_otherList.isNotEmpty) ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          "全部",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C9BFF),
+                        ..._topList
+                            .map((chat) => _buildChatItem(chat, chat['id'])),
+                      ],
+                      if (_otherList.isNotEmpty) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            "全部",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4C9BFF),
+                            ),
                           ),
                         ),
-                      ),
-                      ..._otherList
-                          .map((chat) => _buildChatItem(chat, chat['id'])),
+                        ..._otherList
+                            .map((chat) => _buildChatItem(chat, chat['id'])),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
-            ),
+            if (_searchList.isEmpty && _otherList.isEmpty && _topList.isEmpty)
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/empty-bg.png',
+                        width: 100,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        '暂无聊天记录~',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),
