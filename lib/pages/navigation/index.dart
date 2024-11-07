@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/mine/mine.dart';
+import 'package:linyu_mobile/pages/talk/index.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({super.key});
@@ -62,7 +63,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         children: const [
           ChatListPage(),
           Center(child: Text('通讯列表', style: TextStyle(fontSize: 24))),
-          Center(child: Text('说说', style: TextStyle(fontSize: 24))),
+          Talk(),
           Mine(),
         ],
       ),
