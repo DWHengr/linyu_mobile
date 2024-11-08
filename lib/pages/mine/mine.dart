@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
+import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -73,26 +74,10 @@ class _MinePageState extends State<Mine> {
                     ),
                     borderRadius: BorderRadius.circular(35),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(35),
-                    child: CachedNetworkImage(
-                      imageUrl: currentUserInfo['portrait'] ?? '',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xffffffff),
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.grey[300],
-                        child:
-                            Image.asset('assets/images/default-portrait.jpeg'),
-                      ),
-                    ),
-                  ),
+                  child: CustomPortrait(
+                      url: currentUserInfo['portrait'] ?? '',
+                      size: 70,
+                      radius: 35),
                 ),
                 const SizedBox(width: 10),
                 Expanded(

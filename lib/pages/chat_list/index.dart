@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/utils/date.dart';
 
@@ -277,33 +278,7 @@ class _ChatListPageState extends State<ChatListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: CachedNetworkImage(
-                      imageUrl: chat['portrait'],
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.grey[300],
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xffffffff),
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.grey[300],
-                        child:
-                            Image.asset('assets/images/default-portrait.jpeg'),
-                      ),
-                    ),
-                  ),
+                  CustomPortrait(url: chat['portrait']),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -414,32 +389,7 @@ class _ChatListPageState extends State<ChatListPage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: CachedNetworkImage(
-                    imageUrl: friend['portrait'],
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.grey[300],
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xffffffff),
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.grey[300],
-                      child: Image.asset('assets/images/default-portrait.jpeg'),
-                    ),
-                  ),
-                ),
+                CustomPortrait(url: friend['portrait']),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -454,7 +404,8 @@ class _ChatListPageState extends State<ChatListPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          if (friend['remark']?.toString().trim() != '')
+                          if (friend['remark'] != null &&
+                              friend['remark']?.toString().trim() != '')
                             Text(
                               '(${friend['remark']})',
                               style: const TextStyle(
