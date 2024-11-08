@@ -14,7 +14,7 @@ class FriendApi {
   }
 
   Future<Map<String, dynamic>> list() async {
-    final response = await _dio.get('/v1/api/chat-list/list');
+    final response = await _dio.get('/v1/api/friend/list');
     return response.data;
   }
 
