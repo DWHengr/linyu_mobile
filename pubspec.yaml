@@ -37,6 +37,8 @@ dependencies:
   flutter_slidable: ^3.1.1
   cached_network_image: ^3.4.1
   get: ^4.6.6
+  # add this line to your dependencies
+  fluttertoast: ^8.2.8
 
 
   # The following adds the Cupertino Icons font to your application.

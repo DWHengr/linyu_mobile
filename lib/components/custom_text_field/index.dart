@@ -38,7 +38,7 @@ class CustomTextField extends StatelessWidget {
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hintText,
-              suffix: suffix,
+              suffixIcon: suffix,
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
               filled: true,
               // 填充背景

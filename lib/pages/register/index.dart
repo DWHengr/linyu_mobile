@@ -73,7 +73,7 @@ class RegisterPage extends CustomWidget<RegisterPageLogic> {
                         const SizedBox(height: 15.0),
                         CustomTextField(
                           labelText: "账号",
-                          controller: controller.usernameController,
+                          controller: controller.accountController,
                         ),
                         const SizedBox(height: 15.0),
                         CustomTextField(
@@ -84,7 +84,7 @@ class RegisterPage extends CustomWidget<RegisterPageLogic> {
                         const SizedBox(height: 20.0),
                         CustomTextField(
                           labelText: "邮箱",
-                          controller: controller.passwordController,
+                          controller: controller.mailController,
                         ),
                         const SizedBox(height: 20.0),
                         Countdown(
@@ -95,7 +95,7 @@ class RegisterPage extends CustomWidget<RegisterPageLogic> {
                           widthFactor: 0.8,
                           child: ElevatedButton(
                             // onPressed: ()=>controller.login(context),
-                            onPressed: () {},
+                            onPressed: controller.onRegister,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 5,
