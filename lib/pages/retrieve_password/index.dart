@@ -103,7 +103,7 @@ class RetrievePassword extends CustomWidget<RetrievePasswordLogic> {
                               foregroundColor: Colors.white,
                             ),
                             child: const Text(
-                              "立即注册",
+                              "提  交",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

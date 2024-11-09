@@ -29,10 +29,7 @@ class RegisterPageLogic extends GetxController {
   //计时器
   late Timer _timer;
   int _countdownTime = 0;
-
-
   int get countdownTime => _countdownTime;
-
   set countdownTime(int i) {
     _countdownTime = i;
     update([
@@ -41,9 +38,7 @@ class RegisterPageLogic extends GetxController {
   }
 
   int _userTextLength = 0;
-
   int get userTextLength => _userTextLength;
-
   set userTextLength(int i) {
     _userTextLength = i;
     update([const Key("register")]);
