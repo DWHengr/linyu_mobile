@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/getx_config/config.dart';
-import 'package:linyu_mobile/pages/login/logic.dart';
+import 'package:linyu_mobile/pages/register/logic.dart';
+
+import '../../components/custom_material_button/index.dart';
 import '../../components/custom_text_field/index.dart';
 
-class LoginPage extends CustomWidget<LoginPageLogic> {
-  LoginPage({super.key});
+
+class RegisterPage extends CustomWidget<RegisterPageLogic> {
+  RegisterPage({super.key});
 
   @override
   Widget buildWidget(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -38,7 +42,7 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                     width: screenWidth * 0.25,
                   ),
                   const Text(
-                    "林语",
+                    "欢迎注册",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w900,
@@ -63,20 +67,41 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         CustomTextField(
-                          labelText: "账号",
+                          labelText: "用户名",
                           controller: controller.usernameController,
+                          onChanged: controller.onUserTextChanged,
+                          suffix: Text('${controller.userTextLength}/30'),
+                        ),
+                        const SizedBox(height: 15.0),
+                        CustomTextField(
+                          labelText: "账号",
+                          controller: controller.accountController,
+                          onChanged: controller.onAccountTextChanged,
+                          suffix: Text('${controller.accountTextLength}/30'),
                         ),
                         const SizedBox(height: 15.0),
                         CustomTextField(
                           labelText: "密码",
                           controller: controller.passwordController,
                           obscureText: true,
+                          onChanged: controller.onPasswordTextChanged,
+                          suffix: Text('${controller.passwordTextLength}/16'),
+                        ),
+                        const SizedBox(height: 20.0),
+                        CustomTextField(
+                          labelText: "邮箱",
+                          controller: controller.mailController,
+                        ),
+                        const SizedBox(height: 20.0),
+                        Countdown(
+                          key: const Key("countdown"),
                         ),
                         const SizedBox(height: 20.0),
                         FractionallySizedBox(
                           widthFactor: 0.8,
                           child: ElevatedButton(
-                            onPressed: ()=>controller.login(context),
+                            // onPressed: ()=>controller.login(context),
+                            onPressed: controller.onRegister,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 5,
@@ -86,36 +111,14 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                               foregroundColor: Colors.white,
                             ),
                             child: const Text(
-                              "登  录",
+                              "立即注册",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 10.0),
-                        TextButton(
-                          onPressed: ()=>controller.toRetrievePassword(),
-                          child: const Text(
-                            "忘记密码",
-                            style: TextStyle(
-                              fontSize: 16,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: ()=>controller.toRegister(),
-                          child: const Text(
-                            "注册账号",
-                            style: TextStyle(
-                              fontSize: 16,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-
+                        )
                       ],
                     ),
                   ),

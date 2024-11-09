@@ -6,6 +6,9 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final String hintText;
+  final Widget? suffixIcon;
+  final Widget? suffix;
+  final ValueChanged<String>? onChanged;
 
   const CustomTextField({
     super.key,
@@ -13,6 +16,9 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.hintText = '请输入内容',
     this.obscureText = false,
+    this.suffix,
+    this.onChanged,
+    this.suffixIcon
   });
 
   @override
@@ -23,7 +29,7 @@ class CustomTextField extends StatelessWidget {
         Text(
           labelText,
           style:
-              const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0), // 标签样式
+          const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0), // 标签样式
         ),
         const SizedBox(height: 5.0), // 标签和输入框之间的间距
         Container(
@@ -34,8 +40,11 @@ class CustomTextField extends StatelessWidget {
           child: TextField(
             controller: controller,
             obscureText: obscureText,
+            onChanged: onChanged,
             decoration: InputDecoration(
               hintText: hintText,
+              suffixIcon: suffixIcon,
+              suffix: suffix,
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
               filled: true,
               // 填充背景
@@ -47,7 +56,7 @@ class CustomTextField extends StatelessWidget {
                 borderSide: BorderSide.none, // 去除边框
               ),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             ),
           ),
         ),

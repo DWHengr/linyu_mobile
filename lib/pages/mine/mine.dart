@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
@@ -36,10 +38,11 @@ class _MinePageState extends State<Mine> {
   void _handlerLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-      (route) => false,
-    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(builder: (context) => LoginPage()),
+    //   (route) => false,
+    // );
+    Get.offAndToNamed('/login');
   }
 
   @override
