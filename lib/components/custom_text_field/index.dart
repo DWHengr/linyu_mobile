@@ -1,11 +1,16 @@
 // custom_text_field.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
   final TextEditingController controller;
   final bool obscureText;
   final String hintText;
+  final Widget? suffixIcon;
+  final Widget? suffix;
+  final ValueChanged<String>? onChanged;
+  final int? inputLimit;
 
   const CustomTextField({
     super.key,
@@ -13,6 +18,10 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.hintText = '请输入内容',
     this.obscureText = false,
+    this.suffix,
+    this.onChanged,
+    this.suffixIcon,
+    this.inputLimit,
   });
 
   @override
@@ -34,8 +43,17 @@ class CustomTextField extends StatelessWidget {
           child: TextField(
             controller: controller,
             obscureText: obscureText,
+            onChanged: onChanged,
+            inputFormatters: inputLimit != null
+                ? <TextInputFormatter>[
+                    //只输入数字
+                    LengthLimitingTextInputFormatter(inputLimit) //限制长度
+                  ]
+                : null,
             decoration: InputDecoration(
               hintText: hintText,
+              suffixIcon: suffixIcon,
+              suffix: suffix,
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
               filled: true,
               // 填充背景
