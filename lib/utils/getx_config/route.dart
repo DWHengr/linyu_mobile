@@ -4,6 +4,7 @@ import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:linyu_mobile/pages/mine/index.dart';
+import 'package:linyu_mobile/pages/mine/mine_qr_code/index.dart';
 import 'package:linyu_mobile/pages/navigation/index.dart';
 import 'package:linyu_mobile/pages/password/retrieve/index.dart';
 import 'package:linyu_mobile/pages/password/update/index.dart';
@@ -16,7 +17,12 @@ import 'ControllerBinding.dart';
 
 class AppRoutes {
   static List<GetPage> pageRoute = [
-    GetPage(name: '/', page: () => const CustomBottomNavigationBar()),
+    GetPage(
+      name: '/',
+      page: () => const NavigationPage(
+        key: Key('main'),
+      ),
+    ),
     GetPage(
       name: '/login',
       page: () => LoginPage(
@@ -84,6 +90,13 @@ class AppRoutes {
       name: '/qr_login_affirm',
       page: () => QrLoginAffirmPage(
         key: const Key('qr_login_affirm'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/mine_qr_code',
+      page: () => MineQRCodePage(
+        key: const Key('mine_qr_code'),
       ),
       binding: ControllerBinding(),
     ),

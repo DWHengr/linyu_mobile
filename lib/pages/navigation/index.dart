@@ -1,91 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/mine/index.dart';
+import 'package:linyu_mobile/pages/navigation/logic.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+class NavigationPage extends CustomWidgetObx<NavigationLogic> {
+  const NavigationPage({required super.key});
 
-  @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
-}
-
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _currentIndex = 0;
-  final PageController _pageController = PageController();
-
-  final List<String> _selectedIcons = [
-    'assets/images/chat.png',
-    'assets/images/user.png',
-    'assets/images/talk.png',
-    'assets/images/mine.png',
-  ];
-
-  final List<String> _unselectedIcons = [
-    'assets/images/chat-empty.png',
-    'assets/images/user-empty.png',
-    'assets/images/talk-empty.png',
-    'assets/images/mine-empty.png',
-  ];
-
-  final List<String> _name = [
-    '消息',
-    '通讯',
-    '说说',
-    '我的',
-  ];
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-    _pageController.jumpToPage(index);
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return ChatListPage();
+      case 1:
+        return ContactsPage();
+      case 2:
+        return TalkPage();
+      case 3:
+        return MinePage();
+      default:
+        return ChatListPage();
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        children: [
-          ChatListPage(),
-          ContactsPage(),
-          TalkPage(),
-          MinePage(),
-        ],
-      ),
+      body: Obx(() => _buildPage((controller.currentIndex.value))),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
+        currentIndex: controller.currentIndex.value,
+        onTap: controller.onTap,
         selectedItemColor: Theme.of(context).primaryColor,
         showUnselectedLabels: true,
         backgroundColor: const Color(0xFFEDF2F9),
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
-        items: List.generate(_unselectedIcons.length, (index) {
+        items: List.generate(controller.unselectedIcons.length, (index) {
           return BottomNavigationBarItem(
             icon: Image.asset(
-              _currentIndex == index
-                  ? _selectedIcons[index]
-                  : _unselectedIcons[index],
+              controller.currentIndex == index
+                  ? controller.selectedIcons[index]
+                  : controller.unselectedIcons[index],
               width: 26,
               height: 26,
             ),
-            label: _name[index],
+            label: controller.name[index],
           );
         }),
       ),

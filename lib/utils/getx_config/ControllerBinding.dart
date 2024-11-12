@@ -3,6 +3,8 @@ import 'package:linyu_mobile/pages/chat_list/logic.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/pages/login/logic.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
+import 'package:linyu_mobile/pages/mine/mine_qr_code/logic.dart';
+import 'package:linyu_mobile/pages/navigation/logic.dart';
 import 'package:linyu_mobile/pages/password/retrieve/logic.dart';
 import 'package:linyu_mobile/pages/password/update/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/logic.dart';
@@ -14,6 +16,7 @@ import 'package:linyu_mobile/pages/talk/logic.dart';
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut(() => NavigationLogic());
     Get.lazyPut(() => LoginPageLogic());
     Get.lazyPut(() => RegisterPageLogic());
     Get.lazyPut(() => RetrievePasswordLogic());
@@ -24,5 +27,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => TalkLogic());
     Get.lazyPut(() => QRCodeScanLogic());
     Get.lazyPut(() => QRLoginAffirmLogic());
+    Get.lazyPut(() => MineQRCodeLogic());
   }
 }
