@@ -25,6 +25,14 @@ class UserApi {
     }
   }
 
+  Future<Map<String, dynamic>> qrLogin(String? key) async {
+    final response = await _dio.post(
+      '/v1/api/login/qr',
+      data: {'key': key},
+    );
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> publicKey() async {
     final response = await _dio.get('/v1/api/login/public-key');
     return response.data;
@@ -46,48 +54,50 @@ class UserApi {
   Future<Map<String, dynamic>> emailVerification(String email) async {
     final response = await _dio.post(
       '/v1/api/user/email/verify',
-      data: {'email':email},
+      data: {'email': email},
     );
     return response.data;
   }
 
-  Future<Map<String, dynamic>> register(String username,String account,String password,String email,String code) async {
+  Future<Map<String, dynamic>> register(String username, String account,
+      String password, String email, String code) async {
     final response = await _dio.post(
       '/v1/api/user/register',
       data: {
-        'username':username,
-        'account':account,
-        'password':password,
-        'email':email,
-        'code':code
+        'username': username,
+        'account': account,
+        'password': password,
+        'email': email,
+        'code': code
       },
     );
     return response.data;
   }
 
-  Future<Map<String, dynamic>> forget(String account,String password,String email,String code) async {
+  Future<Map<String, dynamic>> forget(
+      String account, String password, String email, String code) async {
     final response = await _dio.post(
       '/v1/api/user/forget',
       data: {
-        'account':account,
-        'password':password,
-        'email':email,
-        'code':code
+        'account': account,
+        'password': password,
+        'email': email,
+        'code': code
       },
     );
     return response.data;
   }
 
-  Future<Map<String, dynamic>> updatePassword(String oldPassword,String newPassword,String confirmPassword) async {
+  Future<Map<String, dynamic>> updatePassword(
+      String oldPassword, String newPassword, String confirmPassword) async {
     final response = await _dio.post(
       '/v1/api/user/update/password',
       data: {
-        'oldPassword':oldPassword,
-        'newPassword':newPassword,
-        'confirmPassword':confirmPassword,
+        'oldPassword': oldPassword,
+        'newPassword': newPassword,
+        'confirmPassword': confirmPassword,
       },
     );
     return response.data;
   }
-
 }
