@@ -19,7 +19,7 @@ class AppRoutes {
   static List<GetPage> pageRoute = [
     GetPage(
       name: '/',
-      page: () => const NavigationPage(
+      page: () => NavigationPage(
         key: Key('main'),
       ),
     ),

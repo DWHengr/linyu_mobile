@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/chat_group_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
@@ -18,7 +19,7 @@ class ContactsLogic extends GetxController {
   void init() {
     SharedPreferences.getInstance().then((prefs) {
       currentUserId = prefs.getString('userId') ?? '';
-      update();
+      update([const Key("contacts")]);
     });
     onNotifyFriendList();
     onChatGroupList();
@@ -29,7 +30,7 @@ class ContactsLogic extends GetxController {
     _friendApi.list().then((res) {
       if (res['code'] == 0) {
         friendList = res['data'];
-        update();
+        update([const Key("contacts")]);
       }
     });
   }
@@ -38,7 +39,7 @@ class ContactsLogic extends GetxController {
     _chatGroupApi.list().then((res) {
       if (res['code'] == 0) {
         chatGroupList = res['data'];
-        update();
+        update([const Key("contacts")]);
       }
     });
   }
@@ -47,13 +48,13 @@ class ContactsLogic extends GetxController {
     _notifyApi.friendList().then((res) {
       if (res['code'] == 0) {
         notifyFriendList = res['data'];
-        update();
+        update([const Key("contacts")]);
       }
     });
   }
 
   void handlerTabTapped(int index) {
     selectedIndex = index;
-    update();
+    update([const Key("contacts")]);
   }
 }

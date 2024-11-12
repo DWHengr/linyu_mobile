@@ -28,7 +28,7 @@ class QRCodeScanLogic extends GetxController {
         qrText = scanData.code;
         isScanning = false; // 停止扫描
         controller.pauseCamera(); // 暂停摄像头
-        update();
+        update([const Key("qr_code_scan")]);
         await player.play(AssetSource('sounds/success.mp3'));
         final result = await _qrApi.status(scanData.code);
         if (result['code'] == 0) {
@@ -46,7 +46,7 @@ class QRCodeScanLogic extends GetxController {
   void restartScanning() {
     qrText = null;
     isScanning = true;
-    update();
+    update([const Key("qr_code_scan")]);
     qrViewController?.resumeCamera(); // 恢复摄像头
   }
 

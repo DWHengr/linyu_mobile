@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
@@ -14,7 +15,7 @@ class ChatListLogic extends GetxController {
       if (res['code'] == 0) {
         topList = res['data']['tops'];
         otherList = res['data']['others'];
-        update();
+        update([const Key("chat_list")]);
       }
     });
   }
@@ -39,13 +40,13 @@ class ChatListLogic extends GetxController {
     if (friendInfo == null || friendInfo.trim() == '') {
       searchList = [];
       searchList = [];
-      update();
+      update([const Key("chat_list")]);
       return;
     }
     _friendApi.search(friendInfo).then((res) {
       if (res['code'] == 0) {
         searchList = res['data'];
-        update();
+        update([const Key("chat_list")]);
       }
     });
   }

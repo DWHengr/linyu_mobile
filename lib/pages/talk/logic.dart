@@ -34,7 +34,7 @@ class TalkLogic extends GetxController {
   void onTalkList() {
     if (!hasMore || isLoading) return;
     isLoading = true;
-    update();
+    update([const Key("talk")]);
     _talkApi.list(index, 10).then((res) {
       if (res['code'] == 0) {
         final List<dynamic> newTalks = res['data'];
@@ -51,7 +51,7 @@ class TalkLogic extends GetxController {
     }).catchError(() {
       isLoading = false;
     }).whenComplete(() {
-      update();
+      update([const Key("talk")]);
     });
   }
 
@@ -59,7 +59,7 @@ class TalkLogic extends GetxController {
     talkList.clear();
     index = 0;
     hasMore = true;
-    update();
+    update([const Key("talk")]);
     onTalkList();
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,7 @@ class MineLogic extends GetxController {
     currentUserInfo['name'] = prefs.getString('username');
     currentUserInfo['portrait'] = prefs.getString('portrait');
     currentUserInfo['account'] = prefs.getString('account');
-    update();
+    update([const Key("mine")]);
   }
 
   void handlerLogout() async {
