@@ -1,80 +1,22 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:linyu_mobile/api/chat_list_api.dart';
-import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
-import 'package:linyu_mobile/pages/qr_code_scan/index.dart';
-import 'package:linyu_mobile/pages/qr_login_affirm/index.dart';
+import 'package:linyu_mobile/pages/chat_list/logic.dart';
 import 'package:linyu_mobile/utils/date.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-final _chatListApi = ChatListApi();
-final _friendApi = FriendApi();
-
-class ChatListPage extends StatefulWidget {
-  const ChatListPage({super.key});
+class ChatListPage extends CustomWidget<ChatListLogic> {
+  ChatListPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ChatListPageState();
-}
-
-class _ChatListPageState extends State<ChatListPage> {
-  late List<dynamic> _topList = [];
-  late List<dynamic> _otherList = [];
-  late List<dynamic> _searchList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _onGetChatList();
-  }
-
-  void _onGetChatList() {
-    _chatListApi.list().then((res) {
-      if (res['code'] == 0) {
-        setState(() {
-          _topList = res['data']['tops'];
-          _otherList = res['data']['others'];
-        });
-      }
-    });
-  }
-
-  void _onTopStatus(String id, bool isTop) {
-    _chatListApi.top(id, !isTop).then((res) {
-      if (res['code'] == 0) {
-        _onGetChatList();
-      }
-    });
-  }
-
-  void _onDeleteChatList(String id) {
-    _chatListApi.delete(id).then((res) {
-      if (res['code'] == 0) {
-        _onGetChatList();
-      }
-    });
-  }
-
-  void _onSearchFriend(String friendInfo) {
-    if (friendInfo == null || friendInfo.trim() == '') {
-      setState(() {
-        _searchList = [];
-      });
-      return;
-    }
-    _friendApi.search(friendInfo).then((res) {
-      if (res['code'] == 0) {
-        setState(() {
-          _searchList = res['data'];
-        });
-      }
-    });
+  init(BuildContext context) {
+    controller.onGetChatList();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
@@ -93,14 +35,7 @@ class _ChatListPageState extends State<ChatListPage> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const QRCodeScannerPage(),
-                    ),
-                  );
-                },
+                onTap: () => Get.toNamed('/qr_code_scan'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -149,21 +84,21 @@ class _ChatListPageState extends State<ChatListPage> {
             CustomSearchBox(
               isCentered: false,
               onChanged: (value) {
-                _onSearchFriend(value);
+                controller.onSearchFriend(value);
               },
             ),
-            if (_searchList.isNotEmpty ||
-                _otherList.isNotEmpty ||
-                _topList.isNotEmpty)
+            if (controller.searchList.isNotEmpty ||
+                controller.otherList.isNotEmpty ||
+                controller.topList.isNotEmpty)
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    _onGetChatList();
+                    controller.onGetChatList();
                     return Future.delayed(const Duration(milliseconds: 700));
                   },
                   child: ListView(
                     children: [
-                      if (_searchList.isNotEmpty) ...[
+                      if (controller.searchList.isNotEmpty) ...[
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
@@ -175,10 +110,10 @@ class _ChatListPageState extends State<ChatListPage> {
                             ),
                           ),
                         ),
-                        ..._searchList.map((friend) =>
+                        ...controller.searchList.map((friend) =>
                             _buildSearchItem(friend, friend['friendId'])),
                       ],
-                      if (_topList.isNotEmpty) ...[
+                      if (controller.topList.isNotEmpty) ...[
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
@@ -190,10 +125,10 @@ class _ChatListPageState extends State<ChatListPage> {
                             ),
                           ),
                         ),
-                        ..._topList
+                        ...controller.topList
                             .map((chat) => _buildChatItem(chat, chat['id'])),
                       ],
-                      if (_otherList.isNotEmpty) ...[
+                      if (controller.otherList.isNotEmpty) ...[
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
@@ -205,14 +140,16 @@ class _ChatListPageState extends State<ChatListPage> {
                             ),
                           ),
                         ),
-                        ..._otherList
+                        ...controller.otherList
                             .map((chat) => _buildChatItem(chat, chat['id'])),
                       ],
                     ],
                   ),
                 ),
               ),
-            if (_searchList.isEmpty && _otherList.isEmpty && _topList.isEmpty)
+            if (controller.searchList.isEmpty &&
+                controller.otherList.isEmpty &&
+                controller.topList.isEmpty)
               Expanded(
                 child: Center(
                   child: Column(
@@ -246,7 +183,7 @@ class _ChatListPageState extends State<ChatListPage> {
         children: [
           SlidableAction(
             padding: const EdgeInsets.all(0),
-            onPressed: (context) => _onTopStatus(id, chat['isTop']),
+            onPressed: (context) => controller.onTopStatus(id, chat['isTop']),
             backgroundColor: const Color(0xFF4C9BFF),
             foregroundColor: Colors.white,
             icon: chat['isTop'] ? Icons.push_pin_outlined : Icons.push_pin,
@@ -255,7 +192,7 @@ class _ChatListPageState extends State<ChatListPage> {
           ),
           SlidableAction(
             padding: const EdgeInsets.all(0),
-            onPressed: (context) => _onDeleteChatList(id),
+            onPressed: (context) => controller.onDeleteChatList(id),
             backgroundColor: const Color(0xFFFF4C4C),
             foregroundColor: Colors.white,
             icon: Icons.delete,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:linyu_mobile/utils/getx_config/ControllerBinding.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
-import 'package:linyu_mobile/pages/mine/mine.dart';
+import 'package:linyu_mobile/pages/mine/index.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -61,11 +61,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             _currentIndex = index;
           });
         },
-        children: const [
+        children: [
           ChatListPage(),
           ContactsPage(),
-          Talk(),
-          Mine(),
+          TalkPage(),
+          MinePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

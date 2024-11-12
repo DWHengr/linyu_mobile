@@ -2,46 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
+import 'logic.dart';
 
-class Mine extends StatefulWidget {
-  const Mine({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _MinePageState();
-}
-
-class _MinePageState extends State<Mine> {
-  late dynamic currentUserInfo = {};
+class MinePage extends CustomWidget<MineLogic> {
+  MinePage({super.key});
 
   @override
-  void initState() {
-    super.initState();
-    _onGetCurrentUserInfo();
-  }
-
-  void _onGetCurrentUserInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      currentUserInfo['name'] = prefs.getString('username');
-      currentUserInfo['portrait'] = prefs.getString('portrait');
-      currentUserInfo['account'] = prefs.getString('account');
-    });
-  }
-
-  void _handlerLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   MaterialPageRoute(builder: (context) => LoginPage()),
-    //   (route) => false,
-    // );
-    Get.offAndToNamed('/login');
+  void init(BuildContext context) {
+    controller.init();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
       body: Column(
@@ -73,7 +47,7 @@ class _MinePageState extends State<Mine> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                   child: CustomPortrait(
-                      url: currentUserInfo['portrait'] ?? '',
+                      url: controller.currentUserInfo['portrait'] ?? '',
                       size: 70,
                       radius: 35),
                 ),
@@ -114,7 +88,8 @@ class _MinePageState extends State<Mine> {
                                     child: Opacity(
                                       opacity: 0,
                                       child: Text(
-                                        currentUserInfo['name'] ?? '',
+                                        controller.currentUserInfo['name'] ??
+                                            '',
                                         style: const TextStyle(fontSize: 16),
                                       ),
                                     ),
@@ -122,7 +97,7 @@ class _MinePageState extends State<Mine> {
                                 ),
                               ),
                               Text(
-                                currentUserInfo['name'] ?? '',
+                                controller.currentUserInfo['name'] ?? '',
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -130,7 +105,7 @@ class _MinePageState extends State<Mine> {
                           ),
                           const SizedBox(height: 10), // 间距
                           Text(
-                            '账号：${currentUserInfo['account'] ?? ''}',
+                            '账号：${controller.currentUserInfo['account'] ?? ''}',
                             style: TextStyle(
                                 fontSize: 12, color: Colors.grey[700]),
                           ),
@@ -165,7 +140,9 @@ class _MinePageState extends State<Mine> {
                   _leastSelectButton('切换账号', () {}),
                   const SizedBox(height: 2),
                   _leastSelectButton(
-                      '退出', color: const Color(0xFFFFF4C4C), _handlerLogout),
+                      '退出',
+                      color: const Color(0xFFFFF4C4C),
+                      controller.handlerLogout),
                 ],
               ),
             ),

@@ -1,94 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:linyu_mobile/api/chat_group_api.dart';
-import 'package:linyu_mobile/api/friend_api.dart';
-import 'package:linyu_mobile/api/notify_api.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:linyu_mobile/pages/contacts/logic.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-final _friendApi = FriendApi();
-final _chatGroupApi = ChatGroupApi();
-final _notifyApi = NotifyApi();
-
-class ContactsPage extends StatefulWidget {
-  const ContactsPage({super.key});
+class ContactsPage extends CustomWidget<ContactsLogic> {
+  ContactsPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ContactsPageState();
-}
-
-class _ContactsPageState extends State<ContactsPage> {
-  List<String> tabs = ['我的群聊', '我的好友', '好友通知'];
-  int selectedIndex = 1;
-  String currentUserId = '';
-  List<dynamic> _friendList = [];
-  List<dynamic> _chatGroupList = [];
-  List<dynamic> _notifyFriendList = [];
-
-  @override
-  initState() {
-    super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      setState(() {
-        currentUserId = prefs.getString('userId') ?? '';
-      });
-    });
-  }
-
-  void _onFriendList() {
-    _friendApi.list().then((res) {
-      if (res['code'] == 0) {
-        setState(() {
-          _friendList = res['data'];
-        });
-      }
-    });
-  }
-
-  void _onChatGroupList() {
-    _chatGroupApi.list().then((res) {
-      if (res['code'] == 0) {
-        setState(() {
-          _chatGroupList = res['data'];
-        });
-      }
-    });
-  }
-
-  void _onNotifyFriendList() {
-    _notifyApi.friendList().then((res) {
-      if (res['code'] == 0) {
-        setState(() {
-          _notifyFriendList = res['data'];
-        });
-      }
-    });
-  }
-
-  void handlerTabTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
+  init(BuildContext context) {
+    controller.init();
   }
 
   Widget getContent(String tab) {
     switch (tab) {
       case '好友通知':
-        _onNotifyFriendList();
+        controller.onNotifyFriendList();
         return ListView(
           children: [
-            ..._notifyFriendList.map((notify) => Container(
+            ...controller.notifyFriendList.map((notify) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: _buildNotifyFriendItem(notify),
                 )),
           ],
         );
       case '我的群聊':
-        _onChatGroupList();
+        controller.onChatGroupList();
         return ListView(
           children: [
-            ..._chatGroupList.map(
+            ...controller.chatGroupList.map(
               (group) => Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: _buildChatGroupItem(group),
@@ -97,10 +38,10 @@ class _ContactsPageState extends State<ContactsPage> {
           ],
         );
       case '我的好友':
-        _onFriendList();
+        controller.onFriendList();
         return ListView(
           children: [
-            ..._friendList.map((group) {
+            ...controller.friendList.map((group) {
               return ExpansionTile(
                 iconColor: const Color(0xFF4C9BFF),
                 visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -134,7 +75,7 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Widget _buildNotifyFriendItem(dynamic notify) {
-    bool isFromCurrentUser = currentUserId == notify['fromId'];
+    bool isFromCurrentUser = controller.currentUserId == notify['fromId'];
     return Material(
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
@@ -405,7 +346,7 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
@@ -477,26 +418,27 @@ class _ContactsPageState extends State<ContactsPage> {
             const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(tabs.length, (index) {
+              children: List.generate(controller.tabs.length, (index) {
                 return Expanded(
                   child: AnimatedAlign(
                     duration: const Duration(milliseconds: 300),
                     alignment: Alignment.center,
                     child: GestureDetector(
-                      onTap: () => handlerTabTapped(index),
+                      onTap: () => controller.handlerTabTapped(index),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         padding: const EdgeInsets.all(5),
                         margin: EdgeInsets.symmetric(
-                          horizontal: index == selectedIndex ? 4.0 : 0.0,
+                          horizontal:
+                              index == controller.selectedIndex ? 4.0 : 0.0,
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1),
                           color: Colors.transparent,
                           border: Border(
                             bottom: BorderSide(
-                              color: index == selectedIndex
+                              color: index == controller.selectedIndex
                                   ? const Color(0xE64C9BFF)
                                   : Colors.transparent,
                               width: 2,
@@ -507,12 +449,12 @@ class _ContactsPageState extends State<ContactsPage> {
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 300),
                             style: TextStyle(
-                              color: index == selectedIndex
+                              color: index == controller.selectedIndex
                                   ? const Color(0xE64C9BFF)
                                   : Colors.black,
                               fontSize: 16,
                             ),
-                            child: Text(tabs[index]),
+                            child: Text(controller.tabs[index]),
                           ),
                         ),
                       ),
@@ -525,7 +467,7 @@ class _ContactsPageState extends State<ContactsPage> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
-                child: getContent(tabs[selectedIndex]),
+                child: getContent(controller.tabs[controller.selectedIndex]),
               ),
             ),
           ],

@@ -1,39 +1,15 @@
-import 'dart:io';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:linyu_mobile/api/qr_api.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
-import 'package:linyu_mobile/pages/qr_login_affirm/index.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-final _qrApi = QrApi();
+import 'logic.dart';
 
-class QRCodeScannerPage extends StatefulWidget {
-  const QRCodeScannerPage({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _QRCodeScannerPageState();
-}
-
-class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
-  String? qrText;
-  final player = AudioPlayer();
-  bool _isScanning = true; // 新增扫描状态
+class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
+  QRCodeScanPage({super.key});
 
   @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller?.pauseCamera();
-    }
-    controller?.resumeCamera();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -47,8 +23,8 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
               Expanded(
                 flex: 5,
                 child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+                  key: controller.qrKey,
+                  onQRViewCreated: controller.onQRViewCreated,
                   overlay: QrScannerOverlayShape(
                     borderColor: const Color(0xFF4C9BFF),
                     borderRadius: 1,
@@ -73,7 +49,7 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
               ),
             ],
           ),
-          if (qrText != null && _isScanning)
+          if (controller.qrText != null && controller.isScanning)
             Center(
               child: Container(
                 padding: const EdgeInsets.all(10),
@@ -87,11 +63,11 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
                 ),
               ),
             ),
-          if (qrText != null && !_isScanning)
+          if (controller.qrText != null && !controller.isScanning)
             Center(
               child: CustomButton(
                 text: '重新扫描',
-                onTap: _restartScanning,
+                onTap: controller.restartScanning,
                 type: 'minor',
                 width: 120,
               ),
@@ -99,49 +75,5 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
         ],
       ),
     );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      if (_isScanning) {
-        setState(() {
-          qrText = scanData.code;
-          _isScanning = false; // 停止扫描
-          controller.pauseCamera(); // 暂停摄像头
-        });
-
-        await player.play(AssetSource('sounds/success.mp3'));
-        final result = await _qrApi.status(scanData.code);
-        if (result['code'] == 0) {
-          switch (result['data']['action']) {
-            case 'login':
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      QrLoginAffirmPage(qrCode: scanData.code),
-                ),
-              );
-              break;
-          }
-        }
-      }
-    });
-  }
-
-  void _restartScanning() {
-    setState(() {
-      qrText = null;
-      _isScanning = true;
-    });
-    controller?.resumeCamera(); // 恢复摄像头
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    player.dispose();
-    super.dispose();
   }
 }

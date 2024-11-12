@@ -1,66 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:linyu_mobile/pages/register/logic.dart';
-import 'package:linyu_mobile/pages/login/index.dart';
-import 'package:linyu_mobile/pages/login/logic.dart';
-import 'package:linyu_mobile/pages/navigation/index.dart';
-import 'package:linyu_mobile/pages/password/retrieve/index.dart';
-import 'package:linyu_mobile/pages/password/retrieve/logic.dart';
-import 'package:linyu_mobile/pages/register/index.dart';
-
-import 'package:linyu_mobile/pages/password/update/index.dart';
-import 'package:linyu_mobile/pages/password/update/logic.dart';
+import 'package:linyu_mobile/utils/getx_config/route.dart';
 
 typedef InitFunc = void Function();
 typedef CloseFunc = void Function();
 typedef CallbackFunc = void Function();
 typedef FilterFunc<T> = Object Function(T value);
 
-
-
-//依赖注入
-class ControllerBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut(() => LoginPageLogic());
-    Get.lazyPut(() => RegisterPageLogic());
-    Get.lazyPut(() => RetrievePasswordLogic());
-    Get.lazyPut(() => UpdatePasswordLogic());
-  }
-}
-
 //路由配置
-List<GetPage> pageRoute = [
-  GetPage(name: '/', page: () => const CustomBottomNavigationBar()),
-  GetPage(
-    name: '/login',
-    page: () => LoginPage(
-      key: const Key('login'),
-    ),
-    binding: ControllerBinding(),
-  ),
-  GetPage(
-    name: '/register',
-    page: () => RegisterPage(
-      key: const Key('register'),
-    ),
-    binding: ControllerBinding(),
-  ),
-  GetPage(
-    name: '/retrieve_password',
-    page: () => RetrievePassword(
-      key: const Key('retrieve_password'),
-    ),
-    binding: ControllerBinding(),
-  ),
-  GetPage(
-    name: '/update_password',
-    page: () => UpdatePasswordPage(
-      key: const Key('update_password'),
-    ),
-    binding: ControllerBinding(),
-  ),
-];
+List<GetPage> pageRoute = AppRoutes.pageRoute;
 
 //路由监听
 void routingCallback(router) {
@@ -107,7 +55,7 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
   Widget buildWidget(BuildContext context);
 
   /// 关闭
-  void close(BuildContext context) =>null;
+  void close(BuildContext context) => null;
 
   /// 创建上下文
   @override
