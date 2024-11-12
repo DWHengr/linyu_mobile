@@ -20,6 +20,9 @@ class ContactsLogic extends GetxController {
       currentUserId = prefs.getString('userId') ?? '';
       update();
     });
+    onNotifyFriendList();
+    onChatGroupList();
+    onFriendList();
   }
 
   void onFriendList() {

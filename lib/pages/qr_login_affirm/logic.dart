@@ -24,7 +24,7 @@ class QRLoginAffirmLogic extends GetxController {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-      Get.offAllNamed("/");
+      Get.until((route) => Get.currentRoute == "/");
     });
   }
 }

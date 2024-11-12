@@ -16,7 +16,6 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
   Widget getContent(String tab) {
     switch (tab) {
       case '好友通知':
-        controller.onNotifyFriendList();
         return ListView(
           children: [
             ...controller.notifyFriendList.map((notify) => Container(
@@ -26,7 +25,6 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           ],
         );
       case '我的群聊':
-        controller.onChatGroupList();
         return ListView(
           children: [
             ...controller.chatGroupList.map(
@@ -38,7 +36,6 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           ],
         );
       case '我的好友':
-        controller.onFriendList();
         return ListView(
           children: [
             ...controller.friendList.map((group) {
