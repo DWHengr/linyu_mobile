@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.2.8
   qr_code_scanner: ^1.0.1
   audioplayers: ^6.1.0
+  qr_flutter: ^4.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
