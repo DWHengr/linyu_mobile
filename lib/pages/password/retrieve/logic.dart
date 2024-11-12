@@ -34,7 +34,7 @@ class RetrievePasswordLogic extends GetxController{
   set countdownTime(int value) {
     _countdownTime = value;
     update([
-      const Key("countdown"),
+      const Key("retrieve_password"),
     ]);
   }
 

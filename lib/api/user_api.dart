@@ -74,6 +74,28 @@ class UserApi {
     return response.data;
   }
 
+
+  Future<Map<String, dynamic>> update(
+      {required String name,
+      required String sex,
+      required String birthday,
+      required String signature,
+      required String portrait,}) async {
+    final response = await _dio.post(
+      '/v1/api/user/update',
+      data: {
+        'name': name,
+        'sex': sex,
+        'birthday': birthday,
+        'signature': signature,
+        'portrait': portrait
+      },
+    );
+    return response.data;
+  }
+
+
+
   Future<Map<String, dynamic>> forget(
       String account, String password, String email, String code) async {
     final response = await _dio.post(

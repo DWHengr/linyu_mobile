@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/encrypt.dart';
 
-class LoginPageLogic extends GetxController {
+class LoginLogic extends GetxController {
   final _useApi = UserApi();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();

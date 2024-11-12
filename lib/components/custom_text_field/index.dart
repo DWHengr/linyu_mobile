@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
   final int? inputLimit;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     this.inputLimit,
+    this.readOnly = false,
   });
 
   @override
@@ -44,6 +46,7 @@ class CustomTextField extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             onChanged: onChanged,
+            readOnly: this.readOnly,
             inputFormatters: inputLimit != null
                 ? <TextInputFormatter>[
                     //只输入数字

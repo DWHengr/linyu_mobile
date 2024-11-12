@@ -25,4 +25,16 @@ class FriendApi {
     );
     return response.data;
   }
+
+  Future<Map<String, dynamic>> setRemark(String friendId,String remark) async {
+    final response = await _dio.post(
+      '/v1/api/friend/set/remark',
+      data: {
+        'friendId': friendId,
+        'remark': remark,
+      },
+    );
+    return response.data;
+  }
+
 }
