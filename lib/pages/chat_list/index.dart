@@ -5,6 +5,8 @@ import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/index.dart';
+import 'package:linyu_mobile/pages/qr_login_affirm/index.dart';
 import 'package:linyu_mobile/utils/date.dart';
 
 final _chatListApi = ChatListApi();
@@ -91,7 +93,14 @@ class _ChatListPageState extends State<ChatListPage> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const QRCodeScannerPage(),
+                    ),
+                  );
+                },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

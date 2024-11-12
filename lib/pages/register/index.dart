@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/count_down_register/index.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
-
-import 'package:linyu_mobile/components/custom_material_button/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
-
 
 class RegisterPage extends CustomWidget<RegisterPageLogic> {
   RegisterPage({super.key});

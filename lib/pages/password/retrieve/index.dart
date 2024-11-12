@@ -1,4 +1,4 @@
-import 'package:linyu_mobile/components/custom_material_button/index.dart';
+import 'package:linyu_mobile/components/countdown_retrieve_password/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'logic.dart';
