@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
-import 'package:linyu_mobile/pages/mine/mine_qr_code/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import 'logic.dart';
 
 class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
   MineQRCodePage({super.key});
@@ -46,20 +47,20 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                               ),
                               borderRadius: BorderRadius.circular(40),
                             ),
-                            child: const CustomPortrait(
-                                url:
-                                    'https://tse3-mm.cn.bing.net/th/id/OIP-C.ruq8qPQn8b_W0prkr4eucQAAAA?rs=1&pid=ImgDetMain',
+                            child: CustomPortrait(
+                                url: controller.currentUserInfo['portrait'] ??
+                                    '',
                                 size: 80,
                                 radius: 40),
                           ),
-                          const Text(
-                            'Heath',
-                            style: TextStyle(
+                          Text(
+                            controller.currentUserInfo['name'] ?? '',
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           ),
-                          const Text(
-                            'heath',
-                            style: TextStyle(
+                          Text(
+                            controller.currentUserInfo['account'] ?? '',
+                            style: const TextStyle(
                                 fontSize: 14, color: Color(0xFF7D7D7D)),
                           ),
                           Expanded(
@@ -79,7 +80,7 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                                   },
                                   blendMode: BlendMode.srcATop,
                                   child: QrImageView(
-                                    data: '1234567890',
+                                    data: controller.qrCode,
                                     version: QrVersions.auto,
                                     padding: const EdgeInsets.all(5),
                                     size: 200.0,

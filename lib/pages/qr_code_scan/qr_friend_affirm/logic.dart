@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/api/notify_api.dart';
 
-class QRLoginAffirmLogic extends GetxController {
-  final _userAPi = UserApi();
-  late final String qrCode;
+class QRFriendAffirmLogic extends GetxController {
+  final _notifyApi = NotifyApi();
+  late final dynamic result;
 
   @override
   void onInit() {
-    qrCode = Get.arguments['qrCode'];
+    result = Get.arguments['result'];
   }
 
-  void onQrLogin() {
-    _userAPi.qrLogin(qrCode).then((res) {
+  void onAddFriend() {
+    _notifyApi.friendApply(result['id'], "通过二维码添加好友").then((res) {
       if (res['code'] == 0) {
         Fluttertoast.showToast(
-            msg: "登录成功~",
+            msg: "请求成功~",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,

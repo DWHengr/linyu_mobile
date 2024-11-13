@@ -2,57 +2,58 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/qr_api.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRCodeScanLogic extends GetxController {
   final _qrApi = QrApi();
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? qrViewController;
-  String? qrText;
   final player = AudioPlayer();
+  String? qrText;
   bool isScanning = true;
 
-  @override
-  void onReady() {
-    super.onReady();
-    if (GetPlatform.isAndroid) {
-      qrViewController?.pauseCamera();
-    }
-    qrViewController?.resumeCamera();
-  }
+  final mobileScannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    returnImage: false,
+  );
 
-  void onQRViewCreated(QRViewController controller) {
-    qrViewController = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      if (isScanning) {
-        qrText = scanData.code;
-        isScanning = false; // 停止扫描
-        controller.pauseCamera(); // 暂停摄像头
-        update([const Key("qr_code_scan")]);
-        await player.play(AssetSource('sounds/success.mp3'));
-        final result = await _qrApi.status(scanData.code);
-        if (result['code'] == 0) {
-          switch (result['data']['action']) {
-            case 'login':
-              Get.toNamed('/qr_login_affirm',
-                  arguments: {'qrCode': scanData.code});
-              break;
-          }
+  void onDetect(BarcodeCapture capture) async {
+    if (isScanning && capture.barcodes.isNotEmpty) {
+      final barcode = capture.barcodes.first;
+      qrText = barcode.rawValue;
+      isScanning = false;
+      mobileScannerController.stop();
+      update([const Key("qr_code_scan")]);
+      await player.play(AssetSource('sounds/success.mp3'));
+      final result = await _qrApi.status(qrText!);
+      if (result['code'] == 0) {
+        switch (result['data']['action']) {
+          case 'login':
+            Get.toNamed('/qr_login_affirm', arguments: {'qrCode': qrText});
+            break;
+          case 'mine':
+            Get.toNamed('/qr_friend_affirm',
+                arguments: {'result': result['data']['extend']});
+            break;
+          default:
+            Get.toNamed('/qr_other_result',
+                arguments: {'text': "二维码内容无法识别或已失效"});
+            break;
         }
+      } else {
+        Get.toNamed('/qr_other_result', arguments: {'text': "二维码内容无法识别或已失效"});
       }
-    });
+    }
   }
 
   void restartScanning() {
     qrText = null;
     isScanning = true;
+    mobileScannerController.start();
     update([const Key("qr_code_scan")]);
-    qrViewController?.resumeCamera(); // 恢复摄像头
   }
 
   @override
   void onClose() {
-    qrViewController?.dispose();
+    mobileScannerController.dispose();
     player.dispose();
     super.onClose();
   }

@@ -36,4 +36,34 @@ class DateUtil {
       return '$year-$month-$day $hour:$minute';
     }
   }
+
+  static String getYearDayMonth(dynamic date) {
+    DateTime initDate = DateTime.now();
+    if (date is int) {
+      initDate = DateTime.fromMillisecondsSinceEpoch(date);
+    } else if (date is String) {
+      initDate = DateTime.parse(date);
+    }
+    int year = initDate.year;
+    int day = initDate.day;
+    int month = initDate.month;
+    return '$year-$month-$day';
+  }
+
+  static String calculateAge(dynamic birthDate) {
+    DateTime today = DateTime.now();
+    DateTime birth = today;
+    if (birthDate is int) {
+      birth = DateTime.fromMillisecondsSinceEpoch(birthDate);
+    } else if (birthDate is String) {
+      birth = DateTime.parse(birthDate);
+    }
+    int age = today.year - birth.year;
+    int monthDifference = today.month - birth.month;
+    if (monthDifference < 0 ||
+        (monthDifference == 0 && today.day < birth.day)) {
+      age--;
+    }
+    return '$age岁';
+  }
 }

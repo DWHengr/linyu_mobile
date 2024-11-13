@@ -9,7 +9,9 @@ import 'package:linyu_mobile/pages/navigation/index.dart';
 import 'package:linyu_mobile/pages/password/retrieve/index.dart';
 import 'package:linyu_mobile/pages/password/update/index.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/index.dart';
-import 'package:linyu_mobile/pages/qr_login_affirm/index.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_friend_affirm/index.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_login_affirm/index.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/index.dart';
 import 'package:linyu_mobile/pages/register/index.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
 
@@ -97,6 +99,20 @@ class AppRoutes {
       name: '/mine_qr_code',
       page: () => MineQRCodePage(
         key: const Key('mine_qr_code'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/qr_friend_affirm',
+      page: () => QRFriendAffirmPage(
+        key: const Key('qr_friend_affirm'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/qr_other_result',
+      page: () => QrOtherResultPage(
+        key: const Key('qr_other_result'),
       ),
       binding: ControllerBinding(),
     ),

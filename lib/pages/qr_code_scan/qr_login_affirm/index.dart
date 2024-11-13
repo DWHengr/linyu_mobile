@@ -37,9 +37,7 @@ class QrLoginAffirmPage extends CustomWidget<QRLoginAffirmLogic> {
                 children: [
                   CustomButton(
                       text: '确认登录', onTap: controller.onQrLogin, width: 220),
-                  const SizedBox(height: 10),
-                  CustomButton(
-                      text: '取消', type: 'minor', onTap: () {}, width: 220),
+                  const SizedBox(height: 20),
                 ],
               )
             ],

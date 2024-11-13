@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'logic.dart';
 
@@ -22,22 +22,56 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
             children: <Widget>[
               Expanded(
                 flex: 5,
-                child: QRView(
-                  key: controller.qrKey,
-                  onQRViewCreated: controller.onQRViewCreated,
-                  overlay: QrScannerOverlayShape(
-                    borderColor: const Color(0xFF4C9BFF),
-                    borderRadius: 1,
-                    borderLength: 20,
-                    borderWidth: 8,
-                    cutOutSize: 250,
-                  ),
+                child: MobileScanner(
+                  controller: controller.mobileScannerController,
+                  onDetect: controller.onDetect,
+                  overlayBuilder: (context, constraints) {
+                    return Stack(
+                      children: [
+                        CustomPaint(
+                          size:
+                              Size(constraints.maxWidth, constraints.maxHeight),
+                          painter: ScannerOverlayPainter(),
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Container(
+                                  width: 250,
+                                  height: 250,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                              ...buildCorners(constraints),
+                              Positioned(
+                                bottom: 40,
+                                right: 0,
+                                left: 0,
+                                child: Center(
+                                  child: IconButton(
+                                    icon: const Icon(Icons.flashlight_on,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      controller.mobileScannerController
+                                          .toggleTorch();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.tealAccent.withOpacity(0.1),
+                  color: const Color(0xFFF9FBFF),
                   child: const Center(
                     child: Text(
                       '请对准二维码扫描',
@@ -75,5 +109,94 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
         ],
       ),
     );
+  }
+
+  List<Widget> buildCorners(constraints) {
+    return [
+      // 左上角
+      Positioned(
+        top: constraints.maxHeight / 2 - 125,
+        left: constraints.maxWidth / 2 - 125,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              left: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+            ),
+          ),
+        ),
+      ),
+      // 右上角
+      Positioned(
+        top: constraints.maxHeight / 2 - 125,
+        right: constraints.maxWidth / 2 - 125,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              right: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+            ),
+          ),
+        ),
+      ),
+      // 左下角
+      Positioned(
+        bottom: constraints.maxHeight / 2 - 125,
+        left: constraints.maxWidth / 2 - 125,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              left: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+            ),
+          ),
+        ),
+      ),
+      // 右下角
+      Positioned(
+        bottom: constraints.maxHeight / 2 - 125,
+        right: constraints.maxWidth / 2 - 125,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              right: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+            ),
+          ),
+        ),
+      ),
+    ];
+  }
+}
+
+class ScannerOverlayPainter extends CustomPainter {
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..style = PaintingStyle.fill;
+    final centerRect = Rect.fromCenter(
+      center: Offset(size.width / 2, size.height / 2),
+      width: 240,
+      height: 240,
+    );
+    final path = Path()
+      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..addRRect(RRect.fromRectAndRadius(
+        centerRect,
+        const Radius.circular(1),
+      ));
+    canvas.drawPath(path..fillType = PathFillType.evenOdd, paint);
   }
 }

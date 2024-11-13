@@ -12,6 +12,12 @@ class QrApi {
     return _instance;
   }
 
+  Future<Map<String, dynamic>> code() async {
+    final response =
+        await _dio.get('/qr/code', queryParameters: {'action': 'mine'});
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> status(String? key) async {
     final response = await _dio.get('/qr/code/status', data: {'key': key});
     return response.data;
