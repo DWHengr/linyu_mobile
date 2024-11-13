@@ -11,14 +11,16 @@ import 'package:linyu_mobile/pages/qr_code_scan/logic.dart';
 import 'package:linyu_mobile/pages/qr_login_affirm/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
+import 'package:linyu_mobile/pages/mine/edit/logic.dart';
+
 
 //依赖注入
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => NavigationLogic());
-    Get.lazyPut(() => LoginPageLogic());
-    Get.lazyPut(() => RegisterPageLogic());
+    Get.lazyPut(() => LoginLogic());
+    Get.lazyPut(() => RegisterLogic());
     Get.lazyPut(() => RetrievePasswordLogic());
     Get.lazyPut(() => UpdatePasswordLogic());
     Get.lazyPut(() => ChatListLogic());
@@ -27,6 +29,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => TalkLogic());
     Get.lazyPut(() => QRCodeScanLogic());
     Get.lazyPut(() => QRLoginAffirmLogic());
+    Get.lazyPut(() => EditMineLogic());
     Get.lazyPut(() => MineQRCodeLogic());
   }
 }

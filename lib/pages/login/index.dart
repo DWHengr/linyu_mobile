@@ -3,7 +3,7 @@ import 'package:linyu_mobile/pages/login/logic.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class LoginPage extends CustomWidget<LoginPageLogic> {
+class LoginPage extends CustomWidget<LoginLogic> {
   LoginPage({super.key});
 
   @override

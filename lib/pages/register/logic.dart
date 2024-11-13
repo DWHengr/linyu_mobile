@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/encrypt.dart';
 
-class RegisterPageLogic extends GetxController {
+class RegisterLogic extends GetxController {
   final _useApi = UserApi();
 
   //用户名
@@ -31,7 +31,7 @@ class RegisterPageLogic extends GetxController {
   set countdownTime(int value) {
     _countdownTime = value;
     update([
-      const Key("countdown"),
+      const Key("register"),
     ]);
   }
 
@@ -149,11 +149,11 @@ class RegisterPageLogic extends GetxController {
   void _startCountdownTimer() {
     const oneSec = Duration(seconds: 1);
     callback(timer) => {
-          if (countdownTime < 1)
-            {_timer.cancel()}
-          else
-            {countdownTime = countdownTime - 1}
-        };
+      if (countdownTime < 1)
+        {_timer.cancel()}
+      else
+        {countdownTime = countdownTime - 1}
+    };
     _timer = Timer.periodic(oneSec, callback);
   }
 

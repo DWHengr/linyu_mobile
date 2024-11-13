@@ -34,7 +34,7 @@ class RetrievePasswordLogic extends GetxController{
   set countdownTime(int value) {
     _countdownTime = value;
     update([
-      const Key("countdown"),
+      const Key("retrieve_password"),
     ]);
   }
 
@@ -117,17 +117,17 @@ class RetrievePasswordLogic extends GetxController{
       final encryptedPassword =await passwordEncrypt(password);
       assert (encryptedPassword!="-1");
       final passwordForgetReslut = await _useApi.forget(account, encryptedPassword, email, code);
-        Fluttertoast.showToast(
-            msg: passwordForgetReslut['msg'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: passwordForgetReslut['code']==0?const Color(0xFF4C9BFF):Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        if (passwordForgetReslut['code'] == 0) {
-          Get.back();
-        }
+      Fluttertoast.showToast(
+          msg: passwordForgetReslut['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: passwordForgetReslut['code']==0?const Color(0xFF4C9BFF):Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      if (passwordForgetReslut['code'] == 0) {
+        Get.back();
+      }
     }
   }
 
