@@ -8,7 +8,9 @@ import 'package:linyu_mobile/pages/navigation/logic.dart';
 import 'package:linyu_mobile/pages/password/retrieve/logic.dart';
 import 'package:linyu_mobile/pages/password/update/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/logic.dart';
-import 'package:linyu_mobile/pages/qr_login_affirm/logic.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_friend_affirm/logic.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_login_affirm/logic.dart';
+import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 
@@ -28,5 +30,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => QRCodeScanLogic());
     Get.lazyPut(() => QRLoginAffirmLogic());
     Get.lazyPut(() => MineQRCodeLogic());
+    Get.lazyPut(() => QRFriendAffirmLogic());
+    Get.lazyPut(() => QrOtherResultLogic());
   }
 }
