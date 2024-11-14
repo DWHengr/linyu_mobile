@@ -22,8 +22,9 @@ class AppRoutes {
     GetPage(
       name: '/',
       page: () => NavigationPage(
-        key: Key('main'),
+        key: const Key('main'),
       ),
+      binding: ControllerBinding(),
     ),
     GetPage(
       name: '/login',

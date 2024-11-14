@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class NavigationLogic extends GetxController {
-  final currentIndex = 0.obs;
+  late int currentIndex = 0;
 
   final List<String> selectedIcons = [
     'assets/images/chat.png',
@@ -25,6 +26,7 @@ class NavigationLogic extends GetxController {
   ];
 
   void onTap(int index) {
-    currentIndex.value = index;
+    currentIndex = index;
+    update([const Key("main")]);
   }
 }
