@@ -16,141 +16,153 @@ class MinePage extends CustomWidget<MineLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
+    bool isNv = controller.currentUserInfo['sex'] == "女";
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
-      body: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFDFF4FF), Color(0xFFFFFFFF)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20.0),
-                bottomRight: Radius.circular(20.0),
-              ),
-            ),
-            height: 200,
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              children: [
-                Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 5,
-                    ),
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                  child: CustomPortrait(
-                      url: controller.currentUserInfo['portrait'] ?? '',
-                      size: 70,
-                      radius: 35),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    isNv ? const Color(0xFFFBEBFF) : const Color(0xFFDFF4FF),
+                    const Color(0xFFFFFFFF)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                top: 13,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  child: Container(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
+              ),
+              height: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 5,
+                      ),
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                    child: CustomPortrait(
+                        url: controller.currentUserInfo['portrait'] ?? '',
+                        size: 70,
+                        radius: 35),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  top: 13,
+                                  child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    height: 15,
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Color(0x1A4C9BFF),
-                                          Color(0xE64C9BFF)
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
+                                        horizontal: 0, vertical: 0),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      height: 15,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            isNv
+                                                ? const Color(0x1AFFA0CF)
+                                                : const Color(0x1A4C9BFF),
+                                            isNv
+                                                ? const Color(0xE6FFA0CF)
+                                                : const Color(0xE64C9BFF),
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(10), // 圆角
                                       ),
-                                      borderRadius:
-                                          BorderRadius.circular(10), // 圆角
-                                    ),
-                                    child: Opacity(
-                                      opacity: 0,
-                                      child: Text(
-                                        controller.currentUserInfo['name'] ??
-                                            '',
-                                        style: const TextStyle(fontSize: 16),
+                                      child: Opacity(
+                                        opacity: 0,
+                                        child: Text(
+                                          controller.currentUserInfo['name'] ??
+                                              '',
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                controller.currentUserInfo['name'] ?? '',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10), // 间距
-                          Text(
-                            '账号：${controller.currentUserInfo['account'] ?? ''}',
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey[700]),
-                          ),
-                        ],
-                      ),
-                      CustomMaterialButton(
-                          child: const Icon(
-                              IconData(0xe615, fontFamily: 'IconFont'),
-                              size: 45),
-                          onTap: () => Get.toNamed('/mine_qr_code'))
-                    ],
+                                Text(
+                                  controller.currentUserInfo['name'] ?? '',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10), // 间距
+                            Text(
+                              '账号：${controller.currentUserInfo['account'] ?? ''}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[700]),
+                            ),
+                          ],
+                        ),
+                        CustomMaterialButton(
+                            child: const Icon(
+                                IconData(0xe615, fontFamily: 'IconFont'),
+                                size: 45),
+                            onTap: () => Get.toNamed('/mine_qr_code'))
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Transform.translate(
-            offset: const Offset(0, -30),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  _primarySelectButton('我的说说', 'mine-talk.png', () {}),
-                  const SizedBox(height: 2),
-                  _primarySelectButton('系统通知', 'mine-notify.png', () {}),
-                  const SizedBox(height: 30),
-                  _minorSelectButton('修改密码', 'mine-password.png', () {
-                    Get.toNamed('/update_password');
-                  }),
-                  const SizedBox(height: 2),
-                  _minorSelectButton('关于我们', 'mine-about.png', () {}),
-                  const SizedBox(height: 2),
-                  _minorSelectButton('设置', 'mine-set.png', () {}),
-                  const SizedBox(height: 30),
-                  _leastSelectButton('切换账号', () {}),
-                  const SizedBox(height: 2),
-                  _leastSelectButton(
-                      '退出',
-                      color: const Color(0xFFFFF4C4C),
-                      controller.handlerLogout),
                 ],
               ),
             ),
-          ),
-        ],
+            Transform.translate(
+              offset: const Offset(0, -30),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    _primarySelectButton(
+                        '我的说说', 'mine-talk${isNv ? '-pink' : ''}.png', () {}),
+                    const SizedBox(height: 2),
+                    _primarySelectButton('系统通知', 'mine-notify${isNv ? '-pink' : ''}.png', () {}),
+                    const SizedBox(height: 30),
+                    _minorSelectButton('修改密码', 'mine-password.png', () {
+                      Get.toNamed('/update_password');
+                    }),
+                    const SizedBox(height: 2),
+                    _minorSelectButton('关于我们', 'mine-about.png', () {}),
+                    const SizedBox(height: 2),
+                    _minorSelectButton('设置', 'mine-set.png', () {}),
+                    const SizedBox(height: 30),
+                    _leastSelectButton('切换账号', () {}),
+                    const SizedBox(height: 2),
+                    _leastSelectButton(
+                        '退出',
+                        color: const Color(0xFFFFF4C4C),
+                        controller.handlerLogout),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

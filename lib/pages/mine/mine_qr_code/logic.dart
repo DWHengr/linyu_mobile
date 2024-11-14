@@ -10,11 +10,11 @@ class MineQRCodeLogic extends GetxController {
 
   @override
   void onInit() async {
-    print('MineQRCodeLogic init');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentUserInfo['name'] = prefs.getString('username');
     currentUserInfo['portrait'] = prefs.getString('portrait');
     currentUserInfo['account'] = prefs.getString('account');
+    currentUserInfo['sex'] = prefs.getString('sex');
     update([const Key("mine_qr_code")]);
     onQrCode();
   }

@@ -10,11 +10,15 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
+    bool isNv = controller.currentUserInfo['sex'] == "女";
     return Scaffold(
       body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFFDFF4FF), Color(0xFFFFFFFF)],
+              colors: [
+                isNv ? const Color(0xFFFBEBFF) : const Color(0xFFDFF4FF),
+                const Color(0xFFFFFFFF)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -69,10 +73,14 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                               children: [
                                 ShaderMask(
                                   shaderCallback: (Rect bounds) {
-                                    return const LinearGradient(
+                                    return LinearGradient(
                                       colors: [
-                                        Color(0xFF40A9FF),
-                                        Color(0xFFA0D9F6)
+                                        isNv
+                                            ? const Color(0xFFFFA0CF)
+                                            : const Color(0xFF40A9FF),
+                                        isNv
+                                            ? const Color(0xFFF5CFFF)
+                                            : const Color(0xFFA0D9F6)
                                       ],
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
@@ -101,8 +109,8 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                                     borderRadius: BorderRadius.circular(2),
                                     color: Colors.white,
                                   ),
-                                  child:
-                                      Image.asset('assets/images/logo-qr.png'),
+                                  child: Image.asset(
+                                      'assets/images/logo-qr${isNv ? '-pink' : ''}.png'),
                                 ),
                               ],
                             ),

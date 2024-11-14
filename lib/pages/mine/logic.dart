@@ -10,6 +10,7 @@ class MineLogic extends GetxController {
     currentUserInfo['name'] = prefs.getString('username');
     currentUserInfo['portrait'] = prefs.getString('portrait');
     currentUserInfo['account'] = prefs.getString('account');
+    currentUserInfo['sex'] = prefs.getString('sex');
     update([const Key("mine")]);
   }
 
