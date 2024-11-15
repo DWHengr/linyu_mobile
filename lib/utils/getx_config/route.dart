@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
@@ -15,6 +16,7 @@ import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/index.dart';
 import 'package:linyu_mobile/pages/register/index.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
 
+import 'package:linyu_mobile/pages/mine/edit/index.dart';
 import 'ControllerBinding.dart';
 
 class AppRoutes {
@@ -93,6 +95,13 @@ class AppRoutes {
       name: '/qr_login_affirm',
       page: () => QrLoginAffirmPage(
         key: const Key('qr_login_affirm'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/edit_mine',
+      page: () => EditMinePage(
+        key: const Key('edit_mine'),
       ),
       binding: ControllerBinding(),
     ),

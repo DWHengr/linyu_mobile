@@ -39,23 +39,24 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
   late final FilterFunc? widgetFilter;
 
   /// 初始化
-  void init(BuildContext context) => null;
+  void init(BuildContext context) => print("init>${controller.runtimeType}");
 
   /// 依赖发生变化
-  void didChangeDependencies(BuildContext context) => null;
+  void didChangeDependencies(BuildContext context) =>
+      print("change>${controller.runtimeType}");
 
   /// 更新Widget
   void didUpdateWidget(
     GetBuilder oldWidget,
     GetBuilderState<T> state,
   ) =>
-      null;
+      print("update>${controller.runtimeType}");
 
   /// 构建widget
   Widget buildWidget(BuildContext context);
 
   /// 关闭
-  void close(BuildContext context) => null;
+  void close(BuildContext context) => print("close>${controller.runtimeType}");
 
   /// 创建上下文
   @override

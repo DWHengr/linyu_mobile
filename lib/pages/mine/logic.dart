@@ -19,4 +19,12 @@ class MineLogic extends GetxController {
     await prefs.clear();
     Get.offAndToNamed('/login');
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+    init();
+  }
+
 }
+

@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
   final int? inputLimit;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     this.inputLimit,
+    this.readOnly = false,
   });
 
   @override
@@ -32,7 +34,7 @@ class CustomTextField extends StatelessWidget {
         Text(
           labelText,
           style:
-              const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0), // 标签样式
+          const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0), // 标签样式
         ),
         const SizedBox(height: 5.0), // 标签和输入框之间的间距
         Container(
@@ -44,11 +46,12 @@ class CustomTextField extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             onChanged: onChanged,
+            readOnly: this.readOnly,
             inputFormatters: inputLimit != null
                 ? <TextInputFormatter>[
-                    //只输入数字
-                    LengthLimitingTextInputFormatter(inputLimit) //限制长度
-                  ]
+              //只输入数字
+              LengthLimitingTextInputFormatter(inputLimit) //限制长度
+            ]
                 : null,
             decoration: InputDecoration(
               hintText: hintText,
@@ -65,7 +68,7 @@ class CustomTextField extends StatelessWidget {
                 borderSide: BorderSide.none, // 去除边框
               ),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             ),
           ),
         ),
