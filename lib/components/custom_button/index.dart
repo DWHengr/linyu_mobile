@@ -36,17 +36,34 @@ class CustomButton extends StatelessWidget {
     }
   }
 
+  BoxDecoration _getBoxDecoration(String type) {
+    switch (type) {
+      case 'gradient':
+        return BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF4C9AFF), Color(0xFF0060D9)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        );
+      default:
+        return BoxDecoration(
+          color: _getColor(type),
+          borderRadius: BorderRadius.circular(10),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomMaterialButton(
       onTap: onTap,
-      color: _getColor(type),
+      color: type == 'gradient' ? null : _getColor(type),
       child: Container(
         width: width,
         height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        decoration: _getBoxDecoration(type),
         padding: const EdgeInsets.all(10),
         child: Center(
           child: Text(
