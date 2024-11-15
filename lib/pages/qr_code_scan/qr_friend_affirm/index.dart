@@ -12,7 +12,6 @@ class QRFriendAffirmPage extends CustomWidget<QRFriendAffirmLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
-    bool isNv = controller.result['sex'] == "女";
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
@@ -32,12 +31,7 @@ class QRFriendAffirmPage extends CustomWidget<QRFriendAffirmLogic> {
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          isNv
-                              ? const Color(0xFFFBEBFF)
-                              : const Color(0xFFDFF4FF),
-                          const Color(0xFFFFFFFF)
-                        ],
+                        colors: [theme.minorColor, const Color(0xFFFFFFFF)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -87,12 +81,9 @@ class QRFriendAffirmPage extends CustomWidget<QRFriendAffirmLogic> {
                                             decoration: BoxDecoration(
                                               gradient: LinearGradient(
                                                 colors: [
-                                                  isNv
-                                                      ? const Color(0x1AFFA0CF)
-                                                      : const Color(0x1A4C9BFF),
-                                                  isNv
-                                                      ? const Color(0xE6FFA0CF)
-                                                      : const Color(0xE64C9BFF),
+                                                  theme.primaryColor
+                                                      .withOpacity(0.1),
+                                                  theme.primaryColor,
                                                 ],
                                                 begin: Alignment.centerLeft,
                                                 end: Alignment.centerRight,

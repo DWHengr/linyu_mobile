@@ -120,10 +120,10 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Color(0xFF4C9BFF), width: 4),
-              left: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              top: BorderSide(color: theme.primaryColor, width: 4),
+              left: BorderSide(color: theme.primaryColor, width: 4),
             ),
           ),
         ),
@@ -135,10 +135,10 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: Color(0xFF4C9BFF), width: 4),
-              right: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              top: BorderSide(color: theme.primaryColor, width: 4),
+              right: BorderSide(color: theme.primaryColor, width: 4),
             ),
           ),
         ),
@@ -150,10 +150,10 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Color(0xFF4C9BFF), width: 4),
-              left: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              bottom: BorderSide(color: theme.primaryColor, width: 4),
+              left: BorderSide(color: theme.primaryColor, width: 4),
             ),
           ),
         ),
@@ -165,10 +165,10 @@ class QRCodeScanPage extends CustomWidget<QRCodeScanLogic> {
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Color(0xFF4C9BFF), width: 4),
-              right: BorderSide(color: Color(0xFF4C9BFF), width: 4),
+              bottom: BorderSide(color: theme.primaryColor, width: 4),
+              right: BorderSide(color: theme.primaryColor, width: 4),
             ),
           ),
         ),

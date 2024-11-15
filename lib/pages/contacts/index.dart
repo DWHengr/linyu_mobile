@@ -40,8 +40,8 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           children: [
             ...controller.friendList.map((group) {
               return ExpansionTile(
-                iconColor: const Color(0xFF4C9BFF),
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                iconColor: theme.primaryColor,
+                visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
                 dense: true,
                 collapsedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -129,8 +129,8 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                       Text(
                         _getNotifyContentTip(
                             notify['status'], isFromCurrentUser),
-                        style: const TextStyle(
-                            fontSize: 12, color: Color(0xFF4C9BFF)),
+                        style:
+                            TextStyle(fontSize: 12, color: theme.primaryColor),
                       ),
                       const SizedBox(height: 2),
                       Row(
@@ -165,15 +165,15 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
     switch (status) {
       case "wait":
         {
-          return "正在验证你的请求";
+          return "正在验证请求";
         }
       case "reject":
         {
-          return "对方已拒绝你的请求";
+          return "已拒绝申请请求";
         }
       case "agree":
         {
-          return "对方已同意你的请求";
+          return "已同意申请请求";
         }
     }
     return "";
@@ -198,21 +198,21 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       case "wait":
         {
           return Text(
-            "正在验证",
+            "等待验证",
             style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           );
         }
       case "reject":
         {
           return Text(
-            "对方已拒绝",
+            "已拒绝",
             style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           );
         }
       case "agree":
         {
           return Text(
-            "对方已同意",
+            "已同意",
             style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           );
         }
@@ -436,7 +436,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                           border: Border(
                             bottom: BorderSide(
                               color: index == controller.selectedIndex
-                                  ? const Color(0xE64C9BFF)
+                                  ? theme.primaryColor
                                   : Colors.transparent,
                               width: 2,
                             ),
@@ -447,7 +447,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                             duration: const Duration(milliseconds: 300),
                             style: TextStyle(
                               color: index == controller.selectedIndex
-                                  ? const Color(0xE64C9BFF)
+                                  ? theme.primaryColor
                                   : Colors.black,
                               fontSize: 16,
                             ),

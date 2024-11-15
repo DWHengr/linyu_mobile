@@ -10,12 +10,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('x-token');
+  String? sex = prefs.getString('sex');
   // runApp(MyApp(
   //     initialPage:
   //         token != null ? const CustomBottomNavigationBar() : LoginPage()));
   runApp(MyApp(
       initialRoute:
-          token != null ? '/' : '/login'));
+          token != null ? '/?sex=$sex' : '/login'));
 }
 
 class MyApp extends StatelessWidget {

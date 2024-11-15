@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/utils/getx_config/route.dart';
 
 typedef InitFunc = void Function();
@@ -33,6 +34,9 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
 
   /// 获取控制器
   T get controller => GetInstance().find<T>(tag: tag);
+
+  GlobalThemeConfig get theme =>
+      GetInstance().find<GlobalThemeConfig>(tag: tag);
 
   /// 过滤器
   // Object? widgetFilter(BuildContext context) => null;
@@ -75,6 +79,11 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
         },
         dispose: (GetBuilderState<T> state) => this.close(context),
       );
+}
+
+abstract class StatelessThemeWidget extends StatelessWidget {
+  const StatelessThemeWidget({super.key});
+  GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
 }
 
 /// 继承自GetView

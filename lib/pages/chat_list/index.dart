@@ -96,17 +96,18 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                     controller.onGetChatList();
                     return Future.delayed(const Duration(milliseconds: 700));
                   },
+                  color: theme.primaryColor,
                   child: ListView(
                     children: [
                       if (controller.searchList.isNotEmpty) ...[
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             "搜索结果",
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF4C9BFF),
+                              color: theme.primaryColor,
                             ),
                           ),
                         ),
@@ -114,14 +115,14 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                             _buildSearchItem(friend, friend['friendId'])),
                       ],
                       if (controller.topList.isNotEmpty) ...[
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             "置顶",
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF4C9BFF),
+                              color: theme.primaryColor,
                             ),
                           ),
                         ),
@@ -129,14 +130,14 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                             .map((chat) => _buildChatItem(chat, chat['id'])),
                       ],
                       if (controller.otherList.isNotEmpty) ...[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             "全部",
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF4C9BFF),
+                              color: theme.primaryColor,
                             ),
                           ),
                         ),
@@ -184,7 +185,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
           SlidableAction(
             padding: const EdgeInsets.all(0),
             onPressed: (context) => controller.onTopStatus(id, chat['isTop']),
-            backgroundColor: const Color(0xFF4C9BFF),
+            backgroundColor: theme.primaryColor,
             foregroundColor: Colors.white,
             icon: chat['isTop'] ? Icons.push_pin_outlined : Icons.push_pin,
             label: chat['isTop'] ? '取消置顶' : '置顶',

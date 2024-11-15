@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class CustomSearchBox extends StatelessWidget {
+class CustomSearchBox extends StatelessThemeWidget {
   final bool isCentered;
   final Color backgroundColor;
   final double borderRadius;
@@ -16,13 +17,13 @@ class CustomSearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color iconColor = const Color(0xFF4C9BFF);
+    Color iconColor = theme.primaryColor;
     return Container(
       alignment: isCentered ? Alignment.center : Alignment.centerLeft,
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: theme.searchBarColor,
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Row(
@@ -41,7 +42,10 @@ class CustomSearchBox extends StatelessWidget {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(0),
                 hintText: '搜索',
-                hintStyle: TextStyle(color: iconColor, fontSize: 16),
+                hintStyle: TextStyle(
+                    color: iconColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent, width: 1),
                 ),

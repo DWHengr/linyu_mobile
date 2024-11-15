@@ -33,6 +33,7 @@ class TalkPage extends CustomWidget<TalkLogic> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: RefreshIndicator(
           onRefresh: controller.refreshData,
+          color: theme.primaryColor,
           child: ListView.builder(
             controller: controller.scrollController,
             itemCount: controller.talkList.length + 1,
@@ -51,15 +52,15 @@ class TalkPage extends CustomWidget<TalkLogic> {
 
   Widget _buildFooter() {
     if (controller.isLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 16),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Center(
           child: SizedBox(
             width: 30.0,
             height: 30.0,
             child: CircularProgressIndicator(
               strokeWidth: 4,
-              color: Color(0xFF4C9BFF),
+              color: theme.primaryColor,
             ),
           ),
         ),

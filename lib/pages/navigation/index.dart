@@ -26,13 +26,12 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
-    print("controller: ${controller}");
     return Scaffold(
       body: _buildPage((controller.currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: controller.currentIndex,
         onTap: controller.onTap,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: theme.primaryColor,
         showUnselectedLabels: true,
         backgroundColor: const Color(0xFFEDF2F9),
         unselectedItemColor: Colors.grey,
@@ -41,7 +40,7 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
           return BottomNavigationBarItem(
             icon: Image.asset(
               controller.currentIndex == index
-                  ? controller.selectedIcons[index]
+                  ? 'assets/images/${controller.selectedIcons[index]}-${theme.themeMode}.png'
                   : controller.unselectedIcons[index],
               width: 26,
               height: 26,

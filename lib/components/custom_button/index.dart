@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatelessThemeWidget {
   final String text;
   final VoidCallback onTap;
   final String type;
@@ -17,11 +18,11 @@ class CustomButton extends StatelessWidget {
   Color _getColor(String type) {
     switch (type) {
       case 'primary':
-        return const Color(0xFF4C9AFF);
+        return theme.primaryColor;
       case 'minor':
         return const Color(0xFFEDF2F9);
       default:
-        return const Color(0xFF4C9AFF);
+        return theme.primaryColor;
     }
   }
 
@@ -40,8 +41,8 @@ class CustomButton extends StatelessWidget {
     switch (type) {
       case 'gradient':
         return BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF4C9AFF), Color(0xFF0060D9)],
+          gradient: LinearGradient(
+            colors: [theme.primaryColor, theme.boldColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

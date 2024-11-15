@@ -15,9 +15,9 @@ class UpdatePasswordPage extends CustomWidget<UpdatePasswordLogic> {
   @override
   Widget buildWidget(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [const Color(0xFFDFF4FF), const Color(0xFFFFFFFF)],
+          colors: [theme.minorColor, const Color(0xFFFFFFFF)],
           // 渐变颜色
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
