@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/login/index.dart';
+import 'package:linyu_mobile/pages/mine/about/index.dart';
 import 'package:linyu_mobile/pages/mine/index.dart';
 import 'package:linyu_mobile/pages/mine/mine_qr_code/index.dart';
 import 'package:linyu_mobile/pages/navigation/index.dart';
@@ -123,6 +124,13 @@ class AppRoutes {
       name: '/qr_other_result',
       page: () => QrOtherResultPage(
         key: const Key('qr_other_result'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/about',
+      page: () => AboutPage(
+        key: const Key('about'),
       ),
       binding: ControllerBinding(),
     ),

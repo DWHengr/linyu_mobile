@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomLabelValue extends StatelessWidget {
   final String label;
   final String value;
+  final double? width;
 
   const CustomLabelValue({
     super.key,
     required this.label,
     required this.value,
+    this.width = 60,
   });
 
   @override
@@ -23,14 +25,16 @@ class CustomLabelValue extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
+          SizedBox(
+            width: width,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+              ),
             ),
           ),
-          const SizedBox(width: 20),
           Expanded(
             child: Text(
               value,

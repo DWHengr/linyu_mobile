@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:linyu_mobile/pages/chat_list/logic.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/pages/login/logic.dart';
+import 'package:linyu_mobile/pages/mine/about/logic.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
 import 'package:linyu_mobile/pages/mine/mine_qr_code/logic.dart';
 import 'package:linyu_mobile/pages/navigation/logic.dart';
@@ -15,7 +16,6 @@ import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/pages/mine/edit/logic.dart';
-
 
 //依赖注入
 class ControllerBinding extends Bindings {
@@ -37,5 +37,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => MineQRCodeLogic());
     Get.lazyPut(() => QRFriendAffirmLogic());
     Get.lazyPut(() => QrOtherResultLogic());
+    Get.lazyPut(() => AboutLogic());
   }
 }
