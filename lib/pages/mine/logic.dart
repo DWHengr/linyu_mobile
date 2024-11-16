@@ -21,4 +21,12 @@ class MineLogic extends GetxController {
     await prefs.clear();
     exit(0);
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+    init();
+  }
+
 }
+

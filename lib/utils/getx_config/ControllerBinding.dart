@@ -14,6 +14,8 @@ import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
+import 'package:linyu_mobile/pages/mine/edit/logic.dart';
+
 
 //依赖注入
 class ControllerBinding extends Bindings {
@@ -31,6 +33,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => TalkLogic());
     Get.lazyPut(() => QRCodeScanLogic());
     Get.lazyPut(() => QRLoginAffirmLogic());
+    Get.lazyPut(() => EditMineLogic());
     Get.lazyPut(() => MineQRCodeLogic());
     Get.lazyPut(() => QRFriendAffirmLogic());
     Get.lazyPut(() => QrOtherResultLogic());

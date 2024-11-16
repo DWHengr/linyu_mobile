@@ -10,11 +10,6 @@ class MinePage extends CustomWidget<MineLogic> {
   MinePage({super.key});
 
   @override
-  void init(BuildContext context) {
-    controller.init();
-  }
-
-  @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
@@ -37,20 +32,25 @@ class MinePage extends CustomWidget<MineLogic> {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Row(
                 children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 5,
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/edit_mine');
+                    },
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 5,
+                        ),
+                        borderRadius: BorderRadius.circular(35),
                       ),
-                      borderRadius: BorderRadius.circular(35),
+                      child: CustomPortrait(
+                          url: controller.currentUserInfo['portrait'] ?? '',
+                          size: 70,
+                          radius: 35),
                     ),
-                    child: CustomPortrait(
-                        url: controller.currentUserInfo['portrait'] ?? '',
-                        size: 70,
-                        radius: 35),
                   ),
                   const SizedBox(width: 10),
                   Expanded(

@@ -1,5 +1,8 @@
 // lib/services/user_service.dart
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/api/Http.dart';
 
 class UserApi {
@@ -69,6 +72,34 @@ class UserApi {
         'password': password,
         'email': email,
         'code': code
+      },
+    );
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> upload(FormData formData) async {
+    final response = await _dio.post(
+      '/v1/api/user/upload/portrait/form',
+      data: formData,
+    );
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> update({
+    required String name,
+    required String sex,
+    required String birthday,
+    required String signature,
+    required String portrait,
+  }) async {
+    final response = await _dio.post(
+      '/v1/api/user/update',
+      data: {
+        'name': name,
+        'sex': sex,
+        'birthday': birthday,
+        'signature': signature,
+        'portrait': portrait
       },
     );
     return response.data;
