@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:linyu_mobile/utils/getx_config/ControllerBinding.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('x-token');
-  // runApp(MyApp(
-  //     initialPage:
-  //         token != null ? const CustomBottomNavigationBar() : LoginPage()));
-  runApp(MyApp(
-      initialRoute:
-          token != null ? '/' : '/login'));
+  runApp(MyApp(initialRoute: token != null ? '/' : '/login'));
 }
 
 class MyApp extends StatelessWidget {
   final String? initialRoute;
   final Widget? initialPage;
 
-  const MyApp({super.key, this.initialPage,this.initialRoute});
+  const MyApp({super.key, this.initialPage, this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: '林语',
+      //国际化
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('zh', 'CH'),
+        Locale('en', 'US'),
+      ],
+      locale: const Locale('zh'),
       //全局绑定Controller
       initialBinding: ControllerBinding(),
       enableLog: true,
