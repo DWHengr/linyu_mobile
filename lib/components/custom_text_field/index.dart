@@ -1,4 +1,3 @@
-// custom_text_field.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int? inputLimit;
   final bool readOnly;
+  final int? maxLines; // 新增maxLines参数
 
   const CustomTextField({
     super.key,
@@ -24,34 +24,35 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.inputLimit,
     this.readOnly = false,
+    this.maxLines = 1, // 默认为1行
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // 标签左对齐
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           labelText,
-          style:
-          const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0), // 标签样式
+          style: const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0),
         ),
-        const SizedBox(height: 5.0), // 标签和输入框之间的间距
+        const SizedBox(height: 5.0),
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFEDF2F9), // 设置背景颜色为 #EDF2F9
+            color: const Color(0xFFEDF2F9),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
             controller: controller,
             obscureText: obscureText,
             onChanged: onChanged,
-            readOnly: this.readOnly,
+            readOnly: readOnly,
+            maxLines: maxLines,
+            // 使用maxLines参数
             inputFormatters: inputLimit != null
                 ? <TextInputFormatter>[
-              //只输入数字
-              LengthLimitingTextInputFormatter(inputLimit) //限制长度
-            ]
+                    LengthLimitingTextInputFormatter(inputLimit)
+                  ]
                 : null,
             decoration: InputDecoration(
               hintText: hintText,
@@ -59,16 +60,14 @@ class CustomTextField extends StatelessWidget {
               suffix: suffix,
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
               filled: true,
-              // 填充背景
               fillColor: const Color(0xFFEDF2F9),
               isDense: true,
-              // 填充背景颜色
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none, // 去除边框
+                borderSide: BorderSide.none,
               ),
               contentPadding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
             ),
           ),
         ),

@@ -2,17 +2,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as getx;
+import 'package:get/get_instance/src/get_instance.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
 import 'package:linyu_mobile/utils/cropPicture.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
 
 //个人资料编辑页面逻辑
 class EditMineLogic extends getx.GetxController {
-
   //上个页面控制器
   final MineLogic _mineLogic = getx.Get.find<MineLogic>();
 
@@ -33,7 +34,9 @@ class EditMineLogic extends getx.GetxController {
 
   //是否处于编辑状态
   bool _isEdit = false;
+
   bool get isEdit => _isEdit;
+
   set isEdit(bool value) {
     _isEdit = value;
     update([const Key("edit_mine")]);
@@ -41,7 +44,9 @@ class EditMineLogic extends getx.GetxController {
 
   //用户名输入长度
   int _nameTextLength = 0;
+
   int get nameTextLength => _nameTextLength;
+
   set nameTextLength(int value) {
     _nameTextLength = value;
     update([const Key("login")]);
@@ -49,7 +54,9 @@ class EditMineLogic extends getx.GetxController {
 
   //性别
   late String _sex;
+
   String get sex => _sex;
+
   set sex(String value) {
     _sex = value;
     update([const Key("edit_mine")]);
@@ -57,7 +64,9 @@ class EditMineLogic extends getx.GetxController {
 
   //男性颜色被选中时的颜色
   Color _maleColorActive = const Color(0xFFe0e0e0);
+
   Color get maleColorActive => _maleColorActive;
+
   set maleColorActive(Color value) {
     _maleColorActive = value;
     update([const Key("edit_mine")]);
@@ -65,7 +74,9 @@ class EditMineLogic extends getx.GetxController {
 
   //男性文字颜色被选中时的颜色
   Color _maleTextColorActive = const Color(0xFF727275);
+
   Color get maleTextColorActive => _maleTextColorActive;
+
   set maleTextColorActive(Color value) {
     _maleTextColorActive = value;
     update([const Key("edit_mine")]);
@@ -73,7 +84,9 @@ class EditMineLogic extends getx.GetxController {
 
   //女性颜色被选中时的颜色
   Color _femaleColorActive = const Color(0xFFe0e0e0);
+
   Color get femaleColorActive => _femaleColorActive;
+
   set femaleColorActive(Color value) {
     _femaleColorActive = value;
     update([const Key("edit_mine")]);
@@ -81,7 +94,9 @@ class EditMineLogic extends getx.GetxController {
 
   //女性文字颜色被选中时的颜色
   Color _femaleTextColorActive = const Color(0xFF727275);
+
   Color get femaleTextColorActive => _femaleTextColorActive;
+
   set femaleTextColorActive(Color value) {
     _femaleTextColorActive = value;
     update([const Key("edit_mine")]);
@@ -89,7 +104,9 @@ class EditMineLogic extends getx.GetxController {
 
   //生日
   late DateTime _birthday;
+
   DateTime get birthday => _birthday;
+
   set birthday(DateTime value) {
     _birthday = value;
     update([const Key("edit_mine")]);
@@ -97,7 +114,9 @@ class EditMineLogic extends getx.GetxController {
 
   //个性签名输入长度
   int _signatureTextLength = 0;
+
   int get signatureTextLength => _signatureTextLength;
+
   set signatureTextLength(int value) {
     _signatureTextLength = value;
     update([const Key("edit_mine")]);
@@ -256,6 +275,8 @@ class EditMineLogic extends getx.GetxController {
         prefs.setString('sex', sex);
         prefs.setString('birthday', birthday);
         prefs.setString('signature', signature);
+        GlobalThemeConfig theme = GetInstance().find<GlobalThemeConfig>();
+        theme.changeThemeMode(sex == "女" ? "pink" : "blue");
         isEdit = false;
         return;
       } else {
