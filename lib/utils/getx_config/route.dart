@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/index.dart';
+import 'package:linyu_mobile/pages/contacts/friend_information/set_remark/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:linyu_mobile/pages/mine/about/index.dart';
@@ -30,7 +31,6 @@ class AppRoutes {
       ),
       binding: ControllerBinding(),
       transition: Transition.fade,
-      transitionDuration: const Duration(milliseconds: 800),
     ),
     GetPage(
       name: '/login',
@@ -142,6 +142,13 @@ class AppRoutes {
       name: '/friend_info',
       page: () => FriendInformationPage(
         key: const Key('friend_info'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/set_remark',
+      page: () => SetRemarkPage(
+        key: const Key('set_remark'),
       ),
       binding: ControllerBinding(),
     ),

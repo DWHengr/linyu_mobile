@@ -38,6 +38,9 @@ class DateUtil {
   }
 
   static String getYearDayMonth(dynamic date) {
+    if (date == null || date == '') {
+      return '';
+    }
     DateTime initDate = DateTime.now();
     if (date is int) {
       initDate = DateTime.fromMillisecondsSinceEpoch(date);
@@ -51,6 +54,9 @@ class DateUtil {
   }
 
   static String calculateAge(dynamic birthDate) {
+    if (birthDate == null || birthDate == '') {
+      return '';
+    }
     DateTime today = DateTime.now();
     DateTime birth = today;
     if (birthDate is int) {
