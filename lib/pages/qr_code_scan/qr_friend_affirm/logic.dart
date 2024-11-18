@@ -9,6 +9,7 @@ class QRFriendAffirmLogic extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     result = Get.arguments['result'];
   }
 
@@ -24,7 +25,7 @@ class QRFriendAffirmLogic extends GetxController {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-      Get.until((route) => Get.currentRoute == "/");
+      // Get.until((route) => Get.currentRoute == "/");
     });
   }
 }

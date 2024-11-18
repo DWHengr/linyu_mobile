@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_pickers/pickers.dart';
+import 'package:flutter_pickers/style/picker_style.dart';
+import 'package:flutter_pickers/time_picker/model/date_type.dart';
+import 'package:flutter_pickers/time_picker/model/pduration.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as getx;
 import 'package:get/get_instance/src/get_instance.dart';
@@ -16,6 +20,10 @@ import 'package:dio/dio.dart' show MultipartFile, FormData;
 class EditMineLogic extends getx.GetxController {
   //上个页面控制器
   final MineLogic _mineLogic = getx.Get.find<MineLogic>();
+
+  final GlobalThemeConfig _theme = GetInstance().find<GlobalThemeConfig>();
+
+  late SharedPreferences _prefs;
 
   //用户API
   final _useApi = UserApi();
@@ -139,7 +147,7 @@ class EditMineLogic extends getx.GetxController {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
-          backgroundColor: const Color(0xFF4C9BFF),
+          backgroundColor: _theme.primaryColor,
           textColor: Colors.white,
           fontSize: 16.0);
       currentUserInfo['portrait'] = result['data'];
@@ -194,6 +202,7 @@ class EditMineLogic extends getx.GetxController {
   //设置性别值
   void setSexValue(String value) {
     sex = value;
+    _theme.changeThemeMode(sex == "女" ? "pink" : "blue");
     if (value == "男") {
       maleColorActive = const Color(0xFF4C9BFF);
       maleTextColorActive = Colors.white;
@@ -230,17 +239,44 @@ class EditMineLogic extends getx.GetxController {
   //选择生日
   Future<void> selectDate(BuildContext context) async {
     if (isEdit) {
-      final pickedDate = await showDatePicker(
-        context: context,
-        initialDate: birthday,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2101),
+      final iniDate = PDuration.parse(birthday);
+      Pickers.showDatePicker(
+        context,
+        maxDate: PDuration.parse(DateTime.now()),
+        minDate: PDuration.parse(DateTime(1900, 1, 1)),
+        pickerStyle: PickerStyle(
+          commitButton: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(left: 12, right: 22),
+            child: Text('确定',
+                style: TextStyle(color: _theme.primaryColor, fontSize: 16.0)),
+          ),
+          headDecoration: BoxDecoration(
+            color:
+                sex == "女" ? const Color(0xFFfcebff) : const Color(0xFFe6f2ff),
+          ),
+          backgroundColor:
+              sex == "女" ? const Color(0xFFfcebff) : const Color(0xFFe6f2ff),
+        ),
+        selectDate: iniDate,
+        onChanged: (res) {
+          birthday = DateTime(
+            res.getSingle(DateType.Year),
+            res.getSingle(DateType.Month),
+            res.getSingle(DateType.Day),
+          );
+          birthdayController.text = DateFormat('yyyy-MM-dd').format(birthday);
+        },
+        onConfirm: (res) {
+          birthday = DateTime(
+            res.getSingle(DateType.Year),
+            res.getSingle(DateType.Month),
+            res.getSingle(DateType.Day),
+          );
+          birthdayController.text =
+              DateFormat('yyyy-MM-dd').format(birthday); // 格式化日期
+        },
       );
-      if (pickedDate != null && pickedDate != birthday) {
-        birthday = pickedDate;
-        birthdayController.text =
-            DateFormat('yyyy-MM-dd').format(birthday); // 格式化日期
-      }
     }
   }
 
@@ -267,7 +303,7 @@ class EditMineLogic extends getx.GetxController {
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 1,
-            backgroundColor: const Color(0xFF4C9BFF),
+            backgroundColor: _theme.primaryColor,
             textColor: Colors.white,
             fontSize: 16.0);
         prefs.setString('username', name);
@@ -275,8 +311,6 @@ class EditMineLogic extends getx.GetxController {
         prefs.setString('sex', sex);
         prefs.setString('birthday', birthday);
         prefs.setString('signature', signature);
-        GlobalThemeConfig theme = GetInstance().find<GlobalThemeConfig>();
-        theme.changeThemeMode(sex == "女" ? "pink" : "blue");
         isEdit = false;
         return;
       } else {
@@ -293,19 +327,25 @@ class EditMineLogic extends getx.GetxController {
     }
   }
 
+  void whenClose() async {
+    _theme.changeThemeMode(_prefs.getString('sex') == "女" ? "pink" : "blue");
+    //以及返回上一页时更新页面
+    _mineLogic.init();
+  }
+
   //初始化
   @override
   void onInit() async {
     super.onInit();
     final userInfo = await _useApi.info();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
     currentUserInfo['name'] =
-        prefs.getString('username') ?? userInfo['data']['name'];
+        _prefs.getString('username') ?? userInfo['data']['name'];
     currentUserInfo['portrait'] =
-        prefs.getString('portrait') ?? userInfo['data']['portrait'];
+        _prefs.getString('portrait') ?? userInfo['data']['portrait'];
     nameController.text = currentUserInfo['name'];
     nameTextLength = nameController.text.length;
-    sex = prefs.getString('sex') ?? userInfo['data']['sex'];
+    sex = _prefs.getString('sex') ?? userInfo['data']['sex'];
     setSexValue(sex);
     currentUserInfo['sex'] = sex;
     birthday = DateTime.parse(userInfo['data']['birthday']).toLocal();
@@ -313,7 +353,7 @@ class EditMineLogic extends getx.GetxController {
         DateFormat('yyyy-MM-dd').format(birthday); // 格式化日期
     currentUserInfo['birthday'] = birthday;
     signatureController.text =
-        prefs.getString('signature') ?? userInfo['data']['signature'];
+        _prefs.getString('signature') ?? userInfo['data']['signature'];
     signatureTextLength = signatureController.text.length;
   }
 
@@ -324,7 +364,6 @@ class EditMineLogic extends getx.GetxController {
     nameController.dispose();
     signatureController.dispose();
     birthdayController.dispose();
-    //以及返回上一页时更新页面
-    _mineLogic.init();
+    whenClose();
   }
 }

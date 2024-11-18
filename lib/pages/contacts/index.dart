@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -117,12 +118,6 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                             ),
                           ),
                           const SizedBox(width: 2),
-                          // const SizedBox(width: 2),
-                          // Text(
-                          //   DateUtil.formatTime(notify['createTime']),
-                          //   style: TextStyle(
-                          //       fontSize: 12, color: Colors.grey[600]),
-                          // )
                         ],
                       ),
                       const SizedBox(height: 2),
@@ -151,7 +146,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                   ),
                 ),
                 const SizedBox(width: 20),
-                _getNotifyOperateTip(notify['status'], isFromCurrentUser),
+                _getNotifyOperateTip(notify['status'], isFromCurrentUser,notify),
               ],
             ),
           ),
@@ -179,11 +174,12 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
     return "";
   }
 
-  Widget _getNotifyOperateTip(status, isFromCurrentUser) {
+  Widget _getNotifyOperateTip(status, isFromCurrentUser,[dynamic notify]) {
+
     if (!isFromCurrentUser && status == "wait") {
       return Row(
         children: [
-          CustomTextButton("同意", onTap: () {}),
+          CustomTextButton("同意", onTap: ()=> controller.handlerAgreeFriend(notify['id']),),
           const SizedBox(width: 10),
           CustomTextButton(
             "取消",
@@ -286,9 +282,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
       child: InkWell(
-        onTap: () {
-          // 添加点击事件
-        },
+        onTap: () => controller.handlerFriendTapped(friend),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -362,7 +356,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: () {},
+                onTap: () => Get.toNamed('/qr_code_scan'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

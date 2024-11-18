@@ -6,25 +6,18 @@ import 'package:linyu_mobile/utils/getx_config/ControllerBinding.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('x-token');
-  String? sex = prefs.getString('sex');
-  // runApp(MyApp(
-  //     initialPage:
-  //         token != null ? const CustomBottomNavigationBar() : LoginPage()));
-  runApp(MyApp(
-      initialRoute:
-          token != null ? '/?sex=$sex' : '/login'));
+  runApp(MyApp(initialRoute: token != null ? '/' : '/login'));
 }
 
 class MyApp extends StatelessWidget {
   final String? initialRoute;
   final Widget? initialPage;
 
-  const MyApp({super.key, this.initialPage,this.initialRoute});
+  const MyApp({super.key, this.initialPage, this.initialRoute});
 
   @override
   Widget build(BuildContext context) {

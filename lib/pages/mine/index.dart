@@ -10,6 +10,12 @@ class MinePage extends CustomWidget<MineLogic> {
   MinePage({super.key});
 
   @override
+  void init(BuildContext context) {
+    super.init(context);
+    controller.init();
+  }
+
+  @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),

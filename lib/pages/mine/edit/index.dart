@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
@@ -155,15 +153,8 @@ class EditMinePage extends CustomWidget<EditMineLogic> {
                 ]),
               ),
               const SizedBox(height: 16),
-              !controller.isEdit
-                  ? CustomButton(
-                      text: "编辑资料",
-                      onTap: controller.onPressed,
-                      width: MediaQuery.of(context).size.width,
-                      type: 'gradient',
-                    )
-                  : CustomButton(
-                      text: "保存",
+              CustomButton(
+                      text: !controller.isEdit?"编辑资料":"保存",
                       onTap: controller.onPressed,
                       width: MediaQuery.of(context).size.width,
                       type: 'gradient',
