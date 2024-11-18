@@ -78,7 +78,22 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                           onChanged: controller.onPasswordTextChanged,
                           suffix: Text('${controller.passwordTextLength}/16'),
                         ),
-                        const SizedBox(height: 20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => controller.toRetrievePassword(),
+                              child: const Text(
+                                "忘记密码?",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFFb0b0ba),
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         FractionallySizedBox(
                           widthFactor: 0.8,
                           child: ElevatedButton(
@@ -101,16 +116,6 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                           ),
                         ),
                         const SizedBox(height: 10.0),
-                        TextButton(
-                          onPressed: () => controller.toRetrievePassword(),
-                          child: const Text(
-                            "忘记密码",
-                            style: TextStyle(
-                              fontSize: 16,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         TextButton(
                           onPressed: () => controller.toRegister(),
                           child: const Text(

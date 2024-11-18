@@ -3,10 +3,18 @@ import 'package:get/get.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/utils/getx_config/route.dart';
 
-typedef InitFunc = void Function();
-typedef CloseFunc = void Function();
-typedef CallbackFunc = void Function();
 typedef FilterFunc<T> = Object Function(T value);
+
+class Logic extends GetxController {
+  //路由参数
+  dynamic arguments = Get.arguments;
+
+  @override
+  void onClose() {
+    super.onClose();
+    if (arguments != null) arguments = null;
+  }
+}
 
 //路由配置
 List<GetPage> pageRoute = AppRoutes.pageRoute;
@@ -20,7 +28,9 @@ void routingCallback(router) {
 /// 与业务逻辑绑定，通过GetX实现状态管理，这样页面只负责渲染，业务逻辑全部在控制器中实现
 abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
   /// 构造函数
-  CustomWidget({this.key, this.widgetFilter}) : super(key: key);
+  CustomWidget({
+    this.key,
+  }) : super(key: key);
 
   /// 当传入key的时候，若更新widget需使用controller.update([key],)
   @override
@@ -38,29 +48,25 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
   GlobalThemeConfig get theme =>
       GetInstance().find<GlobalThemeConfig>(tag: tag);
 
-  /// 过滤器
-  // Object? widgetFilter(BuildContext context) => null;
-  late final FilterFunc? widgetFilter;
-
   /// 初始化
-  void init(BuildContext context) => print("init>${controller.runtimeType}");
+  void init(BuildContext context) => print("init>$runtimeType");
 
   /// 依赖发生变化
   void didChangeDependencies(BuildContext context) =>
-      print("change>${controller.runtimeType}");
+      print("change>$runtimeType");
 
   /// 更新Widget
   void didUpdateWidget(
     GetBuilder oldWidget,
     GetBuilderState<T> state,
   ) =>
-      print("update>${controller.runtimeType}");
+      print("update>$runtimeType");
 
   /// 构建widget
   Widget buildWidget(BuildContext context);
 
   /// 关闭
-  void close(BuildContext context) => print("close>${controller.runtimeType}");
+  void close(BuildContext context) => print("close>$runtimeType");
 
   /// 创建上下文
   @override
@@ -70,7 +76,6 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<T>(
         id: this.key,
-        filter: this.widgetFilter,
         initState: (GetBuilderState<T> state) => this.init(context),
         didChangeDependencies: (GetBuilderState<T> state) =>
             this.didChangeDependencies(context),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
+import 'package:linyu_mobile/pages/contacts/friend_information/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:linyu_mobile/pages/mine/about/index.dart';
@@ -28,6 +29,8 @@ class AppRoutes {
         key: const Key('main'),
       ),
       binding: ControllerBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 800),
     ),
     GetPage(
       name: '/login',
@@ -35,6 +38,7 @@ class AppRoutes {
         key: const Key('login'),
       ),
       binding: ControllerBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: '/register',
@@ -131,6 +135,13 @@ class AppRoutes {
       name: '/about',
       page: () => AboutPage(
         key: const Key('about'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/friend_info',
+      page: () => FriendInformationPage(
+        key: const Key('friend_info'),
       ),
       binding: ControllerBinding(),
     ),
