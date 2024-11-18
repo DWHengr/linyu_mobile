@@ -25,7 +25,7 @@ class QRFriendAffirmLogic extends GetxController {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-      // Get.until((route) => Get.currentRoute == "/");
+      Get.until((route) => Get.currentRoute == "/");
     });
   }
 }

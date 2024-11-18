@@ -1,11 +1,13 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/qr_api.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRCodeScanLogic extends GetxController {
   final _qrApi = QrApi();
+  final _friendApi = FriendApi();
   final player = AudioPlayer();
   String? qrText;
   bool isScanning = true;
@@ -30,8 +32,15 @@ class QRCodeScanLogic extends GetxController {
             Get.toNamed('/qr_login_affirm', arguments: {'qrCode': qrText});
             break;
           case 'mine':
-            Get.toNamed('/qr_friend_affirm',
-                arguments: {'result': result['data']['extend']});
+            var friendInfo = result['data']['extend'];
+            final isFriend = await _friendApi.isFriend(friendInfo['id']);
+            if (isFriend['code'] == 0 && isFriend['data']) {
+              Get.toNamed('/friend_info',
+                  arguments: {'friendId': friendInfo['id']});
+            } else {
+              Get.toNamed('/qr_friend_affirm',
+                  arguments: {'result': friendInfo});
+            }
             break;
           default:
             Get.toNamed('/qr_other_result',

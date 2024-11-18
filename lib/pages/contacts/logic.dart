@@ -62,22 +62,13 @@ class ContactsLogic extends GetxController {
   }
 
   void handlerFriendTapped(dynamic friend) {
-    List<Map<String, dynamic>> groupList = [];
-    for (var item in friendList) {
-      if (item['name'] == "特别关心" || item['name'] == "未分组"|| item['groupId'] == null) {
-        continue;
-      }
-      groupList.add({'label': item['name'], 'value': item['groupId']});
-    }
-    Get.toNamed('/friend_info',
-        arguments: {'friend': friend, 'groupList': groupList});
+    Get.toNamed('/friend_info', arguments: {'friendId': friend['friendId']});
   }
 
   //同意添加好友
   void handlerAgreeFriend(String notifyId) async {
     final result = await _friendApi.agree(notifyId);
     if (result['code'] == 0) {
-      print(result);
       init();
       Fluttertoast.showToast(
           msg: "同意好友请求成功",

@@ -10,7 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('x-token');
-  runApp(MyApp(initialRoute: token != null ? '/' : '/login'));
+  String? sex = prefs.getString('sex');
+  runApp(MyApp(initialRoute: token != null ? '/?sex=$sex' : '/login'));
 }
 
 class MyApp extends StatelessWidget {

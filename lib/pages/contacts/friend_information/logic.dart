@@ -19,11 +19,8 @@ class FriendInformationLogic extends Logic {
   //初始化获取从联系人页面传递过来的好友信息参数
   Map<String, dynamic> get friendData => arguments['friend'];
 
-  //初始化获取从联系人页面传递过来的分组列表参数
-  List<Map<String, dynamic>> get groupList => arguments['groupList'];
-
   //好友id
-  String get friendId => friendData['friendId'].toString();
+  String get friendId =>  arguments['friendId'].toString();
 
   //好友头像
   String _friendPortrait = '';
