@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/utils/date.dart';
@@ -143,8 +144,9 @@ class TalkPage extends CustomWidget<TalkLogic> {
                           talk['content']['text'] ?? '',
                           style: const TextStyle(fontSize: 14),
                         ),
-                        _buildImageGrid(
-                            talk['content']['img'] ?? [], talk['userId']),
+                        CustomImageGroup(
+                            imagesList: talk['content']['img'] ?? [],
+                            userId: talk['userId']),
                       ],
                     ),
                   ),
@@ -171,61 +173,6 @@ class TalkPage extends CustomWidget<TalkLogic> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildImageGrid(List<dynamic> imageUrls, String userId) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 0,
-        childAspectRatio: 1.0,
-      ),
-      itemCount: imageUrls.length,
-      itemBuilder: (context, index) {
-        return _buildTalkImage(imageUrls[index], userId);
-      },
-    );
-  }
-
-  Widget _buildTalkImage(String imageStr, String userId) {
-    return Container(
-      padding: const EdgeInsets.all(2.0),
-      child: FutureBuilder<String>(
-        future: controller.onGetImg(imageStr, userId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return CachedNetworkImage(
-              imageUrl: snapshot.data ?? '',
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                color: Colors.grey[300],
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xffffffff),
-                    strokeWidth: 2,
-                  ),
-                ),
-              ),
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/images/empty-bg.png'),
-            );
-          } else {
-            return Container(
-              color: Colors.grey[300],
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xffffffff),
-                  strokeWidth: 2,
-                ),
-              ),
-            );
-          }
-        },
       ),
     );
   }
