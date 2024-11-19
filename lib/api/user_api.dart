@@ -131,4 +131,14 @@ class UserApi {
     );
     return response.data;
   }
+
+  Future<Map<String, dynamic>> search( String userInfo) async {
+    final response = await _dio.post(
+      '/v1/api/user/search',
+      data: {
+        'userInfo': userInfo,
+      },
+    );
+    return response.data;
+  }
 }

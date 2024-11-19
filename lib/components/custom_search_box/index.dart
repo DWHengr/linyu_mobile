@@ -6,6 +6,8 @@ class CustomSearchBox extends StatelessThemeWidget {
   final Color backgroundColor;
   final double borderRadius;
   final ValueChanged<String> onChanged;
+  final double? height;
+  final String? hintText;
 
   const CustomSearchBox({
     super.key,
@@ -13,6 +15,8 @@ class CustomSearchBox extends StatelessThemeWidget {
     this.backgroundColor = const Color(0xFFE3ECFF),
     this.borderRadius = 10.0,
     required this.onChanged,
+    this.height= 40,
+    this.hintText= "搜索",
   });
 
   @override
@@ -20,7 +24,7 @@ class CustomSearchBox extends StatelessThemeWidget {
     Color iconColor = theme.primaryColor;
     return Container(
       alignment: isCentered ? Alignment.center : Alignment.centerLeft,
-      height: 40,
+      height: height,
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       decoration: BoxDecoration(
         color: theme.searchBarColor,
@@ -41,7 +45,7 @@ class CustomSearchBox extends StatelessThemeWidget {
               style: TextStyle(color: iconColor, fontSize: 16),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(0),
-                hintText: '搜索',
+                hintText: hintText,
                 hintStyle: TextStyle(
                     color: iconColor,
                     fontSize: 16,

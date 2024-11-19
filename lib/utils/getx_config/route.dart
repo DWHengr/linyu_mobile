@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:linyu_mobile/pages/add_friend/friend_info/index.dart';
+import 'package:linyu_mobile/pages/add_friend/friend_request/index.dart';
+import 'package:linyu_mobile/pages/add_friend/index.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_group/index.dart';
@@ -150,6 +152,27 @@ class AppRoutes {
       name: '/set_remark',
       page: () => SetRemarkPage(
         key: const Key('set_remark'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/add_friend',
+      page: () => AddFriendPage(
+        key: const Key('add_friend'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/search_info',
+      page: () => SearchInfoPage(
+        key: const Key('search_info'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/friend_request',
+      page: () => FriendRequestPage(
+        key: const Key('friend_request'),
       ),
       binding: ControllerBinding(),
     ),
