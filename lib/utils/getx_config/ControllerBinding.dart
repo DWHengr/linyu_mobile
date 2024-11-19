@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:linyu_mobile/pages/chat_list/logic.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/logic.dart';
+import 'package:linyu_mobile/pages/contacts/friend_information/set_group/logic.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_remark/logic.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/pages/login/logic.dart';
@@ -42,5 +43,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => AboutLogic());
     Get.lazyPut(() => FriendInformationLogic());
     Get.lazyPut(() => SetRemarkLogic());
+    Get.lazyPut(() => SetGroupLogic());
   }
 }

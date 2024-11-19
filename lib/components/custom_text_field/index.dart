@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String labelText;
+  final String? labelText;
   final TextEditingController controller;
   final bool obscureText;
   final String hintText;
   final Widget? suffixIcon;
   final Widget? suffix;
+  final double vertical;
   final ValueChanged<String>? onChanged;
   final int? inputLimit;
   final bool readOnly;
@@ -15,7 +16,7 @@ class CustomTextField extends StatelessWidget {
 
   const CustomTextField({
     super.key,
-    required this.labelText,
+    this.labelText,
     required this.controller,
     this.hintText = '请输入内容',
     this.obscureText = false,
@@ -24,7 +25,8 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.inputLimit,
     this.readOnly = false,
-    this.maxLines = 1, // 默认为1行
+    this.maxLines = 1,
+    this.vertical = 12.0,
   });
 
   @override
@@ -32,11 +34,12 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          labelText,
-          style: const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0),
-        ),
-        const SizedBox(height: 5.0),
+        if (labelText != null)
+          Text(
+            labelText ?? '',
+            style: const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0),
+          ),
+        if (labelText != null) const SizedBox(height: 5.0),
         Container(
           decoration: BoxDecoration(
             color: const Color(0xFFEDF2F9),
@@ -67,7 +70,7 @@ class CustomTextField extends StatelessWidget {
                 borderSide: BorderSide.none,
               ),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                  EdgeInsets.symmetric(vertical: vertical, horizontal: 8.0),
             ),
           ),
         ),

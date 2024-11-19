@@ -7,11 +7,13 @@ class CustomButton extends StatelessThemeWidget {
   final VoidCallback onTap;
   final String type;
   final double? width;
+  final double? height;
 
   const CustomButton(
       {super.key,
       required this.text,
       this.width = 200,
+      this.height = 40,
       this.type = 'primary',
       required this.onTap});
 
@@ -63,9 +65,8 @@ class CustomButton extends StatelessThemeWidget {
       color: type == 'gradient' ? null : _getColor(type),
       child: Container(
         width: width,
-        height: 40,
+        height: height,
         decoration: _getBoxDecoration(type),
-        padding: const EdgeInsets.all(10),
         child: Center(
           child: Text(
             text,
