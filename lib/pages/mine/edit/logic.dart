@@ -4,12 +4,12 @@ import 'package:flutter_pickers/pickers.dart';
 import 'package:flutter_pickers/style/picker_style.dart';
 import 'package:flutter_pickers/time_picker/model/date_type.dart';
 import 'package:flutter_pickers/time_picker/model/pduration.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as getx;
 import 'package:get/get_instance/src/get_instance.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
 import 'package:linyu_mobile/utils/cropPicture.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
@@ -142,27 +142,13 @@ class EditMineLogic extends getx.GetxController {
     FormData formData = FormData.fromMap(map);
     final result = await _useApi.upload(formData);
     if (result['code'] == 0) {
-      Fluttertoast.showToast(
-          msg: "头像修改成功",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: _theme.primaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showSuccessToast('头像修改成功');
       currentUserInfo['portrait'] = result['data'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('portrait', currentUserInfo['portrait']);
       update([const Key("edit_mine")]);
     } else {
-      Fluttertoast.showToast(
-          msg: result['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast(result['msg']);
     }
   }
 
@@ -298,14 +284,7 @@ class EditMineLogic extends getx.GetxController {
           signature: signature,
           portrait: portrait);
       if (updateResult['code'] == 0) {
-        Fluttertoast.showToast(
-            msg: "资料修改成功",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: _theme.primaryColor,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        CustomFlutterToast.showSuccessToast('资料修改成功~');
         prefs.setString('username', name);
         prefs.setString('portrait', portrait);
         prefs.setString('sex', sex);
@@ -314,14 +293,7 @@ class EditMineLogic extends getx.GetxController {
         isEdit = false;
         return;
       } else {
-        Fluttertoast.showToast(
-            msg: updateResult['msg'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        CustomFlutterToast.showErrorToast(updateResult['msg']);
       }
       return;
     }

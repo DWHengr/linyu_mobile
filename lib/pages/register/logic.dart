@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/encrypt.dart';
 
 class RegisterPageLogic extends GetxController {
@@ -27,7 +27,9 @@ class RegisterPageLogic extends GetxController {
   //计时器
   late Timer _timer;
   int _countdownTime = 0;
+
   int get countdownTime => _countdownTime;
+
   set countdownTime(int value) {
     _countdownTime = value;
     update([
@@ -36,22 +38,28 @@ class RegisterPageLogic extends GetxController {
   }
 
   int _userTextLength = 0;
+
   int get userTextLength => _userTextLength;
+
   set userTextLength(int value) {
     _userTextLength = value;
     update([const Key("register")]);
   }
 
   int _accountTextLength = 0;
-  int get accountTextLength =>_accountTextLength;
-  set accountTextLength(int value){
+
+  int get accountTextLength => _accountTextLength;
+
+  set accountTextLength(int value) {
     _accountTextLength = value;
     update([const Key("register")]);
   }
 
   int _passwordTextLength = 0;
-  int get passwordTextLength =>_passwordTextLength;
-  set passwordTextLength(int value){
+
+  int get passwordTextLength => _passwordTextLength;
+
+  set passwordTextLength(int value) {
     _passwordTextLength = value;
     update([const Key("register")]);
   }
@@ -63,13 +71,13 @@ class RegisterPageLogic extends GetxController {
   }
 
   //用户账号输入长度
-  void onAccountTextChanged(String value){
+  void onAccountTextChanged(String value) {
     accountTextLength = value.length;
     if (accountTextLength >= 30) accountTextLength = 30;
   }
 
   //用户密码输入长度
-  void onPasswordTextChanged(String value){
+  void onPasswordTextChanged(String value) {
     passwordTextLength = value.length;
     if (passwordTextLength >= 16) passwordTextLength = 16;
   }
@@ -81,25 +89,11 @@ class RegisterPageLogic extends GetxController {
       final String mail = mailController.text;
       final emailVerificationResult = await _useApi.emailVerification(mail);
       if (emailVerificationResult['code'] == 0) {
-        Fluttertoast.showToast(
-            msg: "发送成功",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: const Color(0xFF4C9BFF),
-            textColor: Colors.white,
-            fontSize: 16.0);
+        CustomFlutterToast.showSuccessToast("发送成功~");
         countdownTime = 30;
         _startCountdownTimer();
       } else {
-        Fluttertoast.showToast(
-            msg: emailVerificationResult['msg'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        CustomFlutterToast.showErrorToast(emailVerificationResult['msg']);
       }
     }
   }
@@ -116,31 +110,17 @@ class RegisterPageLogic extends GetxController {
         password.isEmpty ||
         email.isEmpty ||
         code.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "不能为空，请填写完整！",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast("不能为空，请填写完整！");
     } else {
       final encryptedPassword = await passwordEncrypt(password);
       assert(encryptedPassword != "-1");
       final registerResult = await _useApi.register(
           username, account, encryptedPassword, email, code);
-      Fluttertoast.showToast(
-          msg: registerResult['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: registerResult['code'] == 0
-              ? const Color(0xFF4C9BFF)
-              : Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
       if (registerResult['code'] == 0) {
+        CustomFlutterToast.showSuccessToast(registerResult['msg']);
         Get.back();
+      } else {
+        CustomFlutterToast.showErrorToast(registerResult['msg']);
       }
     }
   }
@@ -149,11 +129,11 @@ class RegisterPageLogic extends GetxController {
   void _startCountdownTimer() {
     const oneSec = Duration(seconds: 1);
     callback(timer) => {
-      if (countdownTime < 1)
-        {_timer.cancel()}
-      else
-        {countdownTime = countdownTime - 1}
-    };
+          if (countdownTime < 1)
+            {_timer.cancel()}
+          else
+            {countdownTime = countdownTime - 1}
+        };
     _timer = Timer.periodic(oneSec, callback);
   }
 

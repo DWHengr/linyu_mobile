@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 
 class QRLoginAffirmLogic extends GetxController {
   final _userAPi = UserApi();
@@ -15,14 +14,7 @@ class QRLoginAffirmLogic extends GetxController {
   void onQrLogin() {
     _userAPi.qrLogin(qrCode).then((res) {
       if (res['code'] == 0) {
-        Fluttertoast.showToast(
-            msg: "登录成功~",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: const Color(0xFF4C9BFF),
-            textColor: Colors.white,
-            fontSize: 16.0);
+        CustomFlutterToast.showSuccessToast("登录成功~");
         Get.until((route) => Get.currentRoute == "/");
       }
     });

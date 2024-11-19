@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
@@ -20,7 +20,7 @@ class FriendInformationLogic extends Logic {
   Map<String, dynamic> get friendData => arguments['friend'];
 
   //好友id
-  String get friendId =>  arguments['friendId'].toString();
+  String get friendId => arguments['friendId'].toString();
 
   //好友头像
   String _friendPortrait = '';
@@ -148,7 +148,7 @@ class FriendInformationLogic extends Logic {
       friendGender = data['sex'];
       friendBirthday = data['birthday'];
       friendSignature = data['signature'] ?? '';
-      friendGroup = data['group'] ?? '未分组';
+      friendGroup = data['groupName'] ?? '未分组';
       isConcern = data['isConcern'];
     }
     update([const Key('friend_info')]);
@@ -164,36 +164,15 @@ class FriendInformationLogic extends Logic {
   //设置分组
   void setGroup(String value) async {
     if (value == '0') {
-      Fluttertoast.showToast(
-          msg: "选择有误",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast('选择有误');
       return;
     }
     friendGroup = value;
     final response = await _friendApi.setGroup(friendId, friendGroup);
     if (response['code'] == 0) {
-      Fluttertoast.showToast(
-          msg: "修改分组成功",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: _theme.primaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showSuccessToast('修改分组成功');
     } else {
-      Fluttertoast.showToast(
-          msg: response['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast(response['msg']);
     }
     print('选中的value是：$friendGroup');
   }
@@ -212,24 +191,10 @@ class FriendInformationLogic extends Logic {
   //特别关心结果
   void setResult(Map<String, dynamic> response) {
     if (response['code'] == 0) {
-      Fluttertoast.showToast(
-          msg: isConcern ? "已取消特别关心~" : "特别关心成功~",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: _theme.primaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showSuccessToast(isConcern ? "已取消特别关心~" : "特别关心成功~");
       isConcern = !isConcern;
     } else {
-      Fluttertoast.showToast(
-          msg: response['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast(response['msg']);
     }
   }
 
@@ -237,24 +202,10 @@ class FriendInformationLogic extends Logic {
   void deleteFriend() async {
     final response = await _friendApi.delete(friendId);
     if (response['code'] == 0) {
-      Fluttertoast.showToast(
-          msg: "删除成功",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: _theme.primaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showSuccessToast("删除成功~");
       Get.back();
     } else {
-      Fluttertoast.showToast(
-          msg: response['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast(response['msg']);
     }
   }
 

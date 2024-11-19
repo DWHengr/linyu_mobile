@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 
@@ -28,25 +28,11 @@ class SetRemarkLogic extends GetxController {
     final response =
         await _friendApi.setRemark(friendId, remarkController.text);
     if (response['code'] == 0) {
-      Fluttertoast.showToast(
-          msg: "备注设置成功~",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: theme.primaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showSuccessToast('备注设置成功~');
       _friendInformationLogic.getFriendInfo();
       Get.back();
     } else {
-      Fluttertoast.showToast(
-          msg: response['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      CustomFlutterToast.showErrorToast(response['msg']);
     }
   }
 
