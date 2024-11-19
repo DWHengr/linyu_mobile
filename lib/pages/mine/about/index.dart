@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_label_value/index.dart';
 import 'package:linyu_mobile/pages/mine/about/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
@@ -23,7 +24,7 @@ class AboutPage extends CustomWidget<AboutLogic> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text('关于我们'),
+          title: const AppBarTitle('关于我们'),
           centerTitle: true,
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,

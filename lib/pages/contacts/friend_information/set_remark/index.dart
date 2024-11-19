@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_remark/logic.dart';
@@ -14,7 +15,7 @@ class SetRemarkPage extends CustomWidget<SetRemarkLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text('好友备注'),
+          title: const AppBarTitle('好友备注'),
           centerTitle: true,
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,

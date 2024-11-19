@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
@@ -13,7 +14,7 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         child: InkWell(
-          onTap: ()=>controller.toFriendDetail(friend),
+          onTap: () => controller.toFriendDetail(friend),
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -61,7 +62,7 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
                   ),
                   CustomButton(
                     text: '添加',
-                    onTap: ()=>controller.goApplyFriend(friend),
+                    onTap: () => controller.goApplyFriend(friend),
                     width: 40.2,
                     height: 27.4,
                     textSize: 12,
@@ -79,78 +80,80 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
 
   //添加好友页面
   @override
-  Widget buildWidget(BuildContext context)
-    => Scaffold(
-      backgroundColor: const Color(0xFFF9FBFF),
-      appBar: AppBar(title: const Text('好友搜索'), centerTitle: true, actions: [
-        //取消按钮
-        TextButton(
-          child: const Text('取消'),
-          onPressed: () => Get.back(),
-        ),
-      ]),
-      body: GestureDetector(
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              CustomSearchBox(
-                height: 30,
-                hintText: '账号/手机号/邮箱',
-                onChanged: controller.onSearchFriend,
+  Widget buildWidget(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF9FBFF),
+        appBar: AppBar(
+            title: const AppBarTitle('好友搜索'),
+            centerTitle: true,
+            actions: [
+              //取消按钮
+              TextButton(
+                child: const Text('取消'),
+                onPressed: () => Get.back(),
               ),
-              if (controller.searchList.isNotEmpty)
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async =>
-                        Future.delayed(const Duration(milliseconds: 700)),
-                    color: theme.primaryColor,
-                    child: ListView(
-                      children: [
-                        if (controller.searchList.isNotEmpty) ...[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              "搜索结果",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: theme.primaryColor,
+            ]),
+        body: GestureDetector(
+          onTap: () {},
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              children: [
+                CustomSearchBox(
+                  height: 30,
+                  hintText: '账号/手机号/邮箱',
+                  onChanged: controller.onSearchFriend,
+                ),
+                if (controller.searchList.isNotEmpty)
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async =>
+                          Future.delayed(const Duration(milliseconds: 700)),
+                      color: theme.primaryColor,
+                      child: ListView(
+                        children: [
+                          if (controller.searchList.isNotEmpty) ...[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                "搜索结果",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: theme.primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                          ...controller.searchList.map((friend) =>
-                              _buildSearchItem(friend, friend['friendId'])),
+                            ...controller.searchList.map((friend) =>
+                                _buildSearchItem(friend, friend['friendId'])),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              if (controller.searchList.isEmpty)
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/empty-bg.png',
-                          width: 100,
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          '暂无搜索结果',
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
-                        ),
-                      ],
+                if (controller.searchList.isEmpty)
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/empty-bg.png',
+                            width: 100,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            '暂无搜索结果',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
-
+      );
 }

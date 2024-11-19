@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -83,7 +84,7 @@ class SetGroupPage extends CustomWidget<SetGroupLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text('好友分组'),
+          title: const AppBarTitle('好友分组'),
           centerTitle: true,
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,

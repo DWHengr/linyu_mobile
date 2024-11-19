@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -22,7 +22,7 @@ class TalkPage extends CustomWidget<TalkLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('说说'),
+          title: const AppBarTitle('说说'),
           backgroundColor: const Color(0xFFF9FBFF),
           actions: [
             TextButton(

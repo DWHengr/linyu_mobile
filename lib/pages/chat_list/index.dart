@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/pages/chat_list/logic.dart';
@@ -21,7 +22,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('聊天列表'),
+        title: const AppBarTitle('聊天列表'),
         backgroundColor: const Color(0xFFF9FBFF),
         actions: [
           PopupMenuButton(
@@ -49,7 +50,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: ()=> Get.toNamed('/add_friend'),
+                onTap: () => Get.toNamed('/add_friend'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

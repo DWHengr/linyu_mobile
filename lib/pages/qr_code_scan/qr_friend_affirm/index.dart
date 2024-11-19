@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_label_value/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
@@ -16,7 +16,7 @@ class QRFriendAffirmPage extends CustomWidget<QRFriendAffirmLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('个人资料'),
+        title: const AppBarTitle('个人资料'),
         backgroundColor: const Color(0xFFF9FBFF),
       ),
       body: Padding(

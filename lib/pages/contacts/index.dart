@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -146,7 +147,8 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                   ),
                 ),
                 const SizedBox(width: 20),
-                _getNotifyOperateTip(notify['status'], isFromCurrentUser,notify),
+                _getNotifyOperateTip(
+                    notify['status'], isFromCurrentUser, notify),
               ],
             ),
           ),
@@ -174,12 +176,14 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
     return "";
   }
 
-  Widget _getNotifyOperateTip(status, isFromCurrentUser,[dynamic notify]) {
-
+  Widget _getNotifyOperateTip(status, isFromCurrentUser, [dynamic notify]) {
     if (!isFromCurrentUser && status == "wait") {
       return Row(
         children: [
-          CustomTextButton("同意", onTap: ()=> controller.handlerAgreeFriend(notify['id']),),
+          CustomTextButton(
+            "同意",
+            onTap: () => controller.handlerAgreeFriend(notify['id']),
+          ),
           const SizedBox(width: 10),
           CustomTextButton(
             "取消",
@@ -342,7 +346,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('通讯列表'),
+        title: const AppBarTitle('通讯列表'),
         backgroundColor: const Color(0xFFF9FBFF),
         actions: [
           PopupMenuButton(
@@ -370,7 +374,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: ()=> Get.toNamed('/add_friend'),
+                onTap: () => Get.toNamed('/add_friend'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

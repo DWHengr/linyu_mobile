@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -11,7 +12,7 @@ class QrOtherResultPage extends CustomWidget<QrOtherResultLogic> {
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('扫描结果'),
+        title: const AppBarTitle('扫描结果'),
         backgroundColor: const Color(0xFFF9FBFF),
       ),
       body: Center(
