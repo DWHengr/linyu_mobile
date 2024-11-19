@@ -5,11 +5,16 @@ import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 class NavigationLogic extends GetxController {
   late int currentIndex = 0;
 
-  @override
-  void onInit() {
+  void initData(){
     late String sex = Get.parameters['sex'] ?? "男";
     GlobalThemeConfig theme = GetInstance().find<GlobalThemeConfig>();
     theme.changeThemeMode(sex == "女" ? 'pink' : 'blue');
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    initData();
   }
 
   final List<String> selectedIcons = [

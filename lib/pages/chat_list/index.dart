@@ -49,7 +49,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
               PopupMenuItem(
                 value: 1,
                 height: 40,
-                onTap: () {},
+                onTap: ()=> Get.toNamed('/add_friend'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

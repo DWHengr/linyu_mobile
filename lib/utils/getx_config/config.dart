@@ -5,17 +5,6 @@ import 'package:linyu_mobile/utils/getx_config/route.dart';
 
 typedef FilterFunc<T> = Object Function(T value);
 
-class Logic extends GetxController {
-  //路由参数
-  dynamic arguments = Get.arguments;
-
-  @override
-  void onClose() {
-    super.onClose();
-    if (arguments != null) arguments = null;
-  }
-}
-
 //路由配置
 List<GetPage> pageRoute = AppRoutes.pageRoute;
 
@@ -50,6 +39,89 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
 
   /// 初始化
   void init(BuildContext context) => print("init>$runtimeType");
+
+  /// 依赖发生变化
+  void didChangeDependencies(BuildContext context) =>
+      print("change>$runtimeType");
+
+  /// 更新Widget
+  void didUpdateWidget(
+    GetBuilder oldWidget,
+    GetBuilderState<T> state,
+  ) =>
+      print("update>$runtimeType");
+
+  /// 构建widget
+  Widget buildWidget(BuildContext context);
+
+  /// 关闭
+  void close(BuildContext context) => print("close>$runtimeType");
+
+  /// 创建上下文
+  @override
+  StatelessElement createElement() => StatelessElement(this);
+
+  /// 构建
+  @override
+  Widget build(BuildContext context) => GetBuilder<T>(
+        id: this.key,
+        initState: (GetBuilderState<T> state) => this.init(context),
+        didChangeDependencies: (GetBuilderState<T> state) =>
+            this.didChangeDependencies(context),
+        didUpdateWidget: this.didUpdateWidget,
+        builder: (controller) {
+          return this.buildWidget(context);
+        },
+        dispose: (GetBuilderState<T> state) => this.close(context),
+      );
+}
+
+class Logic<T extends Widget> extends GetxController {
+  /// 当前widget
+  /// 不要在controller的[onInit()]中使用，会导致widget为null
+  /// 若需要使用widget中的属性需要在Logic的泛型声明 否则不要轻易使用
+  /// 例如：
+  /// class HomeLogic extends Logic<HomeWidget> {}
+  late final T? widget;
+
+  //主题配置
+  // GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
+  late final GlobalThemeConfig  theme;
+
+  //路由参数
+   dynamic get arguments => Get.arguments;
+   // late final dynamic  arguments;
+
+}
+
+abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
+  /// 构造函数
+  CustomWidgetNew({
+    this.key,
+  }) : super(key: key);
+
+  /// 当传入key的时候，若更新widget需使用controller.update([key],)
+  @override
+  final Key? key;
+
+  /// 传入的参数
+  final dynamic arguments = Get.arguments;
+
+  /// 控制器的tag
+  final String? tag = null;
+
+  /// 获取控制器
+  T get controller => GetInstance().find<T>(tag: tag);
+
+  GlobalThemeConfig get theme =>
+      GetInstance().find<GlobalThemeConfig>(tag: tag);
+
+  /// 初始化
+  void init(BuildContext context) {
+    print("init>$runtimeType");
+    controller.widget = this;
+    controller.theme = theme;
+  }
 
   /// 依赖发生变化
   void didChangeDependencies(BuildContext context) =>

@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
   final int? inputLimit;
   final bool readOnly;
   final int? maxLines; // 新增maxLines参数
+  final Color? labelTextColor;
 
   const CustomTextField({
     super.key,
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     this.inputLimit,
+    this.labelTextColor = const Color(0xFF1F1F1F),
     this.readOnly = false,
     this.maxLines = 1,
     this.vertical = 12.0,
@@ -37,7 +39,7 @@ class CustomTextField extends StatelessWidget {
         if (labelText != null)
           Text(
             labelText ?? '',
-            style: const TextStyle(color: Color(0xFF1F1F1F), fontSize: 14.0),
+            style: TextStyle(color: labelTextColor, fontSize: 14.0),
           ),
         if (labelText != null) const SizedBox(height: 5.0),
         Container(
