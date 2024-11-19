@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
+import 'package:linyu_mobile/utils/web_socket.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationLogic extends GetxController {
   late int currentIndex = 0;
+  final _wsManager = WebSocketUtil();
 
-  void initData(){
+  void initData() {
     late String sex = Get.parameters['sex'] ?? "男";
     GlobalThemeConfig theme = GetInstance().find<GlobalThemeConfig>();
     theme.changeThemeMode(sex == "女" ? 'pink' : 'blue');
@@ -15,6 +18,13 @@ class NavigationLogic extends GetxController {
   void onInit() {
     super.onInit();
     initData();
+    connectWebSocket();
+  }
+
+  void connectWebSocket() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('x-token');
+    _wsManager.connect(token!);
   }
 
   final List<String> selectedIcons = [
@@ -41,5 +51,10 @@ class NavigationLogic extends GetxController {
   void onTap(int index) {
     currentIndex = index;
     update([const Key("main")]);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

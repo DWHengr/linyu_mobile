@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/utils/web_socket.dart';
 
 class ChatListLogic extends GetxController {
   final _chatListApi = ChatListApi();
@@ -9,6 +12,22 @@ class ChatListLogic extends GetxController {
   late List<dynamic> topList = [];
   late List<dynamic> otherList = [];
   late List<dynamic> searchList = [];
+  final _wsManager = WebSocketUtil();
+  StreamSubscription? _subscription;
+
+  @override
+  void onInit() {
+    eventListen();
+  }
+
+  void eventListen() {
+    // 监听消息
+    _subscription = _wsManager.eventStream.listen((event) {
+      if (event['type'] == 'on-receive-msg') {
+        onGetChatList();
+      }
+    });
+  }
 
   void onGetChatList() {
     _chatListApi.list().then((res) {
@@ -49,5 +68,11 @@ class ChatListLogic extends GetxController {
         update([const Key("chat_list")]);
       }
     });
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
   }
 }

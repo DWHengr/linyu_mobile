@@ -44,6 +44,7 @@ dependencies:
   audioplayers: ^6.1.0
   qr_flutter: ^4.1.0
   mobile_scanner: ^6.0.2
+  web_socket_channel: ^3.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
