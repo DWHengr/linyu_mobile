@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
+import 'package:linyu_mobile/utils/notification.dart';
+import 'package:linyu_mobile/utils/permission_handler.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationLogic extends GetxController {
   late int currentIndex = 0;
   final _wsManager = WebSocketUtil();
+
+  GlobalData get globalData => GetInstance().find<GlobalData>();
 
   void initData() {
     late String sex = Get.parameters['sex'] ?? "男";
@@ -19,12 +23,16 @@ class NavigationLogic extends GetxController {
     super.onInit();
     initData();
     connectWebSocket();
+    (() async {
+      await NotificationUtil.initialize();
+      await NotificationUtil.createNotificationChannel();
+      await PermissionHandler.permissionRequest();
+      globalData.init();
+    })();
   }
 
   void connectWebSocket() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('x-token');
-    _wsManager.connect(token!);
+    _wsManager.connect();
   }
 
   final List<String> selectedIcons = [

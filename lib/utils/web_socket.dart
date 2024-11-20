@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:linyu_mobile/utils/date.dart';
+import 'package:linyu_mobile/utils/notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketUtil {
@@ -26,10 +29,12 @@ class WebSocketUtil {
 
   WebSocketUtil._internal();
 
-  Future<void> connect(String token) async {
+  Future<void> connect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('x-token');
+    if (token == null) return;
     if (_isConnected || _channel != null) return;
     _isConnected = true;
-    _token = token;
 
     try {
       print('WebSocket connecting...');
@@ -73,6 +78,7 @@ class WebSocketUtil {
       } else {
         switch (wsContent['type']) {
           case 'msg':
+            sendNotification(wsContent['content']);
             _eventController.add(
                 {'type': 'on-receive-msg', 'content': wsContent['content']});
             break;
@@ -131,7 +137,7 @@ class WebSocketUtil {
     _reconnectTimer = Timer(
       const Duration(seconds: 5),
       () {
-        connect(_token!);
+        connect();
         _reconnectCount++;
         _lockReconnect = false;
       },
@@ -154,5 +160,47 @@ class WebSocketUtil {
     _channel?.sink.close();
     _eventController.close();
     _instance = null;
+  }
+
+  void sendNotification(dynamic msg) {
+    dynamic msgContent = msg['msgContent'];
+    try {
+      String contentStr = '';
+      switch (msgContent['type']) {
+        case "text":
+          contentStr = msgContent['content'];
+          break;
+        case "file":
+          var content = jsonDecode(msgContent['content']);
+          contentStr = '[文件] ${content['name']}';
+          break;
+        case "img":
+          contentStr = '[图片]';
+          break;
+        case "retraction":
+          contentStr = '[消息被撤回]';
+          break;
+        case "voice":
+          var content = jsonDecode(msgContent['content']);
+          contentStr = '[语音] ${content['time']}';
+          break;
+        case "call":
+          var content = jsonDecode(msgContent['content']);
+          contentStr =
+              '[通话] ${content['time'] > 0 ? DateUtil.formatTimingTime(content['time']) : "未接通"}';
+          break;
+        case "system":
+          contentStr = '[系统消息]';
+          break;
+        case "quit":
+          contentStr = '[系统消息]';
+          break;
+      }
+      NotificationUtil.showNotification(
+        id: 0,
+        title: msgContent['formUserName'],
+        body: '${msgContent['formUserName']}: $contentStr',
+      );
+    } catch (e) {}
   }
 }

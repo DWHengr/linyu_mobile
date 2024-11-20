@@ -72,4 +72,13 @@ class DateUtil {
     }
     return '$age岁';
   }
+
+  static String formatTimingTime(String time) {
+    final int totalSeconds = int.tryParse(time) ?? 0;
+    final hours = totalSeconds ~/ 3600;
+    final minutes = (totalSeconds % 3600) ~/ 60;
+    final seconds = totalSeconds % 60;
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return '${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}';
+  }
 }

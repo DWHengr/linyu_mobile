@@ -1,8 +1,6 @@
-// lib/services/user_service.dart
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/api/Http.dart';
 
 class UserApi {
@@ -132,7 +130,7 @@ class UserApi {
     return response.data;
   }
 
-  Future<Map<String, dynamic>> search( String userInfo) async {
+  Future<Map<String, dynamic>> search(String userInfo) async {
     final response = await _dio.post(
       '/v1/api/user/search',
       data: {
@@ -140,5 +138,19 @@ class UserApi {
       },
     );
     return response.data;
+  }
+
+  Future<Map<String, dynamic>> unread() async {
+    final response = await _dio.get('/v1/api/user/unread');
+    return response.data;
+  }
+
+  Future<dynamic> getNetworkImage(imageUrl) async {
+    final response = await _dio.get<List<int>>(
+      imageUrl,
+      options: Options(responseType: ResponseType.bytes),
+    );
+    final List<int> list = List<int>.from(response.data!);
+    return base64Encode(list);
   }
 }

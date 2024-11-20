@@ -184,7 +184,7 @@ class SearchInfoPage extends CustomWidgetNew<SearchInfoLogic> {
                           width: 50,
                           label: '签名',
                           hint: 'ta没有要说的签名~',
-                          maxLines: 3,
+                          maxLines: 10,
                           value: controller.friendSignature),
                       const SizedBox(height: 1),
                     ],

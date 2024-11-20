@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/utils/getx_config/route.dart';
 
@@ -36,6 +37,8 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
 
   GlobalThemeConfig get theme =>
       GetInstance().find<GlobalThemeConfig>(tag: tag);
+
+  GlobalData get globalData => GetInstance().find<GlobalData>(tag: tag);
 
   /// 初始化
   void init(BuildContext context) => print("init>$runtimeType");
@@ -86,12 +89,11 @@ class Logic<T extends Widget> extends GetxController {
 
   //主题配置
   // GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
-  late final GlobalThemeConfig  theme;
+  late final GlobalThemeConfig theme;
 
   //路由参数
-   dynamic get arguments => Get.arguments;
-   // late final dynamic  arguments;
-
+  dynamic get arguments => Get.arguments;
+// late final dynamic  arguments;
 }
 
 abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
@@ -161,6 +163,7 @@ abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
 
 abstract class StatelessThemeWidget extends StatelessWidget {
   const StatelessThemeWidget({super.key});
+
   GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
 }
 

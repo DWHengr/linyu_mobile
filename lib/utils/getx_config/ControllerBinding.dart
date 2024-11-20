@@ -20,6 +20,7 @@ import 'package:linyu_mobile/pages/qr_code_scan/qr_login_affirm/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/pages/mine/edit/logic.dart';
 
@@ -28,6 +29,7 @@ class ControllerBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(GlobalThemeConfig(), permanent: true);
+    Get.put(GlobalData(), permanent: true);
     Get.lazyPut(() => NavigationLogic());
     Get.lazyPut(() => LoginPageLogic());
     Get.lazyPut(() => RegisterPageLogic());
