@@ -1,19 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 
 class GlobalThemeConfig extends GetxController {
-  late String themeMode = 'blue';
+  late RxString themeMode = 'blue'.obs;
 
   void changeThemeMode(String mode) {
-    themeMode = mode;
+    themeMode.value = mode;
     update();
   }
 
   //主题色
   Color get primaryColor {
-    switch (themeMode) {
+    switch (themeMode.value) {
       case 'blue':
         return const Color(0xFF4C9BFF);
       case 'pink':
@@ -24,7 +24,7 @@ class GlobalThemeConfig extends GetxController {
   }
 
   Color get boldColor {
-    switch (themeMode) {
+    switch (themeMode.value) {
       case 'blue':
         return const Color(0xFF0060D9);
       case 'pink':
@@ -35,7 +35,7 @@ class GlobalThemeConfig extends GetxController {
   }
 
   Color get minorColor {
-    switch (themeMode) {
+    switch (themeMode.value) {
       case 'blue':
         return const Color(0xFFDFF4FF);
       case 'pink':
@@ -46,7 +46,7 @@ class GlobalThemeConfig extends GetxController {
   }
 
   Color get qrColor {
-    switch (themeMode) {
+    switch (themeMode.value) {
       case 'blue':
         return const Color(0xFFA0D9F6);
       case 'pink':
@@ -58,7 +58,7 @@ class GlobalThemeConfig extends GetxController {
 
   //搜索框背景色
   Color get searchBarColor {
-    switch (themeMode) {
+    switch (themeMode.value) {
       case 'blue':
         return const Color(0xFFE3ECFF);
       case 'pink':

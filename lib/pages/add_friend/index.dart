@@ -99,7 +99,6 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
             child: Column(
               children: [
                 CustomSearchBox(
-                  height: 30,
                   hintText: '账号/手机号/邮箱',
                   onChanged: controller.onSearchFriend,
                 ),

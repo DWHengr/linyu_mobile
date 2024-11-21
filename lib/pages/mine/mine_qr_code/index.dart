@@ -102,7 +102,7 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                                     color: Colors.white,
                                   ),
                                   child: Image.asset(
-                                      'assets/images/logo-qr-${theme.themeMode}.png'),
+                                      'assets/images/logo-qr-${theme.themeMode.value}.png'),
                                 ),
                               ],
                             ),
