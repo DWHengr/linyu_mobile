@@ -61,7 +61,7 @@ class NotificationUtil {
       'high_importance_channel',
       'High Importance Notifications',
       description: 'This channel is used for important notifications.',
-      importance: Importance.high,
+      importance: Importance.max,
     );
 
     await _notificationsPlugin
@@ -81,8 +81,8 @@ class NotificationUtil {
       'high_importance_channel',
       'High Importance Notifications',
       channelDescription: 'This channel is used for important notifications.',
-      importance: Importance.high,
-      priority: Priority.high,
+      importance: Importance.max,
+      priority: Priority.max,
       ticker: 'ticker',
     );
 
@@ -118,8 +118,8 @@ class NotificationUtil {
       'progress_channel',
       'Progress Notifications',
       channelDescription: 'Notifications with progress bar',
-      importance: Importance.low,
-      priority: Priority.low,
+      importance: Importance.max,
+      priority: Priority.max,
       showProgress: true,
       maxProgress: maxProgress,
       progress: progress,
@@ -148,8 +148,8 @@ class NotificationUtil {
       'big_picture_channel',
       'Big Picture Notifications',
       channelDescription: 'Notifications with big picture',
-      importance: Importance.high,
-      priority: Priority.high,
+      importance: Importance.max,
+      priority: Priority.max,
       styleInformation: bigPicture,
     );
 

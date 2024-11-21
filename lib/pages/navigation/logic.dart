@@ -24,10 +24,10 @@ class NavigationLogic extends GetxController {
     initData();
     connectWebSocket();
     (() async {
+      await globalData.init();
       await NotificationUtil.initialize();
       await NotificationUtil.createNotificationChannel();
       await PermissionHandler.permissionRequest();
-      globalData.init();
     })();
   }
 

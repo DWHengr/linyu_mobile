@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_instance/src/get_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
 
 class ChatListLogic extends GetxController {
@@ -15,6 +17,8 @@ class ChatListLogic extends GetxController {
   final _wsManager = WebSocketUtil();
   StreamSubscription? _subscription;
 
+  GlobalData get globalData => GetInstance().find<GlobalData>();
+
   @override
   void onInit() {
     eventListen();
@@ -25,6 +29,7 @@ class ChatListLogic extends GetxController {
     _subscription = _wsManager.eventStream.listen((event) {
       if (event['type'] == 'on-receive-msg') {
         onGetChatList();
+        globalData.onGetUserUnreadInfo();
       }
     });
   }

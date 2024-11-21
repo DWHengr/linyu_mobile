@@ -1,27 +1,26 @@
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/app_badger.dart';
 
 class GlobalData extends GetxController {
   final _userApi = UserApi();
-  late Map<String, dynamic> unread;
+  var unread = <String, int>{}.obs;
 
-  void init() {
-    _onGetUserUnreadInfo();
+  Future<void> init() async {
+    await onGetUserUnreadInfo();
   }
 
-  void _onGetUserUnreadInfo() async {
+  Future<void> onGetUserUnreadInfo() async {
     final result = await _userApi.unread();
     if (result['code'] == 0) {
-      unread = result['data'];
+      unread.assignAll(Map<String, int>.from(result['data']));
       AppBadger.setCount(getUnreadCount('chat'), getUnreadCount('notify'));
-      update();
     }
   }
 
   int getUnreadCount(String type) {
-    if (unread.containsKey(type)) {
-      return unread[type];
+    if (unread.value.containsKey(type)) {
+      return unread.value[type]!;
     }
     return 0;
   }
