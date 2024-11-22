@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class CustomTextField extends StatelessWidget {
   final String? labelText;
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final bool obscureText;
   final String hintText;
   final Widget? suffixIcon;
@@ -12,13 +13,16 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int? inputLimit;
   final bool readOnly;
-  final int? maxLines; // 新增maxLines参数
+  final int? maxLines;
+  final int? minLines;
   final Color? labelTextColor;
+  final Color? hintTextColor;
 
   const CustomTextField({
     super.key,
     this.labelText,
     required this.controller,
+    this.focusNode,
     this.hintText = '请输入内容',
     this.obscureText = false,
     this.suffix,
@@ -28,7 +32,9 @@ class CustomTextField extends StatelessWidget {
     this.labelTextColor = const Color(0xFF1F1F1F),
     this.readOnly = false,
     this.maxLines = 1,
+    this.minLines,
     this.vertical = 12.0,
+    this.hintTextColor = Colors.grey,
   });
 
   @override
@@ -49,10 +55,12 @@ class CustomTextField extends StatelessWidget {
           ),
           child: TextField(
             controller: controller,
+            focusNode: focusNode,
             obscureText: obscureText,
             onChanged: onChanged,
             readOnly: readOnly,
             maxLines: maxLines,
+            minLines: minLines,
             // 使用maxLines参数
             inputFormatters: inputLimit != null
                 ? <TextInputFormatter>[
@@ -63,7 +71,7 @@ class CustomTextField extends StatelessWidget {
               hintText: hintText,
               suffixIcon: suffixIcon,
               suffix: suffix,
-              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
+              hintStyle: TextStyle(color: hintTextColor, fontSize: 14.0),
               filled: true,
               fillColor: const Color(0xFFEDF2F9),
               isDense: true,

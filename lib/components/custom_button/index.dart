@@ -73,7 +73,6 @@ class CustomButton extends StatelessThemeWidget {
         width: width,
         height: height,
         decoration: _getBoxDecoration(type),
-        padding: padding,
         child: Center(
           child: Text(
             text,

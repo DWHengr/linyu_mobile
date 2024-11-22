@@ -1,5 +1,8 @@
 class DateUtil {
   static String formatTime(String dateStr) {
+    if (dateStr == null || dateStr == '') {
+      return '';
+    }
     final date = DateTime.parse(dateStr);
     final now = DateTime.now();
     final diff = now.difference(date);
@@ -74,6 +77,9 @@ class DateUtil {
   }
 
   static String formatTimingTime(String time) {
+    if (time == null || time == '') {
+      return '';
+    }
     final int totalSeconds = int.tryParse(time) ?? 0;
     final hours = totalSeconds ~/ 3600;
     final minutes = (totalSeconds % 3600) ~/ 60;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
@@ -87,7 +88,8 @@ class TalkPage extends CustomWidget<TalkLogic> {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         child: InkWell(
-          onTap: () {},
+          onTap: () => Get.toNamed('/talk_details',
+              arguments: {'talkId': talk['talkId']}),
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -163,7 +165,8 @@ class TalkPage extends CustomWidget<TalkLogic> {
                               style: const TextStyle(fontSize: 12)),
                         ],
                       ),
-                      CustomTextButton('删除', onTap: () {}),
+                      if (controller.currentUserId == talk['userId'])
+                        CustomTextButton('删除', onTap: () {}),
                     ],
                   ),
                   const SizedBox(height: 5),

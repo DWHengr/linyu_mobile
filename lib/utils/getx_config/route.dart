@@ -23,6 +23,7 @@ import 'package:linyu_mobile/pages/register/index.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
 
 import 'package:linyu_mobile/pages/mine/edit/index.dart';
+import 'package:linyu_mobile/pages/talk/talk_details/index.dart';
 import 'ControllerBinding.dart';
 
 class AppRoutes {
@@ -180,6 +181,13 @@ class AppRoutes {
       name: '/set_group',
       page: () => SetGroupPage(
         key: const Key('set_group'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/talk_details',
+      page: () => TalkDetailsPage(
+        key: const Key('talk_details'),
       ),
       binding: ControllerBinding(),
     ),

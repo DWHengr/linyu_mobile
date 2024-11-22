@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/talk_api.dart';
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TalkLogic extends GetxController {
   final _talkApi = TalkApi();
   final _userApi = UserApi();
+  String currentUserId = '';
 
   List<dynamic> talkList = [];
   int index = 0;
@@ -13,9 +15,12 @@ class TalkLogic extends GetxController {
   bool isLoading = false;
   final ScrollController scrollController = ScrollController();
 
-  void init() {
+  void init() async {
     onTalkList();
     scrollController.addListener(scrollListener);
+    SharedPreferences.getInstance().then((prefs) {
+      currentUserId = prefs.getString('userId') ?? '';
+    });
   }
 
   @override
@@ -61,6 +66,16 @@ class TalkLogic extends GetxController {
     hasMore = true;
     update([const Key("talk")]);
     onTalkList();
+  }
+
+  void updateTalkLikeOrCommentCount(String key, int num, String talkId) {
+    for (var talk in talkList) {
+      if (talk['talkId'] == talkId) {
+        talk[key] = num;
+        update([const Key("talk")]);
+        return;
+      }
+    }
   }
 
   Future<String> onGetImg(String fileName, String userId) async {
