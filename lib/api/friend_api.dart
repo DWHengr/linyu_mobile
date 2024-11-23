@@ -18,6 +18,11 @@ class FriendApi {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> listFlat() async {
+    final response = await _dio.get('/v1/api/friend/list/flat');
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> search(String friendInfo) async {
     final response = await _dio.post(
       '/v1/api/friend/search',
