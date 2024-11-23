@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:linyu_mobile/api/talk_api.dart';
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/components/CustomDialog/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TalkLogic extends GetxController {
@@ -76,6 +77,29 @@ class TalkLogic extends GetxController {
         return;
       }
     }
+  }
+
+  void onDeleteTalk(talkId) {
+    _talkApi.delete(talkId).then((res) {
+      if (res['code'] == 0) {
+        for (var talk in talkList) {
+          if (talk['talkId'] == talkId) {
+            talkList.remove(talk);
+            update([const Key("talk")]);
+            return;
+          }
+        }
+      }
+    });
+  }
+
+  void handlerDeleteTalkTip(BuildContext context, String talkId) {
+    CustomDialog.showTipDialog(
+      context,
+      text: '确认删除该条说说?',
+      onOk: () => onDeleteTalk(talkId),
+      onCancel: () {},
+    );
   }
 
   Future<String> onGetImg(String fileName, String userId) async {

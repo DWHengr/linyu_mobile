@@ -26,10 +26,11 @@ class TalkPage extends CustomWidget<TalkLogic> {
           title: const AppBarTitle('说说'),
           backgroundColor: const Color(0xFFF9FBFF),
           actions: [
-            TextButton(
-              onPressed: () {},
-              child: CustomTextButton('发表', onTap: () {}, fontSize: 14),
-            ),
+            CustomTextButton('发表',
+                onTap: () => Get.toNamed('/talk_create'),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                fontSize: 14),
           ]),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -41,7 +42,7 @@ class TalkPage extends CustomWidget<TalkLogic> {
             itemCount: controller.talkList.length + 1,
             itemBuilder: (context, index) {
               if (index < controller.talkList.length) {
-                return _buildTalkItem(controller.talkList[index]);
+                return _buildTalkItem(context, controller.talkList[index]);
               } else {
                 return _buildFooter();
               }
@@ -81,7 +82,7 @@ class TalkPage extends CustomWidget<TalkLogic> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildTalkItem(dynamic talk) {
+  Widget _buildTalkItem(context, dynamic talk) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
       child: Material(
@@ -166,7 +167,9 @@ class TalkPage extends CustomWidget<TalkLogic> {
                         ],
                       ),
                       if (controller.currentUserId == talk['userId'])
-                        CustomTextButton('删除', onTap: () {}),
+                        CustomTextButton('删除',
+                            onTap: () => controller.handlerDeleteTalkTip(
+                                context, talk['talkId'])),
                     ],
                   ),
                   const SizedBox(height: 5),

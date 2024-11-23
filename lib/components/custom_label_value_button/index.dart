@@ -9,6 +9,7 @@ class CustomLabelValueButton extends StatelessWidget {
   final int? maxLines;
   final Widget? child;
   final String hint;
+  final Color? color;
 
   const CustomLabelValueButton({
     super.key,
@@ -19,6 +20,7 @@ class CustomLabelValueButton extends StatelessWidget {
     this.maxLines = 5,
     this.hint = '',
     this.width = 60,
+    this.color,
   });
 
   Widget _getContent() {
@@ -48,6 +50,7 @@ class CustomLabelValueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomMaterialButton(
+      color: color,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),

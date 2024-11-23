@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:linyu_mobile/api/talk_api.dart';
 import 'package:linyu_mobile/api/talk_comment_api.dart';
 import 'package:linyu_mobile/api/talk_like_api.dart';
+import 'package:linyu_mobile/components/CustomDialog/index.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -103,6 +104,18 @@ class TalkDetailsLogic extends GetxController {
         update([const Key('talk_details')]);
       }
     });
+  }
+
+  void handlerDeleteTalkTip(BuildContext context) {
+    CustomDialog.showTipDialog(
+      context,
+      text: '确认删除该条说说?',
+      onOk: () {
+        _talkLogic.onDeleteTalk(talkId);
+        Get.back();
+      },
+      onCancel: () {},
+    );
   }
 
   void onCreateTalkComment() {

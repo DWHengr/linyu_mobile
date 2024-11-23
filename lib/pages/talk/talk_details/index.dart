@@ -69,7 +69,9 @@ class TalkDetailsPage extends CustomWidget<TalkDetailsLogic> {
                           ),
                           if (controller.currentUserId ==
                               controller.talkDetails['userId'])
-                            CustomTextButton('删除', onTap: () {}),
+                            CustomTextButton('删除',
+                                onTap: () =>
+                                    controller.handlerDeleteTalkTip(context)),
                         ],
                       ),
                       const SizedBox(height: 10),
