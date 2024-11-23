@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/chat_group_api.dart';
@@ -5,6 +7,7 @@ import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/notify_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
+import 'package:linyu_mobile/utils/web_socket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactsLogic extends GetxController {
@@ -18,6 +21,27 @@ class ContactsLogic extends GetxController {
   List<dynamic> friendList = [];
   List<dynamic> chatGroupList = [];
   List<dynamic> notifyFriendList = [];
+
+  final _wsManager = WebSocketUtil();
+  StreamSubscription? _subscription;
+
+  GlobalData get globalData => GetInstance().find<GlobalData>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    eventListen();
+  }
+
+  void eventListen() {
+    // 监听消息
+    _subscription = _wsManager.eventStream.listen((event) {
+      print("监听消息=================>$event");
+      if (event['type'] == 'on-receive-notify') {
+        init();
+      }
+    });
+  }
 
   void init() {
     SharedPreferences.getInstance().then((prefs) {
@@ -74,13 +98,32 @@ class ContactsLogic extends GetxController {
   }
 
   //同意添加好友
-  void handlerAgreeFriend(String notifyId) async {
-    final result = await _friendApi.agree(notifyId);
+  void handlerAgreeFriend(dynamic notify) async {
+    onReadNotify();
+    final result = await _friendApi.agree(notify['id'], notify['fromId']);
     if (result['code'] == 0) {
       init();
       CustomFlutterToast.showSuccessToast("同意好友请求成功");
     } else {
       CustomFlutterToast.showErrorToast("同意好友请求失败");
     }
+  }
+
+  //拒绝添加好友
+  void handlerRejectFriend(dynamic notify) async {
+    onReadNotify();
+    final result = await _friendApi.reject(notify['fromId']);
+    if (result['code'] == 0) {
+      init();
+      CustomFlutterToast.showSuccessToast("操作成功");
+    } else {
+      CustomFlutterToast.showErrorToast("网络错误");
+    }
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
   }
 }
