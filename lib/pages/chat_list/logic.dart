@@ -29,7 +29,6 @@ class ChatListLogic extends GetxController {
     _subscription = _wsManager.eventStream.listen((event) {
       if (event['type'] == 'on-receive-msg') {
         onGetChatList();
-        globalData.onGetUserUnreadInfo();
       }
     });
   }

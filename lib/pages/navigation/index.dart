@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:linyu_mobile/components/custom_tip/index.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
 import 'package:linyu_mobile/pages/contacts/index.dart';
 import 'package:linyu_mobile/pages/mine/index.dart';
@@ -23,32 +24,6 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
       default:
         return ChatListPage(key: const Key('chat_list'));
     }
-  }
-
-  Widget _buildUnreadTip(int count) {
-    return Positioned(
-      right: -10,
-      top: -5,
-      child: Container(
-        height: 16,
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        constraints: const BoxConstraints(
-          minWidth: 16,
-        ),
-        child: Text(
-          count > 99 ? '99+' : count.toString(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
   }
 
   @override
@@ -78,7 +53,10 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
                   ),
                   if (controller.selectedIcons[index] == 'chat' &&
                       globalData.getUnreadCount('chat') > 0)
-                    _buildUnreadTip(globalData.getUnreadCount('chat')),
+                    CustomTip(globalData.getUnreadCount('chat')),
+                  if (controller.selectedIcons[index] == 'user' &&
+                      globalData.getUnreadCount('friendNotify') > 0)
+                    CustomTip(globalData.getUnreadCount('friendNotify')),
                 ],
               ),
               label: controller.name[index],

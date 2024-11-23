@@ -4,6 +4,7 @@ import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
+import 'package:linyu_mobile/components/custom_tip/index.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -415,45 +416,57 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(controller.tabs.length, (index) {
                 return Expanded(
-                  child: AnimatedAlign(
-                    duration: const Duration(milliseconds: 300),
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () => controller.handlerTabTapped(index),
-                      child: AnimatedContainer(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      AnimatedAlign(
                         duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        padding: const EdgeInsets.all(5),
-                        margin: EdgeInsets.symmetric(
-                          horizontal:
-                              index == controller.selectedIndex ? 4.0 : 0.0,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1),
-                          color: Colors.transparent,
-                          border: Border(
-                            bottom: BorderSide(
-                              color: index == controller.selectedIndex
-                                  ? theme.primaryColor
-                                  : Colors.transparent,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                        child: Center(
-                          child: AnimatedDefaultTextStyle(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          onTap: () => controller.handlerTabTapped(index),
+                          child: AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
-                            style: TextStyle(
-                              color: index == controller.selectedIndex
-                                  ? theme.primaryColor
-                                  : Colors.black,
-                              fontSize: 16,
+                            curve: Curves.easeInOut,
+                            padding: const EdgeInsets.all(5),
+                            margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  index == controller.selectedIndex ? 4.0 : 0.0,
                             ),
-                            child: Text(controller.tabs[index]),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(1),
+                              color: Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: index == controller.selectedIndex
+                                      ? theme.primaryColor
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 300),
+                                style: TextStyle(
+                                  color: index == controller.selectedIndex
+                                      ? theme.primaryColor
+                                      : Colors.black,
+                                  fontSize: 16,
+                                ),
+                                child: Text(controller.tabs[index]),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      if (index == 2)
+                        Obx(() => globalData.getUnreadCount('friendNotify') > 0
+                            ? CustomTip(
+                                globalData.getUnreadCount('friendNotify'),
+                                right: 7,
+                                top: -2)
+                            : const SizedBox.shrink()),
+                    ],
                   ),
                 );
               }),

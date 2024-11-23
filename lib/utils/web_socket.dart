@@ -83,7 +83,8 @@ class WebSocketUtil {
                 {'type': 'on-receive-msg', 'content': wsContent['content']});
             break;
           case 'notify':
-            // 处理通知消息
+            _eventController.add(
+                {'type': 'on-receive-notify', 'content': wsContent['content']});
             break;
           case 'video':
             // 处理视频消息

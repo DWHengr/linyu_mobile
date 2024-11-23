@@ -22,16 +22,24 @@ class NavigationLogic extends GetxController {
   void onInit() {
     super.onInit();
     initData();
-    connectWebSocket();
     (() async {
       await globalData.init();
       await NotificationUtil.initialize();
       await NotificationUtil.createNotificationChannel();
       await PermissionHandler.permissionRequest();
+      await connectWebSocket();
+      eventListen();
     })();
   }
 
-  void connectWebSocket() async {
+  void eventListen() {
+    // 监听消息
+    _wsManager.eventStream.listen((event) {
+      globalData.onGetUserUnreadInfo();
+    });
+  }
+
+  Future<void> connectWebSocket() async {
     _wsManager.connect();
   }
 
