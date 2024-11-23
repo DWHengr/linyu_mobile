@@ -80,9 +80,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
       child: InkWell(
-        onTap: () {
-          // 添加点击事件
-        },
+        onTap: controller.onReadNotify,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -183,12 +181,12 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
         children: [
           CustomTextButton(
             "同意",
-            onTap: () => controller.handlerAgreeFriend(notify['id']),
+            onTap: () => controller.handlerAgreeFriend(notify),
           ),
           const SizedBox(width: 10),
           CustomTextButton(
-            "取消",
-            onTap: () {},
+            "拒绝",
+            onTap: () => controller.handlerRejectFriend(notify),
             textColor: Colors.grey[600],
           ),
           const SizedBox(width: 5),
