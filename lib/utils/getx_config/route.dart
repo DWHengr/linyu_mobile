@@ -23,7 +23,9 @@ import 'package:linyu_mobile/pages/register/index.dart';
 import 'package:linyu_mobile/pages/talk/index.dart';
 
 import 'package:linyu_mobile/pages/mine/edit/index.dart';
+import 'package:linyu_mobile/pages/talk/talk_create/index.dart';
 import 'package:linyu_mobile/pages/talk/talk_details/index.dart';
+import '../../pages/contacts/user_select/index.dart';
 import 'ControllerBinding.dart';
 
 class AppRoutes {
@@ -188,6 +190,20 @@ class AppRoutes {
       name: '/talk_details',
       page: () => TalkDetailsPage(
         key: const Key('talk_details'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/talk_create',
+      page: () => TalkCreatePage(
+        key: const Key('talk_create'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/user_select',
+      page: () => UserSelectPage(
+        key: const Key('user_select'),
       ),
       binding: ControllerBinding(),
     ),

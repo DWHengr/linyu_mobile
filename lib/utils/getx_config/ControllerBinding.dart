@@ -7,6 +7,7 @@ import 'package:linyu_mobile/pages/contacts/friend_information/logic.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_group/logic.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_remark/logic.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
+import 'package:linyu_mobile/pages/contacts/user_select/logic.dart';
 import 'package:linyu_mobile/pages/login/logic.dart';
 import 'package:linyu_mobile/pages/mine/about/logic.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
@@ -20,6 +21,7 @@ import 'package:linyu_mobile/pages/qr_code_scan/qr_login_affirm/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
+import 'package:linyu_mobile/pages/talk/talk_create/logic.dart';
 import 'package:linyu_mobile/pages/talk/talk_details/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
@@ -54,5 +56,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => SearchInfoLogic());
     Get.lazyPut(() => FriendRequestLogic());
     Get.lazyPut(() => TalkDetailsLogic());
+    Get.lazyPut(() => TalkCreateLogic());
+    Get.lazyPut(() => UserSelectLogic());
   }
 }
