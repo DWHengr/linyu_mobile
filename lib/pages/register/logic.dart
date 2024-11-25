@@ -85,7 +85,6 @@ class RegisterPageLogic extends GetxController {
   //发送验证码
   void onTapSendMail() async {
     if (countdownTime == 0) {
-      //TODO Http请求发送验证码
       final String mail = mailController.text;
       final emailVerificationResult = await _useApi.emailVerification(mail);
       if (emailVerificationResult['code'] == 0) {

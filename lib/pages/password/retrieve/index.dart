@@ -31,99 +31,101 @@ class RetrievePassword extends CustomWidget<RetrievePasswordLogic> {
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10.0),
-              const Text(
-                "找回密码",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              const Text(
-                "请输入账号，验证码，新密码。验证码会发送到账号所对应的邮箱内。",
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20.0),
-              // 登录框部分
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
-                  horizontal: 20.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: const Color(0xFFF2F2F2),
-                    width: 1.0,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10.0),
+                const Text(
+                  "找回密码",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomTextField(
-                      labelText: "账号",
-                      controller: controller.accountController,
-                      onChanged: controller.onAccountTextChanged,
-                      suffix: Text('${controller.accountTextLength}/30'),
-                      inputLimit: 30,
+                const SizedBox(height: 5.0),
+                const Text(
+                  "请输入账号，验证码，新密码。验证码会发送到账号所对应的邮箱内。",
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 20.0),
+                // 登录框部分
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 20.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                      color: const Color(0xFFF2F2F2),
+                      width: 1.0,
                     ),
-                    const SizedBox(height: 20.0),
-                    CustomTextField(
-                      labelText: '验证码',
-                      hintText: "请输入验证码",
-                      controller: controller.codeController,
-                      suffix: controller.accountController.text != ""
-                          ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: controller.onTapSendMail,
-                                  child: Text(
-                                    controller.countdownTime > 0
-                                        ? '${controller.countdownTime}后重新获取'
-                                        : '获取验证码',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: controller.countdownTime > 0
-                                          ? const Color.fromARGB(
-                                              255, 183, 184, 195)
-                                          : const Color.fromARGB(
-                                              255, 17, 132, 255),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextField(
+                        labelText: "账号",
+                        controller: controller.accountController,
+                        onChanged: controller.onAccountTextChanged,
+                        suffix: Text('${controller.accountTextLength}/30'),
+                        inputLimit: 30,
+                      ),
+                      const SizedBox(height: 20.0),
+                      CustomTextField(
+                        labelText: '验证码',
+                        hintText: "请输入验证码",
+                        controller: controller.codeController,
+                        suffix: controller.accountController.text != ""
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(
+                                    onTap: controller.onTapSendMail,
+                                    child: Text(
+                                      controller.countdownTime > 0
+                                          ? '${controller.countdownTime}后重新获取'
+                                          : '获取验证码',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: controller.countdownTime > 0
+                                            ? const Color.fromARGB(
+                                                255, 183, 184, 195)
+                                            : const Color.fromARGB(
+                                                255, 17, 132, 255),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 8.0),
-                              ],
-                            )
-                          : null,
-                    ),
-                    const SizedBox(height: 20.0),
-                    CustomTextField(
-                      labelText: "新密码",
-                      controller: controller.passwordController,
-                      obscureText: true,
-                      onChanged: controller.onPasswordTextChanged,
-                      suffix: Text('${controller.passwordTextLength}/16'),
-                      inputLimit: 16,
-                    ),
-                  ],
+                                  const SizedBox(width: 8.0),
+                                ],
+                              )
+                            : null,
+                      ),
+                      const SizedBox(height: 20.0),
+                      CustomTextField(
+                        labelText: "新密码",
+                        controller: controller.passwordController,
+                        obscureText: true,
+                        onChanged: controller.onPasswordTextChanged,
+                        suffix: Text('${controller.passwordTextLength}/16'),
+                        inputLimit: 16,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20.0),
-              CustomButton(
-                text: "确 定",
-                onTap: controller.onSubmit,
-                width: MediaQuery.of(context).size.width,
-                type: 'gradient',
-              ),
-            ],
+                const SizedBox(height: 20.0),
+                CustomButton(
+                  text: "确 定",
+                  onTap: controller.onSubmit,
+                  width: MediaQuery.of(context).size.width,
+                  type: 'gradient',
+                ),
+              ],
+            ),
           ),
         ),
       ),

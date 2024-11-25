@@ -31,78 +31,80 @@ class UpdatePasswordPage extends CustomWidget<UpdatePasswordLogic> {
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Logo部分
-              const SizedBox(height: 10.0),
-              const Text(
-                "重置密码",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 5.0),
-              const Text(
-                "请输入原密码和新密码，确认密码。",
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 20.0),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
-                  horizontal: 20.0,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Logo部分
+                const SizedBox(height: 10.0),
+                const Text(
+                  "重置密码",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: const Color(0xFFF2F2F2),
-                    width: 1.0,
+                const SizedBox(height: 5.0),
+                const Text(
+                  "请输入原密码和新密码，确认密码。",
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 20.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 20.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                      color: const Color(0xFFF2F2F2),
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CustomTextField(
+                        labelText: "原密码",
+                        controller: controller.oldPasswordController,
+                        obscureText: true,
+                        onChanged: controller.onOldPasswordTextChanged,
+                        suffix: Text('${controller.oldPasswordTextLength}/16'),
+                        inputLimit: 16,
+                      ),
+                      const SizedBox(height: 20.0),
+                      CustomTextField(
+                        labelText: "新密码",
+                        controller: controller.newPasswordController,
+                        obscureText: true,
+                        onChanged: controller.onNewPasswordTextChanged,
+                        suffix: Text('${controller.newPasswordTextLength}/16'),
+                        inputLimit: 16,
+                      ),
+                      const SizedBox(height: 20.0),
+                      CustomTextField(
+                        labelText: "确认密码",
+                        controller: controller.confirmPasswordController,
+                        obscureText: true,
+                        onChanged: controller.onConfirmPasswordTextChanged,
+                        suffix:
+                            Text('${controller.confirmPasswordTextLength}/16'),
+                        inputLimit: 16,
+                      ),
+                      // const SizedBox(height: 20.0),
+                    ],
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    CustomTextField(
-                      labelText: "原密码",
-                      controller: controller.oldPasswordController,
-                      obscureText: true,
-                      onChanged: controller.onOldPasswordTextChanged,
-                      suffix: Text('${controller.oldPasswordTextLength}/16'),
-                      inputLimit: 16,
-                    ),
-                    const SizedBox(height: 20.0),
-                    CustomTextField(
-                      labelText: "新密码",
-                      controller: controller.newPasswordController,
-                      obscureText: true,
-                      onChanged: controller.onNewPasswordTextChanged,
-                      suffix: Text('${controller.newPasswordTextLength}/16'),
-                      inputLimit: 16,
-                    ),
-                    const SizedBox(height: 20.0),
-                    CustomTextField(
-                      labelText: "确认密码",
-                      controller: controller.confirmPasswordController,
-                      obscureText: true,
-                      onChanged: controller.onConfirmPasswordTextChanged,
-                      suffix:
-                          Text('${controller.confirmPasswordTextLength}/16'),
-                      inputLimit: 16,
-                    ),
-                    // const SizedBox(height: 20.0),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              CustomButton(
-                text: "更改密码",
-                onTap: controller.onSubmit,
-                width: MediaQuery.of(context).size.width,
-                type: 'gradient',
-              )
-            ],
+                const SizedBox(height: 20.0),
+                CustomButton(
+                  text: "更改密码",
+                  onTap: controller.onSubmit,
+                  width: MediaQuery.of(context).size.width,
+                  type: 'gradient',
+                )
+              ],
+            ),
           ),
         ),
       ),
