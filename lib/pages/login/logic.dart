@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/encrypt.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPageLogic extends GetxController {
   final _useApi = UserApi();
@@ -85,6 +86,18 @@ class LoginPageLogic extends GetxController {
   void toRegister() => Get.toNamed('/register');
 
   void toRetrievePassword() => Get.toNamed('/retrieve_password');
+
+  Future<void> launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   void onClose() {

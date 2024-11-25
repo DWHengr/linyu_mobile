@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:linyu_mobile/components/custom_button/index.dart';
+import 'package:linyu_mobile/components/custom_gradient_line/index.dart';
+import 'package:linyu_mobile/components/custom_material_button/index.dart';
+import 'package:linyu_mobile/components/custom_shadow_text/index.dart';
 import 'package:linyu_mobile/pages/login/logic.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
@@ -8,128 +12,223 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        height: screenHeight,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFBED7F6), Color(0xFFFFFFFF), Color(0xFFDFF4FF)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFDFF4FF),
+              Color(0xFFFFFFFF),
+              Color(0xFFFFFFFF),
+              Color(0xFFFFFFFF)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: screenHeight -
                   MediaQuery.of(context).padding.top -
                   MediaQuery.of(context).padding.bottom,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  const Spacer(flex: 1),
-                  // Logo部分
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: screenWidth * 0.25,
-                    width: screenWidth * 0.25,
-                  ),
-                  const Text(
-                    "林语",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  // 登录框部分
+                  const SizedBox(height: 40.0),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 20.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(
-                        color: const Color(0xFFF2F2F2),
-                        width: 1.0,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        CustomTextField(
-                          labelText: "账号",
-                          controller: controller.usernameController,
-                          inputLimit: 30,
-                          onChanged: controller.onAccountTextChanged,
-                          suffix: Text('${controller.accountTextLength}/30'),
-                        ),
-                        const SizedBox(height: 15.0),
-                        CustomTextField(
-                          labelText: "密码",
-                          controller: controller.passwordController,
-                          obscureText: true,
-                          inputLimit: 16,
-                          onChanged: controller.onPasswordTextChanged,
-                          suffix: Text('${controller.passwordTextLength}/16'),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextButton(
-                              onPressed: () => controller.toRetrievePassword(),
-                              child: const Text(
-                                "忘记密码?",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Color(0xFFb0b0ba),
-                                  // fontWeight: FontWeight.bold,
-                                ),
+                            CustomShadowText(
+                              text: 'HELLO',
+                              fontSize: 26,
+                              fontWeight: FontWeight.w900,
+                              shadowTop: 22,
+                            ),
+                            Text(
+                              "欢迎使用，林语",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
                           ],
                         ),
-                        FractionallySizedBox(
-                          widthFactor: 0.8,
-                          child: ElevatedButton(
-                            onPressed: () => controller.login(context),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5,
-                                vertical: 5,
-                              ),
-                              backgroundColor: const Color(0xFF4C9BFF),
-                              foregroundColor: Colors.white,
+                        const SizedBox(width: 10),
+                        Flexible(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 120,
                             ),
-                            child: const Text(
-                              "登  录",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10.0),
-                        TextButton(
-                          onPressed: () => controller.toRegister(),
-                          child: const Text(
-                            "注册账号",
-                            style: TextStyle(
-                              fontSize: 16,
-                              // fontWeight: FontWeight.bold,
+                            child: Image.asset(
+                              'assets/images/logo-login.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const Spacer(flex: 3),
+                  const SizedBox(height: 20.0),
+                  // 登录框部分
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(30.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: const Color(0xFFF2F2F2),
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomTextField(
+                            hintText: '请输入账号',
+                            iconData:
+                                const IconData(0xe60d, fontFamily: 'IconFont'),
+                            controller: controller.usernameController,
+                            inputLimit: 30,
+                            onChanged: controller.onAccountTextChanged,
+                            suffix: Text('${controller.accountTextLength}/30'),
+                          ),
+                          const SizedBox(height: 20.0),
+                          CustomTextField(
+                            hintText: '请输入密码',
+                            iconData:
+                                const IconData(0xe620, fontFamily: 'IconFont'),
+                            controller: controller.passwordController,
+                            obscureText: true,
+                            inputLimit: 16,
+                            onChanged: controller.onPasswordTextChanged,
+                            suffix: Text('${controller.passwordTextLength}/16'),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () =>
+                                    controller.toRetrievePassword(),
+                                child: const Text(
+                                  "忘记密码?",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFFb0b0ba),
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          CustomButton(
+                            text: '立即登录',
+                            type: 'gradient',
+                            onTap: () => controller.login(context),
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                          const SizedBox(height: 5.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "没有账号?",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFFb0b0ba),
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => controller.toRegister(),
+                                child: const Text(
+                                  "立即注册",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomGradientLine(
+                                      width: 80,
+                                      height: 1.5,
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white,
+                                          Color(0xFFb0b0ba)
+                                        ],
+                                      ),
+                                    ),
+                                    Text(
+                                      " 相关地址 ",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xFFb0b0ba),
+                                      ),
+                                    ),
+                                    CustomGradientLine(
+                                      width: 80,
+                                      height: 1.5,
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFFb0b0ba),
+                                          Colors.white
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomMaterialButton(
+                                      child: const Icon(
+                                        IconData(0xe6f6,
+                                            fontFamily: 'IconFont'),
+                                        size: 36.0,
+                                        color: Color(0xFFb0b0ba),
+                                      ),
+                                      onTap: () => controller.launchURL(
+                                          'https://github.com/DWHengr/linyu_mobile'),
+                                    ),
+                                    const SizedBox(width: 15),
+                                    CustomMaterialButton(
+                                      child: const Icon(
+                                        IconData(0xe600,
+                                            fontFamily: 'IconFont'),
+                                        size: 36.0,
+                                        color: Color(0xFFb0b0ba),
+                                      ),
+                                      onTap: () => controller.launchURL(
+                                          'https://space.bilibili.com/135427028/channel/series'),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

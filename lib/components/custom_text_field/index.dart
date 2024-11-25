@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final int? minLines;
   final Color? labelTextColor;
   final Color? hintTextColor;
+  final IconData? iconData;
 
   const CustomTextField({
     super.key,
@@ -35,6 +36,7 @@ class CustomTextField extends StatelessWidget {
     this.minLines,
     this.vertical = 12.0,
     this.hintTextColor = Colors.grey,
+    this.iconData,
   });
 
   @override
@@ -49,39 +51,54 @@ class CustomTextField extends StatelessWidget {
           ),
         if (labelText != null) const SizedBox(height: 5.0),
         Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           decoration: BoxDecoration(
             color: const Color(0xFFEDF2F9),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            obscureText: obscureText,
-            onChanged: onChanged,
-            readOnly: readOnly,
-            maxLines: maxLines,
-            minLines: minLines,
-            // 使用maxLines参数
-            inputFormatters: inputLimit != null
-                ? <TextInputFormatter>[
-                    LengthLimitingTextInputFormatter(inputLimit)
-                  ]
-                : null,
-            decoration: InputDecoration(
-              hintText: hintText,
-              suffixIcon: suffixIcon,
-              suffix: suffix,
-              hintStyle: TextStyle(color: hintTextColor, fontSize: 14.0),
-              filled: true,
-              fillColor: const Color(0xFFEDF2F9),
-              isDense: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              if (iconData != null)
+                Row(
+                  children: [
+                    Icon(iconData, size: 16.0, color: hintTextColor),
+                    const SizedBox(width: 5.0),
+                  ],
+                ),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  obscureText: obscureText,
+                  onChanged: onChanged,
+                  readOnly: readOnly,
+                  maxLines: maxLines,
+                  minLines: minLines,
+                  // 使用maxLines参数
+                  inputFormatters: inputLimit != null
+                      ? <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(inputLimit)
+                        ]
+                      : null,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    suffixIcon: suffixIcon,
+                    suffix: suffix,
+                    hintStyle: TextStyle(color: hintTextColor, fontSize: 14.0),
+                    filled: true,
+                    fillColor: const Color(0xFFEDF2F9),
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: vertical),
+                  ),
+                ),
               ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: vertical, horizontal: 8.0),
-            ),
+            ],
           ),
         ),
       ],
