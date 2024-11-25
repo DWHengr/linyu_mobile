@@ -16,9 +16,6 @@ class RetrievePasswordLogic extends GetxController {
   //密码
   final passwordController = TextEditingController();
 
-  //邮箱
-  final mailController = TextEditingController();
-
   //验证码
   final codeController = TextEditingController();
 
@@ -57,9 +54,9 @@ class RetrievePasswordLogic extends GetxController {
   //发送验证码
   void onTapSendMail() async {
     if (countdownTime == 0) {
-      //TODO Http请求发送验证码
-      final String mail = mailController.text;
-      final emailVerificationResult = await _useApi.emailVerification(mail);
+      final String account = accountController.text;
+      final emailVerificationResult =
+          await _useApi.emailVerificationByAccount(account);
       if (emailVerificationResult['code'] == 0) {
         CustomFlutterToast.showSuccessToast('发送成功~');
         countdownTime = 30;
@@ -85,15 +82,14 @@ class RetrievePasswordLogic extends GetxController {
   void onSubmit() async {
     String account = accountController.text;
     String password = passwordController.text;
-    String email = mailController.text;
     String code = codeController.text;
-    if (account.isEmpty || password.isEmpty || email.isEmpty || code.isEmpty) {
+    if (account.isEmpty || password.isEmpty || code.isEmpty) {
       CustomFlutterToast.showSuccessToast('不能为空，请填写完整！');
     } else {
       final encryptedPassword = await passwordEncrypt(password);
       assert(encryptedPassword != "-1");
       final passwordForgetResult =
-          await _useApi.forget(account, encryptedPassword, email, code);
+          await _useApi.forget(account, encryptedPassword, code);
       if (passwordForgetResult['code'] == 0) {
         CustomFlutterToast.showSuccessToast(passwordForgetResult['msg']);
         Get.back();
@@ -119,7 +115,6 @@ class RetrievePasswordLogic extends GetxController {
   void onClose() {
     accountController.dispose();
     passwordController.dispose();
-    mailController.dispose();
     codeController.dispose();
     super.onClose();
   }

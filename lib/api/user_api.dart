@@ -60,6 +60,15 @@ class UserApi {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> emailVerificationByAccount(
+      String account) async {
+    final response = await _dio.post(
+      '/v1/api/user/email/verify/by/account',
+      data: {'account': account},
+    );
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> register(String username, String account,
       String password, String email, String code) async {
     final response = await _dio.post(
@@ -104,15 +113,10 @@ class UserApi {
   }
 
   Future<Map<String, dynamic>> forget(
-      String account, String password, String email, String code) async {
+      String account, String password, String code) async {
     final response = await _dio.post(
       '/v1/api/user/forget',
-      data: {
-        'account': account,
-        'password': password,
-        'email': email,
-        'code': code
-      },
+      data: {'account': account, 'password': password, 'code': code},
     );
     return response.data;
   }
