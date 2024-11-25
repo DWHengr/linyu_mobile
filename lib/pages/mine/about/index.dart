@@ -13,7 +13,12 @@ class AboutPage extends CustomWidget<AboutLogic> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [theme.minorColor, const Color(0xFFFFFFFF)],
+          colors: [
+            theme.minorColor,
+            const Color(0xFFFFFFFF),
+            const Color(0xFFFFFFFF),
+            theme.minorColor,
+          ],
           // 渐变颜色
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -30,37 +35,37 @@ class AboutPage extends CustomWidget<AboutLogic> {
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.only(
+              left: 16.0, right: 16.0, top: 0, bottom: 40),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(height: 30),
-              Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  color: Colors.white,
-                ),
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  width: 80,
-                ),
+              Column(
+                children: [
+                  const SizedBox(height: 30),
+                  Image.asset(
+                    "assets/images/logo-about.png",
+                    width: 80,
+                  ),
+                  const SizedBox(height: 10),
+                  Image.asset(
+                    "assets/images/linyu.png",
+                    height: 30,
+                  ),
+                  const SizedBox(height: 30),
+                  const CustomLabelValue(
+                      label: '作者', value: "Heath", width: 80),
+                  const SizedBox(height: 1),
+                  const CustomLabelValue(
+                      label: 'QQ群', value: "729158695", width: 80),
+                  const SizedBox(height: 1),
+                  const CustomLabelValue(
+                      label: '开源地址',
+                      value: "https://github.com/DWHengr/linyu_mobile",
+                      width: 80),
+                  const SizedBox(height: 30),
+                ],
               ),
-              const SizedBox(height: 10),
-              Image.asset(
-                "assets/images/linyu.png",
-                height: 30,
-              ),
-              const SizedBox(height: 30),
-              const CustomLabelValue(label: '作者', value: "Heath", width: 80),
-              const SizedBox(height: 1),
-              const CustomLabelValue(
-                  label: 'QQ群', value: "729158695", width: 80),
-              const SizedBox(height: 1),
-              const CustomLabelValue(
-                  label: '开源地址',
-                  value: "https://github.com/DWHengr/linyu_mobile",
-                  width: 80),
-              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

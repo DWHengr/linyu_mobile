@@ -19,6 +19,12 @@ class CustomLabelValue extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey[200]!,
+            width: 0.5,
+          ),
+        ), // One pixel width]
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
