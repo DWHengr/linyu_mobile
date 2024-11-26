@@ -22,4 +22,9 @@ class GroupApi {
         await _dio.post('/v1/api/group/create', data: {'groupName': groupName});
     return response.data;
   }
+
+  Future<Map<String, dynamic>> delete(String groupId) async {
+    final response = await _dio.post('/v1/api/group/delete', data: {'groupId': groupId,});
+    return response.data;
+  }
 }

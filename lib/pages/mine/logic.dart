@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MineLogic extends GetxController {
   late dynamic currentUserInfo = {};
+  final GlobalThemeConfig _theme = GetInstance().find<GlobalThemeConfig>();
 
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -17,7 +20,7 @@ class MineLogic extends GetxController {
   void handlerLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    // exit(0);
+    _theme.changeThemeMode("blue");
     Get.offAllNamed('/login');
   }
 }

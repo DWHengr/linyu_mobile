@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
@@ -78,6 +79,23 @@ class SetGroupPage extends CustomWidget<SetGroupLogic> {
     );
   }
 
+  void _showDeleteGroupBottomSheet(dynamic group) => Get.bottomSheet(
+        backgroundColor: Colors.white,
+        Wrap(
+          children: [
+            Center(
+              child: TextButton(
+                onPressed: () => controller.onDeleteGroup(group),
+                child: const Text(
+                  '删除分组',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(
@@ -104,6 +122,7 @@ class SetGroupPage extends CustomWidget<SetGroupLogic> {
                 (group) => Column(
                   children: [
                     CustomMaterialButton(
+                      onLongPress: () => _showDeleteGroupBottomSheet(group),
                       onTap: () => controller.onSetGroup(group),
                       child: Container(
                         padding: const EdgeInsets.all(10),
