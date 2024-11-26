@@ -224,9 +224,8 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
       child: InkWell(
-        onTap: () {
-          // 添加点击事件
-        },
+        onTap: () => Get.toNamed('/chat_group_info',
+            arguments: {'chatGroupId': group['id']}),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),

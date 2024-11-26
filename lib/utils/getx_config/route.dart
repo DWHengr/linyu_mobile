@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/pages/image_viewer/image_viewer_update/index.dart';
+import 'package:linyu_mobile/pages/image_viewer/index.dart';
 import 'package:linyu_mobile/pages/add_friend/friend_info/index.dart';
 import 'package:linyu_mobile/pages/add_friend/friend_request/index.dart';
 import 'package:linyu_mobile/pages/add_friend/index.dart';
 import 'package:linyu_mobile/pages/chat_list/index.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_group/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_remark/index.dart';
@@ -204,6 +207,27 @@ class AppRoutes {
       name: '/user_select',
       page: () => UserSelectPage(
         key: const Key('user_select'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/chat_group_info',
+      page: () => ChatGroupInformationPage(
+        key: const Key('chat_group_info'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/image_viewer',
+      page: () => ImageViewerPage(
+        key: const Key('image_viewer'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/image_viewer_update',
+      page: () => ImageViewerUpdatePage(
+        key: const Key('image_viewer_update'),
       ),
       binding: ControllerBinding(),
     ),
