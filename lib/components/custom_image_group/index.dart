@@ -1,38 +1,62 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
+import 'package:linyu_mobile/components/custom_material_button/index.dart';
 
 final _userApi = UserApi();
 
 class CustomImageGroup extends StatelessWidget {
   final List<dynamic> imagesList;
   final String userId;
+  List<String> imageUrls = [];
 
-  const CustomImageGroup({
+  CustomImageGroup({
     super.key,
     required this.imagesList,
     required this.userId,
-  });
+  }) : imageUrls = List.filled(imagesList.length, '');
 
-  Future<String> onGetImg(String fileName, String userId) async {
+  void _handlerOpenImageViewer(index) {
+    Get.toNamed('/image_viewer',
+        arguments: {'imageUrls': imageUrls, 'currentIndex': index});
+  }
+
+  Future<String> onGetImg(String fileName, String userId, int index) async {
     dynamic res = await _userApi.getImg(fileName, userId);
     if (res['code'] == 0) {
+      imageUrls[index] = res['data'];
       return res['data'];
     }
     return '';
   }
 
-  Widget _buildTalkImage(String imageStr, String userId) {
-    return Container(
-      padding: const EdgeInsets.all(2.0),
-      child: FutureBuilder<String>(
-        future: onGetImg(imageStr, userId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return CachedNetworkImage(
-              imageUrl: snapshot.data ?? '',
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
+  Widget _buildTalkImage(String imageStr, String userId, int index) {
+    return CustomMaterialButton(
+      onTap: () => _handlerOpenImageViewer(index),
+      child: Container(
+        padding: const EdgeInsets.all(2.0),
+        child: FutureBuilder<String>(
+          future: onGetImg(imageStr, userId, index),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return CachedNetworkImage(
+                imageUrl: snapshot.data ?? '',
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[300],
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xffffffff),
+                      strokeWidth: 2,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) =>
+                    Image.asset('assets/images/empty-bg.png'),
+              );
+            } else {
+              return Container(
                 color: Colors.grey[300],
                 child: const Center(
                   child: CircularProgressIndicator(
@@ -40,22 +64,10 @@ class CustomImageGroup extends StatelessWidget {
                     strokeWidth: 2,
                   ),
                 ),
-              ),
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/images/empty-bg.png'),
-            );
-          } else {
-            return Container(
-              color: Colors.grey[300],
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xffffffff),
-                  strokeWidth: 2,
-                ),
-              ),
-            );
-          }
-        },
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -72,7 +84,7 @@ class CustomImageGroup extends StatelessWidget {
       ),
       itemCount: imageUrls.length,
       itemBuilder: (context, index) {
-        return _buildTalkImage(imageUrls[index], userId);
+        return _buildTalkImage(imageUrls[index], userId, index);
       },
     );
   }

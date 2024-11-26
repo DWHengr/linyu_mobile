@@ -5,7 +5,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'getx_config/GlobalThemeConfig.dart';
 
-typedef UploadPictureCallback = void Function(File picture);
+typedef UploadPictureCallback = Future<void> Function(File picture);
 
 //图片剪切
 Future cropPicture(
@@ -21,20 +21,20 @@ Future cropPicture(
     aspectRatioPresets: Platform.isAndroid
         ? [
             CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9
+            // CropAspectRatioPreset.ratio3x2,
+            // CropAspectRatioPreset.original,
+            // CropAspectRatioPreset.ratio4x3,
+            // CropAspectRatioPreset.ratio16x9
           ]
         : [
-            CropAspectRatioPreset.original,
+            // CropAspectRatioPreset.original,
             CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio5x3,
-            CropAspectRatioPreset.ratio5x4,
-            CropAspectRatioPreset.ratio7x5,
-            CropAspectRatioPreset.ratio16x9
+            // CropAspectRatioPreset.ratio3x2,
+            // CropAspectRatioPreset.ratio4x3,
+            // CropAspectRatioPreset.ratio5x3,
+            // CropAspectRatioPreset.ratio5x4,
+            // CropAspectRatioPreset.ratio7x5,
+            // CropAspectRatioPreset.ratio16x9
           ],
     androidUiSettings: AndroidUiSettings(
       toolbarTitle: '剪切',
@@ -44,7 +44,8 @@ Future cropPicture(
       cropFrameColor: theme.primaryColor,
       activeControlsWidgetColor: theme.primaryColor,
       initAspectRatio: CropAspectRatioPreset.original,
-      lockAspectRatio: false,
+      // lockAspectRatio: false,
+      lockAspectRatio: true,
     ),
     iosUiSettings: const IOSUiSettings(
       title: '剪切',

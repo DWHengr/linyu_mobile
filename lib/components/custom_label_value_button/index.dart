@@ -10,6 +10,7 @@ class CustomLabelValueButton extends StatelessWidget {
   final Widget? child;
   final String hint;
   final Color? color;
+  final bool compact;
 
   const CustomLabelValueButton({
     super.key,
@@ -21,6 +22,7 @@ class CustomLabelValueButton extends StatelessWidget {
     this.hint = '',
     this.width = 60,
     this.color,
+    this.compact = true,
   });
 
   Widget _getContent() {
@@ -53,36 +55,42 @@ class CustomLabelValueButton extends StatelessWidget {
       color: color,
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: width,
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
-                ),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: width,
+                    child: Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                  if (compact)
+                    Expanded(
+                      child: _getContent(),
+                    ),
+                  Icon(
+                    const IconData(0xe61f, fontFamily: 'IconFont'),
+                    size: 16,
+                    color: Colors.grey[700],
+                  ),
+                ],
               ),
-            ),
-            Expanded(
-              child: _getContent(),
-            ),
-            Icon(
-              const IconData(0xe61f, fontFamily: 'IconFont'),
-              size: 16,
-              color: Colors.grey[700],
-            ),
-          ],
-        ),
-      ),
+              if (!compact) _getContent(),
+            ],
+          )),
     );
   }
 }
