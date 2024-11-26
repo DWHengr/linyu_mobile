@@ -5,13 +5,12 @@ import 'package:flutter_pickers/style/picker_style.dart';
 import 'package:flutter_pickers/time_picker/model/date_type.dart';
 import 'package:flutter_pickers/time_picker/model/pduration.dart';
 import 'package:get/get.dart' as getx;
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/get_instance.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
-import 'package:linyu_mobile/utils/cropPicture.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
@@ -131,7 +130,7 @@ class EditMineLogic extends getx.GetxController {
   }
 
   //上传头像
-  void _uploadPicture(File picture) async {
+  Future<void> _uploadPicture(File picture) async {
     Map<String, dynamic> map = {};
     final file = await MultipartFile.fromFile(picture.path,
         filename: picture.path.split('/').last);
@@ -152,37 +151,13 @@ class EditMineLogic extends getx.GetxController {
     }
   }
 
-  ///裁剪图片
-  Future _cropChatBackgroundPicture(ImageSource? type) async =>
-      cropPicture(type, _uploadPicture);
-
   //点击头像按钮弹出底部选择框
-  void selectPortrait(BuildContext context) {
+  void selectPortrait() {
     if (!isEdit) return;
-    getx.Get.bottomSheet(Container(
-      decoration: const BoxDecoration(
-        color: Colors.white60,
-      ),
-      child: Wrap(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.photo),
-            title: const Text("图库"),
-            onTap: () =>
-                //改变主题模式(白天模式还是夜晚模式)
-                //Get.isDarkMode用来判断是否是夜晚模式
-                _cropChatBackgroundPicture(null),
-          ),
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text("拍照"),
-            onTap: () =>
-                //改变主题模式(白天模式还是夜晚模式)
-                _cropChatBackgroundPicture(ImageSource.camera),
-          )
-        ],
-      ),
-    ));
+    Get.toNamed('/image_viewer_update', arguments: {
+      'imageUrl': currentUserInfo['portrait'],
+      'onConfirm': _uploadPicture
+    });
   }
 
   //设置性别值

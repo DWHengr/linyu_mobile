@@ -36,7 +36,6 @@ class ContactsLogic extends GetxController {
   void eventListen() {
     // 监听消息
     _subscription = _wsManager.eventStream.listen((event) {
-      print("监听消息=================>$event");
       if (event['type'] == 'on-receive-notify') {
         init();
       }

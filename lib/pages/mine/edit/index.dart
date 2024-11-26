@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
-import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
+import 'package:linyu_mobile/components/custom_update_portrait/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 import 'logic.dart';
@@ -33,8 +33,9 @@ class EditMinePage extends CustomWidget<EditMineLogic> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              CustomPortrait(
-                  onTap: () => controller.selectPortrait(context),
+              CustomUpdatePortrait(
+                  isEdit: controller.isEdit,
+                  onTap: () => controller.selectPortrait(),
                   url: controller.currentUserInfo['portrait'] ?? '',
                   size: 80,
                   radius: 50),
@@ -154,11 +155,11 @@ class EditMinePage extends CustomWidget<EditMineLogic> {
               ),
               const SizedBox(height: 16),
               CustomButton(
-                      text: !controller.isEdit?"编辑资料":"保存",
-                      onTap: controller.onPressed,
-                      width: MediaQuery.of(context).size.width,
-                      type: 'gradient',
-                    ),
+                text: !controller.isEdit ? "编辑资料" : "保存",
+                onTap: controller.onPressed,
+                width: MediaQuery.of(context).size.width,
+                type: 'gradient',
+              ),
             ],
           ),
         ),
