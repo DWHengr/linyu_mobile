@@ -10,6 +10,9 @@ import 'package:linyu_mobile/utils/getx_config/config.dart';
 class LoginPage extends CustomWidget<LoginPageLogic> {
   LoginPage({super.key});
 
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget buildWidget(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -96,7 +99,7 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                             hintText: '请输入账号',
                             iconData:
                                 const IconData(0xe60d, fontFamily: 'IconFont'),
-                            controller: controller.usernameController,
+                            controller: usernameController,
                             inputLimit: 30,
                             onChanged: controller.onAccountTextChanged,
                             suffix: Text('${controller.accountTextLength}/30'),
@@ -106,7 +109,7 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                             hintText: '请输入密码',
                             iconData:
                                 const IconData(0xe620, fontFamily: 'IconFont'),
-                            controller: controller.passwordController,
+                            controller: passwordController,
                             obscureText: true,
                             inputLimit: 16,
                             onChanged: controller.onPasswordTextChanged,
@@ -132,7 +135,10 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
                           CustomButton(
                             text: '立即登录',
                             type: 'gradient',
-                            onTap: () => controller.login(context),
+                            onTap: () => controller.login(
+                                context,
+                                usernameController.text,
+                                passwordController.text),
                             width: MediaQuery.of(context).size.width,
                           ),
                           const SizedBox(height: 5.0),
@@ -236,5 +242,12 @@ class LoginPage extends CustomWidget<LoginPageLogic> {
         ),
       ),
     );
+  }
+
+  @override
+  void close(BuildContext context) {
+    super.close(context);
+    usernameController.dispose();
+    passwordController.dispose();
   }
 }
