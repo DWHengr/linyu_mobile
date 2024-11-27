@@ -120,6 +120,38 @@ class ContactsLogic extends GetxController {
     }
   }
 
+  //长按分组进入分组设置页面
+  void onLongPressGroup(){
+      Get.toNamed("/set_group",arguments: {
+        'groupName':'0',
+        'friendId':'0'
+      });
+
+  }
+
+  //设置特别关心
+  void onSetConcernFriend(dynamic friend) async{
+    if(friend['isConcern']){
+      final response = await _friendApi.unCareFor(friend['friendId']);
+      setResult(response);
+    }else {
+      final response = await _friendApi.careFor(friend['friendId']);
+      setResult(response);
+    }
+    Get.back();
+    init();
+  }
+
+  //特别关心结果
+  void setResult(Map<String, dynamic> response) {
+    if (response['code'] == 0) {
+      CustomFlutterToast.showSuccessToast('设置成功~');
+    } else {
+      CustomFlutterToast.showErrorToast(response['msg']);
+    }
+  }
+
+
   @override
   void onClose() {
     _subscription?.cancel();

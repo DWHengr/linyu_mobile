@@ -137,22 +137,28 @@ class FriendInformationLogic extends Logic {
 
   //获取好友信息
   Future<Map<String, dynamic>> getFriendInfo() async {
-    final response = await _friendApi.details(friendId);
-    if (response['code'] == 0) {
-      final data = response['data'];
-      talkContent = data['talkContent'] ?? talkContent;
-      friendPortrait = data['portrait'];
-      friendName = data['name'];
-      friendRemark = data['remark'] ?? '';
-      friendAccount = data['account'];
-      friendGender = data['sex'];
-      friendBirthday = data['birthday'];
-      friendSignature = data['signature'] ?? '';
-      friendGroup = data['groupName'] ?? '未分组';
-      isConcern = data['isConcern'];
+    if(friendId != '0'){
+      final response = await _friendApi.details(friendId);
+      if (response['code'] == 0) {
+        final data = response['data'];
+        talkContent = data['talkContent'] ?? talkContent;
+        friendPortrait = data['portrait'];
+        friendName = data['name'];
+        friendRemark = data['remark'] ?? '';
+        friendAccount = data['account'];
+        friendGender = data['sex'];
+        friendBirthday = data['birthday'];
+        friendSignature = data['signature'] ?? '';
+        friendGroup = data['groupName'] ?? '未分组';
+        isConcern = data['isConcern'];
+      }
+      update([const Key('friend_info')]);
+      return response['data'];
+    }else {
+      return {};
     }
-    update([const Key('friend_info')]);
-    return response['data'];
+
+
   }
 
   @override
@@ -161,21 +167,6 @@ class FriendInformationLogic extends Logic {
     getFriendInfo();
   }
 
-  //设置分组
-  void setGroup(String value) async {
-    if (value == '0') {
-      CustomFlutterToast.showErrorToast('选择有误');
-      return;
-    }
-    friendGroup = value;
-    final response = await _friendApi.setGroup(friendId, friendGroup);
-    if (response['code'] == 0) {
-      CustomFlutterToast.showSuccessToast('修改分组成功');
-    } else {
-      CustomFlutterToast.showErrorToast(response['msg']);
-    }
-    print('选中的value是：$friendGroup');
-  }
 
   //设置特别关心
   void setConcern() async {

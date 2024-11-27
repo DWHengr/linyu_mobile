@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +18,6 @@ class MineLogic extends GetxController {
   void handlerLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    // exit(0);
     Get.offAllNamed('/login');
   }
 }

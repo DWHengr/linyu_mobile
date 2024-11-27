@@ -76,7 +76,7 @@ class LoginPageLogic extends GetxController {
       await prefs.setString('userId', loginResult['data']['userId']);
       await prefs.setString('account', loginResult['data']['account']);
       await prefs.setString('portrait', loginResult['data']['portrait']);
-      await prefs.setString('sex', loginResult['data']['sex']);
+      await prefs.setString('sex', loginResult['data']['sex']??'男');
       Get.offAllNamed('/?sex=${loginResult['data']['sex']}');
     } else {
       _dialog("用户名或密码错误，请重试尝试~", context = context);

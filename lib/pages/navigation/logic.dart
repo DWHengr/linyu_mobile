@@ -72,5 +72,6 @@ class NavigationLogic extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    _wsManager.dispose();
   }
 }
