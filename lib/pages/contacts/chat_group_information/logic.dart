@@ -81,7 +81,51 @@ class ChatGroupInformationLogic extends GetxController {
   void selectPortrait() {
     Get.toNamed('/image_viewer_update', arguments: {
       'imageUrl': chatGroupDetails['portrait'],
-      'onConfirm': _onUpdateChatGroupPortrait
+      'onConfirm': _onUpdateChatGroupPortrait,
+      'isUpdate': isOwner
     });
+  }
+
+  void setGroupName() async {
+    var result = await Get.toNamed('/set_group_name', arguments: {
+      'chatGroupId': chatGroupId,
+      'name': chatGroupDetails['name']
+    });
+    if (result != null) {
+      chatGroupDetails['name'] = result;
+      update([const Key("chat_group_info")]);
+    }
+  }
+
+  void setGroupRemark() async {
+    var result = await Get.toNamed('/set_group_remark', arguments: {
+      'chatGroupId': chatGroupId,
+      'remark': chatGroupDetails['groupRemark'] ?? ''
+    });
+    if (result != null) {
+      chatGroupDetails['groupRemark'] = result;
+      update([const Key("chat_group_info")]);
+    }
+  }
+
+  void setGroupNickname() async {
+    var result = await Get.toNamed('/set_group_nickname', arguments: {
+      'chatGroupId': chatGroupId,
+      'name': chatGroupDetails['groupName'] ?? ''
+    });
+    if (result != null) {
+      chatGroupDetails['groupName'] = result;
+      update([const Key("chat_group_info")]);
+    }
+  }
+
+  void chatGroupNotice() async {
+    await Get.toNamed('/chat_group_notice', arguments: {
+      'chatGroupId': chatGroupId,
+      'isOwner': isOwner,
+    });
+    if (isOwner) {
+      onGetGroupChatDetails();
+    }
   }
 }

@@ -1,13 +1,18 @@
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/app_badger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalData extends GetxController {
   final _userApi = UserApi();
   var unread = <String, int>{}.obs;
+  var currentUserId = '';
 
   Future<void> init() async {
     await onGetUserUnreadInfo();
+    SharedPreferences.getInstance().then((prefs) {
+      currentUserId = prefs.getString('userId') ?? '';
+    });
   }
 
   Future<void> onGetUserUnreadInfo() async {

@@ -39,13 +39,22 @@ class ImageViewerUpdatePage extends CustomWidget<ImageViewerUpdateLogic> {
             ),
             const SizedBox(height: 50),
             Obx(
-              () => CustomButton(
-                text: controller.text.value,
-                onTap: () => _showDialog(context),
-                width: MediaQuery.of(context).size.width / 2,
-              ),
+              () {
+                if (controller.isUpdate.value) {
+                  return Column(
+                    children: [
+                      CustomButton(
+                        text: controller.text.value,
+                        onTap: () => _showDialog(context),
+                        width: MediaQuery.of(context).size.width / 2,
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
-            const SizedBox(height: 15),
             CustomButton(
               text: '保存图片',
               onTap: () => controller.saveImage(),

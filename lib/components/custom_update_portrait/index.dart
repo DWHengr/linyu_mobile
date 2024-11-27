@@ -22,6 +22,7 @@ class CustomUpdatePortrait extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         CustomPortrait(
+          onTap: onTap,
           url: url,
           size: size,
           radius: radius,

@@ -30,4 +30,20 @@ class ChatGroupApi {
     );
     return response.data;
   }
+
+  Future<Map<String, dynamic>> update(
+      String chatGroupId, String key, dynamic value) async {
+    final response = await _dio.post('/v1/api/chat-group/update',
+        data: {'groupId': chatGroupId, 'updateKey': key, 'updateValue': value});
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateName(
+      String chatGroupId, String name) async {
+    final response = await _dio.post('/v1/api/chat-group/update/name', data: {
+      'groupId': chatGroupId,
+      'name': name,
+    });
+    return response.data;
+  }
 }

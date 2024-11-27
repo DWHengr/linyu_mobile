@@ -12,12 +12,14 @@ class ImageViewerUpdateLogic extends GetxController {
   late RxString imageUrl = ''.obs;
   late RxString text = ''.obs;
   late UploadPictureCallback onConfirm;
+  late RxBool isUpdate = true.obs;
 
   @override
   void onInit() {
     imageUrl.value = Get.arguments['imageUrl'] ?? '';
     text.value = Get.arguments['text'] ?? '更改头像';
     onConfirm = Get.arguments['onConfirm'] ?? (File file) async {};
+    isUpdate.value = Get.arguments['isUpdate'] ?? true;
     super.onInit();
   }
 

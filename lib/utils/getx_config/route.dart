@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/add_chat_group_notice/index.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/index.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_nickname/index.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_name/index.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_remark/index.dart';
 import 'package:linyu_mobile/pages/image_viewer/image_viewer_update/index.dart';
 import 'package:linyu_mobile/pages/image_viewer/index.dart';
 import 'package:linyu_mobile/pages/add_friend/friend_info/index.dart';
@@ -228,6 +233,41 @@ class AppRoutes {
       name: '/image_viewer_update',
       page: () => ImageViewerUpdatePage(
         key: const Key('image_viewer_update'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/set_group_name',
+      page: () => SetGroupNamePage(
+        key: const Key('set_group_name'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/set_group_remark',
+      page: () => SetGroupRemarkPage(
+        key: const Key('set_group_remark'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/set_group_nickname',
+      page: () => SetGroupNickNamePage(
+        key: const Key('set_group_nickname'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/chat_group_notice',
+      page: () => ChatGroupNoticePage(
+        key: const Key('chat_group_notice'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/add_chat_group_notice',
+      page: () => AddChatGroupNoticePage(
+        key: const Key('add_chat_group_notice'),
       ),
       binding: ControllerBinding(),
     ),

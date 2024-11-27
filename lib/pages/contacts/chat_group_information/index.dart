@@ -67,6 +67,7 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                               borderRadius: BorderRadius.circular(35),
                             ),
                             child: CustomUpdatePortrait(
+                                isEdit: controller.isOwner,
                                 onTap: () => controller.selectPortrait(),
                                 url: controller.chatGroupDetails['portrait'] ??
                                     '',
@@ -88,27 +89,27 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                     ),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                        onTap: () => {},
+                        onTap: controller.setGroupName,
                         width: 60,
                         label: '群名称',
                         value: controller.chatGroupDetails['name']),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                        onTap: () => {},
+                        onTap: controller.setGroupRemark,
                         width: 60,
                         label: '群备注',
                         hint: '未设置备注',
                         value: controller.chatGroupDetails['groupRemark']),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                        onTap: () => {},
+                        onTap: controller.setGroupNickname,
                         width: 60,
                         label: '群昵称',
                         hint: '未设置昵称',
                         value: controller.chatGroupDetails['groupName']),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                        onTap: () {},
+                        onTap: controller.chatGroupNotice,
                         width: 60,
                         label: '群公告',
                         hint: '暂无群公告~',

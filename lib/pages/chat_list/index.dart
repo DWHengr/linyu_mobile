@@ -236,7 +236,10 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              chat['remark'] ?? chat['name'],
+                              chat['remark'] != null &&
+                                      chat['remark'].toString().trim() != ''
+                                  ? chat['remark']
+                                  : chat['name'],
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,

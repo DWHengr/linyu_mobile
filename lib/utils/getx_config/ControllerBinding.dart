@@ -1,4 +1,9 @@
 import 'package:get/get.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/add_chat_group_notice/logic.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/logic.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_nickname/logic.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_name/logic.dart';
+import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_remark/logic.dart';
 import 'package:linyu_mobile/pages/image_viewer/image_viewer_update/logic.dart';
 import 'package:linyu_mobile/pages/image_viewer/logic.dart';
 import 'package:linyu_mobile/pages/add_friend/friend_info/logic.dart';
@@ -64,5 +69,10 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => ChatGroupInformationLogic());
     Get.lazyPut(() => ImageViewerLogic());
     Get.lazyPut(() => ImageViewerUpdateLogic());
+    Get.lazyPut(() => SetGroupNameLogic());
+    Get.lazyPut(() => SetGroupRemarkLogic());
+    Get.lazyPut(() => SetGroupNameNickLogic());
+    Get.lazyPut(() => ChatGroupNoticeLogic());
+    Get.lazyPut(() => AddChatGroupNoticeLogic());
   }
 }
