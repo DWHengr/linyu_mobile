@@ -49,11 +49,14 @@ class UserSelectPage extends CustomWidget<UserSelectLogic> {
   }
 
   Widget _buildUserItem(dynamic user) {
+    bool isOnly = controller.onlyUsers.any((id) => id == user['friendId']);
     return Material(
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
       child: InkWell(
-        onTap: () => controller.handlerSelectUser(user),
+        onTap: () {
+          if (!isOnly) controller.handlerSelectUser(user);
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -71,11 +74,13 @@ class UserSelectPage extends CustomWidget<UserSelectLogic> {
             child: Row(
               children: [
                 Checkbox(
-                  checkColor: theme.primaryColor,
+                  checkColor: isOnly ? Colors.grey : theme.primaryColor,
                   fillColor: WidgetStateProperty.resolveWith<Color>(
                       (Set<WidgetState> states) {
                     if (states.contains(WidgetState.selected)) {
-                      return theme.searchBarColor;
+                      return isOnly
+                          ? Colors.grey.withOpacity(0.1)
+                          : theme.searchBarColor;
                     }
                     return Colors.transparent;
                   }),
@@ -83,9 +88,13 @@ class UserSelectPage extends CustomWidget<UserSelectLogic> {
                     width: 1.5,
                     color: Colors.grey,
                   ),
-                  value: controller.selectedUsers.any(
-                      (selected) => selected['friendId'] == user['friendId']),
-                  onChanged: (_) => controller.handlerSelectUser(user),
+                  value: isOnly
+                      ? true
+                      : controller.selectedUsers.any((selected) =>
+                          selected['friendId'] == user['friendId']),
+                  onChanged: (_) {
+                    if (!isOnly) controller.handlerSelectUser(user);
+                  },
                 ),
                 CustomPortrait(url: user['portrait']),
                 const SizedBox(width: 12),

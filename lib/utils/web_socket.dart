@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:linyu_mobile/utils/date.dart';
+import 'package:linyu_mobile/utils/linyu_msg.dart';
 import 'package:linyu_mobile/utils/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -165,43 +166,11 @@ class WebSocketUtil {
 
   void sendNotification(dynamic msg) {
     dynamic msgContent = msg['msgContent'];
-    try {
-      String contentStr = '';
-      switch (msgContent['type']) {
-        case "text":
-          contentStr = msgContent['content'];
-          break;
-        case "file":
-          var content = jsonDecode(msgContent['content']);
-          contentStr = '[文件] ${content['name']}';
-          break;
-        case "img":
-          contentStr = '[图片]';
-          break;
-        case "retraction":
-          contentStr = '[消息被撤回]';
-          break;
-        case "voice":
-          var content = jsonDecode(msgContent['content']);
-          contentStr = '[语音] ${content['time']}';
-          break;
-        case "call":
-          var content = jsonDecode(msgContent['content']);
-          contentStr =
-              '[通话] ${content['time'] > 0 ? DateUtil.formatTimingTime(content['time']) : "未接通"}';
-          break;
-        case "system":
-          contentStr = '[系统消息]';
-          break;
-        case "quit":
-          contentStr = '[系统消息]';
-          break;
-      }
-      NotificationUtil.showNotification(
-        id: 0,
-        title: msgContent['formUserName'],
-        body: '${msgContent['formUserName']}: $contentStr',
-      );
-    } catch (e) {}
+    String contentStr = LinyuMsgUtil.getMsgContent(msgContent);
+    NotificationUtil.showNotification(
+      id: 0,
+      title: msgContent['formUserName'],
+      body: '${msgContent['formUserName']}: $contentStr',
+    );
   }
 }

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
+import 'package:linyu_mobile/components/custom_badge/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/pages/chat_list/logic.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
+import 'package:linyu_mobile/utils/linyu_msg.dart';
 
 class ChatListPage extends CustomWidget<ChatListLogic> {
   ChatListPage({super.key});
@@ -235,15 +237,22 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              chat['remark'] != null &&
-                                      chat['remark'].toString().trim() != ''
-                                  ? chat['remark']
-                                  : chat['name'],
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  chat['remark'] != null &&
+                                          chat['remark'].toString().trim() != ''
+                                      ? chat['remark']
+                                      : chat['name'],
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                if (chat['type'] == 'group')
+                                  const CustomBadge(text: '群'),
+                              ],
                             ),
                             Text(
                               DateUtil.formatTime(chat['createTime']),
@@ -260,7 +269,8 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                           children: [
                             Expanded(
                               child: Text(
-                                chat['lastMsgContent']['content'],
+                                LinyuMsgUtil.getMsgContent(
+                                    chat['lastMsgContent']),
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey[500],

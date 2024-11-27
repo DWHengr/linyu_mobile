@@ -11,6 +11,7 @@ import 'package:dio/dio.dart' show MultipartFile, FormData;
 class ChatGroupInformationLogic extends GetxController {
   final _chatGroupApi = ChatGroupApi();
   final _chatGroupMemberApi = ChatGroupMemberApi();
+  late String? _currentUserId = '';
   late bool isOwner = false;
   late dynamic chatGroupDetails = {
     'id': '',
@@ -28,22 +29,22 @@ class ChatGroupInformationLogic extends GetxController {
 
   @override
   void onInit() {
-    () async {
-      await onGetGroupChatDetails();
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getString('userId');
-      if (userId == chatGroupDetails['ownerUserId']) {
-        isOwner = true;
-      }
-    }();
+    onGetGroupChatDetails();
     onGetGroupChatMembers();
     super.onInit();
   }
 
   Future<void> onGetGroupChatDetails() async {
-    await _chatGroupApi.details(chatGroupId).then((res) {
+    await _chatGroupApi.details(chatGroupId).then((res) async {
       if (res['code'] == 0) {
         chatGroupDetails = res['data'];
+        final prefs = await SharedPreferences.getInstance();
+        _currentUserId = prefs.getString('userId');
+        if (_currentUserId == chatGroupDetails['ownerUserId']) {
+          isOwner = true;
+        } else {
+          isOwner = false;
+        }
         update([const Key('chat_group_info')]);
       }
     });
@@ -127,5 +128,15 @@ class ChatGroupInformationLogic extends GetxController {
     if (isOwner) {
       onGetGroupChatDetails();
     }
+  }
+
+  void chatGroupMember() async {
+    await Get.toNamed('/chat_group_member', arguments: {
+      'chatGroupId': chatGroupId,
+      'isOwner': isOwner,
+      'chatGroupDetails': chatGroupDetails
+    });
+    onGetGroupChatMembers();
+    onGetGroupChatDetails();
   }
 }

@@ -7,11 +7,13 @@ class UserSelectLogic extends GetxController {
   late List<dynamic> userList = [];
   late List<dynamic> allUserList = [];
   late List<dynamic> selectedUsers = [];
+  late List<dynamic> onlyUsers = [];
 
   @override
   void onInit() {
     super.onInit();
-    selectedUsers = Get.arguments['selectedUsers'].toList();
+    selectedUsers = Get.arguments['selectedUsers'] ?? [];
+    onlyUsers = Get.arguments['onlyUsers'] ?? [];
     update([const Key('user_select')]);
     loadUsers();
   }

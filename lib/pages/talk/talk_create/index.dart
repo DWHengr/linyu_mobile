@@ -7,6 +7,7 @@ import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/pages/talk/talk_create/logic.dart';
+import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 class TalkCreatePage extends CustomWidget<TalkCreateLogic> {
@@ -141,6 +142,8 @@ class TalkCreatePage extends CustomWidget<TalkCreateLogic> {
   }
 
   Widget _buildUserItem(user) {
+    String? adf;
+    adf = 'sd';
     return Container(
       height: 26,
       padding: const EdgeInsets.all(4),
@@ -161,7 +164,9 @@ class TalkCreatePage extends CustomWidget<TalkCreateLogic> {
           const SizedBox(width: 2),
           Expanded(
             child: Text(
-              user['remark'] ?? user['name'],
+              StringUtil.isNotNullOrEmpty(user['remark'])
+                  ? user['remark']
+                  : user['name'],
               style: const TextStyle(
                   fontSize: 12, overflow: TextOverflow.ellipsis),
             ),

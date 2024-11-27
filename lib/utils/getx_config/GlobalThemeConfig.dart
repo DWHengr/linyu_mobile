@@ -67,4 +67,8 @@ class GlobalThemeConfig extends GetxController {
         return const Color(0xFFE3ECFF);
     }
   }
+
+  Color get errorColor {
+    return const Color(0xFFFF4C4C);
+  }
 }

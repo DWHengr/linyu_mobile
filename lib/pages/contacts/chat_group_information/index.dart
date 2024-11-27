@@ -118,7 +118,7 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                             ['noticeContent']),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                      onTap: () {},
+                      onTap: controller.chatGroupMember,
                       width: 140,
                       compact: false,
                       label:

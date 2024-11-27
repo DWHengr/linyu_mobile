@@ -13,7 +13,7 @@ class ChatGroupMemberApi {
   }
 
   Future<Map<String, dynamic>> list(String chatGroupId) async {
-    final response = await _dio.get('/v1/api/chat-group-member/list',
+    final response = await _dio.post('/v1/api/chat-group-member/list',
         data: {'chatGroupId': chatGroupId});
     return response.data;
   }

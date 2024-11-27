@@ -46,4 +46,31 @@ class ChatGroupApi {
     });
     return response.data;
   }
+
+  Future<Map<String, dynamic>> kickChatGroup(
+      String groupId, String userId) async {
+    final response = await _dio.post('/v1/api/chat-group/kick', data: {
+      'groupId': groupId,
+      'userId': userId,
+    });
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> inviteMember(
+      String groupId, List<dynamic> ids) async {
+    final response = await _dio.post('/v1/api/chat-group/invite', data: {
+      'groupId': groupId,
+      'userIds': ids,
+    });
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> transferChatGroup(
+      String groupId, String userId) async {
+    final response = await _dio.post('/v1/api/chat-group/transfer', data: {
+      'groupId': groupId,
+      'userId': userId,
+    });
+    return response.data;
+  }
 }
