@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/group_api.dart';
@@ -33,7 +34,7 @@ class SetGroupLogic extends GetxController {
   }
 
   void onSetGroup(group) {
-    if (group['name'] == selectedGroup) {
+    if (group['name'] == selectedGroup || group['value']=='0'||friendId =='0') {
       return;
     }
     _friendApi.setGroup(friendId, group['value']).then((res) {
@@ -60,5 +61,20 @@ class SetGroupLogic extends GetxController {
         CustomFlutterToast.showErrorToast(res['msg']);
       }
     });
+  }
+
+  void onDeleteGroup(dynamic group) async {
+    if (group['value'] == '0') {
+      CustomFlutterToast.showErrorToast("操作有误");
+      return;
+    }
+    var res = await _groupApi.delete(group['value']);
+    if (res['code'] == 0) {
+      Get.back();
+      CustomFlutterToast.showSuccessToast("删除成功~");
+      onGetGroupList();
+    } else {
+      CustomFlutterToast.showErrorToast("网络错误");
+    }
   }
 }
