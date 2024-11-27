@@ -79,13 +79,13 @@ abstract class CustomWidget<T extends GetxController> extends StatelessWidget {
       );
 }
 
-class Logic<T extends Widget> extends GetxController {
+abstract class Logic<W extends Widget> extends GetxController {
   /// 当前widget
   /// 不要在controller的[onInit()]中使用，会导致widget为null
   /// 若需要使用widget中的属性需要在Logic的泛型声明 否则不要轻易使用
   /// 例如：
   /// class HomeLogic extends Logic<HomeWidget> {}
-  late final T? widget;
+  late final W? widget;
 
   //主题配置
   // GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
@@ -118,11 +118,15 @@ abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
   GlobalThemeConfig get theme =>
       GetInstance().find<GlobalThemeConfig>(tag: tag);
 
+  GlobalData get globalData => GetInstance().find<GlobalData>(tag: tag);
+
   /// 初始化
   void init(BuildContext context) {
     print("init>$runtimeType");
-    controller.widget = this;
-    controller.theme = theme;
+    if(controller.initialized){
+      controller.widget = this;
+      controller.theme = theme;
+    }
   }
 
   /// 依赖发生变化

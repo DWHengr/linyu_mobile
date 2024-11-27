@@ -173,7 +173,11 @@ class TalkPage extends CustomWidget<TalkLogic> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  CustomTextButton('查看更多内容', onTap: () {}),
+                  CustomTextButton(
+                    '查看更多内容',
+                    onTap: () => Get.toNamed('/talk_details',
+                        arguments: {'talkId': talk['talkId']}),
+                  ),
                 ],
               ),
             ),
