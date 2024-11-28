@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' show Get, GetNavigation, GetxController;
 import 'package:linyu_mobile/api/chat_group_api.dart';
 import 'package:linyu_mobile/api/chat_group_member.dart';
+import 'package:linyu_mobile/components/CustomDialog/index.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
@@ -138,5 +139,27 @@ class ChatGroupInformationLogic extends GetxController {
     });
     onGetGroupChatMembers();
     onGetGroupChatDetails();
+  }
+
+  void onQuitGroup(context) async {
+    CustomDialog.showTipDialog(context, text: "确定退出该群聊?", onOk: () {
+      _chatGroupApi.quitChatGroup(chatGroupId).then((res) {
+        if (res['code'] == 0) {
+          CustomFlutterToast.showSuccessToast('退出群聊成功~');
+          Get.back(result: true);
+        }
+      });
+    }, onCancel: () {});
+  }
+
+  void onDissolveGroup(context) async {
+    CustomDialog.showTipDialog(context, text: "确定解散该群聊?", onOk: () {
+      _chatGroupApi.dissolveChatGroup(chatGroupId).then((res) {
+        if (res['code'] == 0) {
+          CustomFlutterToast.showSuccessToast('解散群聊成功~');
+          Get.back(result: true);
+        }
+      });
+    }, onCancel: () {});
   }
 }

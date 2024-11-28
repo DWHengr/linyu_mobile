@@ -115,7 +115,8 @@ class ChatGroupMemberPage extends CustomWidget<ChatGroupMemberLogic> {
                                 fontSize: 14,
                               ),
                             const SizedBox(width: 10),
-                            if (controller.isOwner)
+                            if (controller.isOwner &&
+                                user['userId'] != globalData.currentUserId)
                               CustomTextButton(
                                 '移除',
                                 onTap: () => controller.onKickMember(

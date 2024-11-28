@@ -19,59 +19,80 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
   Widget getContent(String tab) {
     switch (tab) {
       case '好友通知':
-        return ListView(
-          children: [
-            ...controller.notifyFriendList.map((notify) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: _buildNotifyFriendItem(notify),
-                )),
-          ],
+        return RefreshIndicator(
+          onRefresh: () async {
+            controller.onNotifyFriendList();
+            return Future.delayed(const Duration(milliseconds: 700));
+          },
+          child: ListView(
+            children: [
+              ...controller.notifyFriendList.map((notify) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: _buildNotifyFriendItem(notify),
+                  )),
+            ],
+          ),
         );
       case '我的群聊':
-        return ListView(
-          children: [
-            ...controller.chatGroupList.map(
-              (group) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: _buildChatGroupItem(group),
+        return RefreshIndicator(
+          onRefresh: () async {
+            controller.onChatGroupList();
+            return Future.delayed(const Duration(milliseconds: 700));
+          },
+          child: ListView(
+            children: [
+              ...controller.chatGroupList.map(
+                (group) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: _buildChatGroupItem(group),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       case '我的好友':
-        return ListView(
-          children: [
-            ...controller.friendList.map((group) {
-              return GestureDetector(
-                onLongPress: controller.onLongPressGroup,
-                child: ExpansionTile(
-                  iconColor: theme.primaryColor,
-                  visualDensity:
-                      const VisualDensity(horizontal: 0, vertical: -4),
-                  dense: true,
-                  collapsedShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  title: Text(
-                    '${group['name']}（${group['friends'].length}）',
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  children: [
-                    ...group['friends'].map(
-                      (friend) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: _buildFriendItem(friend),
+        return RefreshIndicator(
+          onRefresh: () async {
+            controller.onFriendList();
+            return Future.delayed(const Duration(milliseconds: 700));
+          },
+          child: ListView(
+            children: [
+              ...controller.friendList.map(
+                (group) {
+                  return GestureDetector(
+                    onLongPress: controller.onLongPressGroup,
+                    child: ExpansionTile(
+                      iconColor: theme.primaryColor,
+                      visualDensity:
+                          const VisualDensity(horizontal: 0, vertical: -4),
+                      dense: true,
+                      collapsedShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      title: Text(
+                        '${group['name']}（${group['friends'].length}）',
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      children: [
+                        ...group['friends'].map(
+                          (friend) => Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: _buildFriendItem(friend),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         );
       default:
         return Container();
@@ -228,8 +249,11 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       borderRadius: BorderRadius.circular(12),
       color: Colors.white,
       child: InkWell(
-        onTap: () => Get.toNamed('/chat_group_info',
-            arguments: {'chatGroupId': group['id']}),
+        onTap: () async {
+          var result = await Get.toNamed('/chat_group_info',
+              arguments: {'chatGroupId': group['id']});
+          if (result != null && result) controller.onChatGroupList();
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -408,7 +432,10 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
               PopupMenuItem(
                 value: 2,
                 height: 40,
-                onTap: () {},
+                onTap: () async {
+                  var result = await Get.toNamed('/create_chat_group');
+                  if (result != null && result) controller.onChatGroupList();
+                },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

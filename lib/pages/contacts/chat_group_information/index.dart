@@ -109,13 +109,16 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                         value: controller.chatGroupDetails['groupName']),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
-                        onTap: controller.chatGroupNotice,
-                        width: 60,
-                        label: '群公告',
-                        hint: '暂无群公告~',
-                        maxLines: 10,
-                        value: controller.chatGroupDetails['notice']
-                            ['noticeContent']),
+                      onTap: controller.chatGroupNotice,
+                      width: 60,
+                      label: '群公告',
+                      hint: '暂无群公告~',
+                      maxLines: 10,
+                      value: controller.chatGroupDetails['notice'] != null
+                          ? controller.chatGroupDetails['notice']
+                              ['noticeContent']
+                          : '',
+                    ),
                     const SizedBox(height: 1),
                     CustomLabelValueButton(
                       onTap: controller.chatGroupMember,
@@ -156,12 +159,12 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                                 ),
                               ),
                               CustomIconButton(
-                                onTap: () {},
+                                onTap: controller.chatGroupMember,
                                 icon: Icons.add,
                                 text: '邀请成员',
                               ),
                               CustomIconButton(
-                                onTap: () {},
+                                onTap: controller.chatGroupMember,
                                 icon: Icons.remove,
                                 text: '移除成员',
                               ),
@@ -173,13 +176,13 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                     const SizedBox(height: 20),
                     if (controller.isOwner)
                       CustomLeastButton(
-                        onTap: () {},
+                        onTap: () => controller.onDissolveGroup(context),
                         text: '解散群聊',
                         textColor: const Color(0xFFFF4C4C),
                       ),
                     if (!controller.isOwner)
                       CustomLeastButton(
-                        onTap: () {},
+                        onTap: () => controller.onQuitGroup(context),
                         text: '退出群聊',
                         textColor: const Color(0xFFFF4C4C),
                       ),

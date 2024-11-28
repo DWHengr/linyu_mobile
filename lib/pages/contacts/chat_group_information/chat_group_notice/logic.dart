@@ -48,7 +48,7 @@ class ChatGroupNoticeLogic extends GetxController {
       'chatGroupNoticeId': id,
       'content': content,
     });
-    if (result) {
+    if (result != null && result) {
       onGetChatGroupNoticeList();
     }
   }
@@ -57,7 +57,7 @@ class ChatGroupNoticeLogic extends GetxController {
     var result = await Get.toNamed('/add_chat_group_notice', arguments: {
       'chatGroupId': chatGroupId,
     });
-    if (result) {
+    if (result != null && result) {
       onGetChatGroupNoticeList();
     }
   }
