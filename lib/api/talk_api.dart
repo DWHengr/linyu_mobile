@@ -13,9 +13,9 @@ class TalkApi {
     return _instance;
   }
 
-  Future<Map<String, dynamic>> list(int index, int num) async {
-    final response = await _dio
-        .post('/v1/api/talk/list', data: {'index': index, 'num': num});
+  Future<Map<String, dynamic>> list(int index, int num, String targetId) async {
+    final response = await _dio.post('/v1/api/talk/list',
+        data: {'index': index, 'num': num, 'targetId': targetId});
     return response.data;
   }
 

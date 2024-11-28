@@ -4,6 +4,7 @@ import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
+import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -13,25 +14,22 @@ class TalkPage extends CustomWidget<TalkLogic> {
   TalkPage({super.key});
 
   @override
-  void init(BuildContext context) {
-    controller.init();
-  }
-
-  @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FBFF),
       appBar: AppBar(
-          centerTitle: true,
-          title: const AppBarTitle('说说'),
-          backgroundColor: const Color(0xFFF9FBFF),
-          actions: [
+        centerTitle: true,
+        title: AppBarTitle(controller.title),
+        backgroundColor: const Color(0xFFF9FBFF),
+        actions: [
+          if (StringUtil.isNullOrEmpty(controller.targetUserId))
             CustomTextButton('发表',
                 onTap: () => Get.toNamed('/talk_create'),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 fontSize: 14),
-          ]),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: RefreshIndicator(

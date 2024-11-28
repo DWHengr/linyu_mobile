@@ -136,8 +136,14 @@ class MinePage extends CustomWidget<MineLogic> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   children: [
-                    _primarySelectButton('我的说说',
-                        'mine-talk-${theme.themeMode.value}.png', () {}),
+                    _primarySelectButton(
+                      '我的说说',
+                      'mine-talk-${theme.themeMode.value}.png',
+                      () => Get.toNamed('/talk', arguments: {
+                        'userId': globalData.currentUserId,
+                        'title': '我的说说'
+                      }),
+                    ),
                     const SizedBox(height: 2),
                     _primarySelectButton(
                         '系统通知',

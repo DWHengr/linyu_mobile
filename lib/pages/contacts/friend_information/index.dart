@@ -6,6 +6,7 @@ import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_label_value_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/logic.dart';
+import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -285,7 +286,13 @@ class FriendInformationPage extends CustomWidget<FriendInformationLogic> {
                             value: controller.friendSignature),
                         const SizedBox(height: 1),
                         CustomLabelValueButton(
-                          onTap: () {},
+                          onTap: () => Get.toNamed('/talk', arguments: {
+                            'userId': controller.friendId,
+                            'title': StringUtil.isNotNullOrEmpty(
+                                    controller.friendRemark)
+                                ? controller.friendRemark
+                                : controller.friendName,
+                          }),
                           width: 50,
                           label: '说说',
                           hint: '这个人很懒，什么都没留下~',

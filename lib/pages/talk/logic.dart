@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/api/talk_api.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/components/CustomDialog/index.dart';
@@ -9,6 +9,8 @@ class TalkLogic extends GetxController {
   final _talkApi = TalkApi();
   final _userApi = UserApi();
   String currentUserId = '';
+  String targetUserId = '';
+  String title = '说说';
 
   List<dynamic> talkList = [];
   int index = 0;
@@ -16,8 +18,18 @@ class TalkLogic extends GetxController {
   bool isLoading = false;
   final ScrollController scrollController = ScrollController();
 
+  @override
+  void onInit() {
+    super.onInit();
+    init();
+  }
+
   void init() async {
-    onTalkList();
+    if (Get.arguments != null) {
+      targetUserId = Get.arguments['userId'] ?? '';
+      title = Get.arguments['title'] ?? '说说';
+    }
+    refreshData();
     scrollController.addListener(scrollListener);
     SharedPreferences.getInstance().then((prefs) {
       currentUserId = prefs.getString('userId') ?? '';
@@ -41,7 +53,7 @@ class TalkLogic extends GetxController {
     if (!hasMore || isLoading) return;
     isLoading = true;
     update([const Key("talk")]);
-    _talkApi.list(index, 10).then((res) {
+    _talkApi.list(index, 10, targetUserId).then((res) {
       if (res['code'] == 0) {
         final List<dynamic> newTalks = res['data'];
         if (newTalks.isEmpty) {
