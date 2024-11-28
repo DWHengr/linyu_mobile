@@ -22,6 +22,7 @@ import 'package:linyu_mobile/pages/login/logic.dart';
 import 'package:linyu_mobile/pages/mine/about/logic.dart';
 import 'package:linyu_mobile/pages/mine/logic.dart';
 import 'package:linyu_mobile/pages/mine/mine_qr_code/logic.dart';
+import 'package:linyu_mobile/pages/mine/system_notify/logic.dart';
 import 'package:linyu_mobile/pages/navigation/logic.dart';
 import 'package:linyu_mobile/pages/password/retrieve/logic.dart';
 import 'package:linyu_mobile/pages/password/update/logic.dart';
@@ -78,5 +79,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => AddChatGroupNoticeLogic(), fenix: true);
     Get.lazyPut(() => ChatGroupMemberLogic(), fenix: true);
     Get.lazyPut(() => CreateChatGroupLogic(), fenix: true);
+    Get.lazyPut(() => SystemNotifyLogic(), fenix: true);
   }
 }

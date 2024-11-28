@@ -139,8 +139,10 @@ class MinePage extends CustomWidget<MineLogic> {
                     _primarySelectButton('我的说说',
                         'mine-talk-${theme.themeMode.value}.png', () {}),
                     const SizedBox(height: 2),
-                    _primarySelectButton('系统通知',
-                        'mine-notify-${theme.themeMode.value}.png', () {}),
+                    _primarySelectButton(
+                        '系统通知',
+                        'mine-notify-${theme.themeMode.value}.png',
+                        () => Get.toNamed('/system_notify')),
                     const SizedBox(height: 30),
                     _minorSelectButton('修改密码', 'mine-password.png', () {
                       Get.toNamed('/update_password');

@@ -22,6 +22,7 @@ import 'package:linyu_mobile/pages/login/index.dart';
 import 'package:linyu_mobile/pages/mine/about/index.dart';
 import 'package:linyu_mobile/pages/mine/index.dart';
 import 'package:linyu_mobile/pages/mine/mine_qr_code/index.dart';
+import 'package:linyu_mobile/pages/mine/system_notify/index.dart';
 import 'package:linyu_mobile/pages/navigation/index.dart';
 import 'package:linyu_mobile/pages/password/retrieve/index.dart';
 import 'package:linyu_mobile/pages/password/update/index.dart';
@@ -284,6 +285,13 @@ class AppRoutes {
       name: '/create_chat_group',
       page: () => CreateChatGroupPage(
         key: const Key('create_chat_group'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/system_notify',
+      page: () => SystemNotifyPage(
+        key: const Key('system_notify'),
       ),
       binding: ControllerBinding(),
     ),
