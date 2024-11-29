@@ -6,6 +6,7 @@ import 'package:linyu_mobile/components/custom_badge/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/pages/chat_list/logic.dart';
+import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:linyu_mobile/utils/linyu_msg.dart';
@@ -209,8 +210,11 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         child: InkWell(
-          onTap: () {
-            // 添加点击事件
+          onTap: () async {
+            await Get.toNamed('/chat_frame', arguments: {
+              'chatInfo': chat,
+            });
+            controller.onGetChatList();
           },
           borderRadius: BorderRadius.circular(12),
           child: Container(
@@ -240,8 +244,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                             Row(
                               children: [
                                 Text(
-                                  chat['remark'] != null &&
-                                          chat['remark'].toString().trim() != ''
+                                  StringUtil.isNotNullOrEmpty(chat['remark'])
                                       ? chat['remark']
                                       : chat['name'],
                                   style: const TextStyle(
@@ -255,7 +258,7 @@ class ChatListPage extends CustomWidget<ChatListLogic> {
                               ],
                             ),
                             Text(
-                              DateUtil.formatTime(chat['createTime']),
+                              DateUtil.formatTime(chat['updateTime']),
                               style: TextStyle(
                                 fontSize: 10,
                                 color: Colors.grey[500],

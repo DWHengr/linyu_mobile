@@ -142,8 +142,6 @@ class TalkCreatePage extends CustomWidget<TalkCreateLogic> {
   }
 
   Widget _buildUserItem(user) {
-    String? adf;
-    adf = 'sd';
     return Container(
       height: 26,
       padding: const EdgeInsets.all(4),

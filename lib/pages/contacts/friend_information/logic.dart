@@ -45,12 +45,12 @@ class FriendInformationLogic extends Logic {
   //好友备注
   String _friendRemark = '';
 
-  String get friendRemark => _friendRemark;
-
   set friendRemark(String value) {
     _friendRemark = value;
     update([const Key('friend_info')]);
   }
+
+  String get friendRemark => _friendRemark;
 
   //好友账号
   String _friendAccount = '';

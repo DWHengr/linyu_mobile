@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/pages/chat_frame/index.dart';
 import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_member/index.dart';
 import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/add_chat_group_notice/index.dart';
 import 'package:linyu_mobile/pages/contacts/chat_group_information/chat_group_notice/index.dart';
@@ -292,6 +293,13 @@ class AppRoutes {
       name: '/system_notify',
       page: () => SystemNotifyPage(
         key: const Key('system_notify'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/chat_frame',
+      page: () => ChatFramePage(
+        key: const Key('chat_frame'),
       ),
       binding: ControllerBinding(),
     ),
