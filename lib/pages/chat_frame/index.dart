@@ -5,6 +5,7 @@ import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
+import 'package:linyu_mobile/pages/chat_frame/chat_content/msg.dart';
 import 'package:linyu_mobile/pages/chat_frame/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
@@ -83,8 +84,8 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                   ),
                                 ),
                               ),
-                            ...controller.msgList
-                                .map((msg) => _buildMsgContent(msg)),
+                            ...controller.msgList.map((msg) => ChatMessage(
+                                msg: msg, chatInfo: controller.chatInfo)),
                           ],
                         ),
                         if (controller.isLoading)
@@ -161,6 +162,10 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
         ),
       ),
     );
+  }
+
+  Widget _buildMoreOperation(String url, double size) {
+    return Container();
   }
 
   Widget _buildMsgContent(msg) {

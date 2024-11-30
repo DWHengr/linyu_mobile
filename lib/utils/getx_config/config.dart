@@ -123,7 +123,7 @@ abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
   /// 初始化
   void init(BuildContext context) {
     print("init>$runtimeType");
-    if(controller.initialized){
+    if (controller.initialized) {
       controller.widget = this;
       controller.theme = theme;
     }
@@ -169,6 +169,8 @@ abstract class StatelessThemeWidget extends StatelessWidget {
   const StatelessThemeWidget({super.key});
 
   GlobalThemeConfig get theme => GetInstance().find<GlobalThemeConfig>();
+
+  GlobalData get globalData => GetInstance().find<GlobalData>();
 }
 
 /// 继承自GetView

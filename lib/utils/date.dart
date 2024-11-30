@@ -1,9 +1,20 @@
 class DateUtil {
-  static String formatTime(String dateStr) {
-    if (dateStr == null || dateStr == '') {
+  static String formatTime(dynamic input) {
+    if (input == null || (input is String && input.isEmpty)) {
       return '';
     }
-    final date = DateTime.parse(dateStr);
+    DateTime? date;
+    if (input is int) {
+      date = DateTime.fromMillisecondsSinceEpoch(input);
+    } else if (input is String) {
+      try {
+        date = DateTime.parse(input);
+      } catch (e) {
+        return '';
+      }
+    } else {
+      return '';
+    }
     final now = DateTime.now();
     final diff = now.difference(date);
     const oneDay = Duration(days: 1);
@@ -11,12 +22,13 @@ class DateUtil {
     final isYesterday = now.day - date.day == 1 &&
         now.month == date.month &&
         now.year == date.year;
+
     if (diff < oneDay && !isYesterday) {
       final hour = date.hour;
       final minute = date.minute;
       final period = hour < 12 ? '上午' : '下午';
       final formattedMinute = minute < 10 ? '0$minute' : minute.toString();
-      return '$period ${hour % 12}:$formattedMinute';
+      return '$period ${hour % 12 == 0 ? 12 : hour % 12}:$formattedMinute';
     } else if (isYesterday) {
       final hour = date.hour;
       final minute = date.minute;

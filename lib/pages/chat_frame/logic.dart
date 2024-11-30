@@ -34,9 +34,11 @@ class ChatFrameLogic extends GetxController {
 
     // 添加滚动监听
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.minScrollExtent) {
-        loadMore();
+      if (scrollController.hasClients) {
+        if (scrollController.position.pixels ==
+            scrollController.position.minScrollExtent) {
+          loadMore();
+        }
       }
     });
   }
