@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/call.dart';
+import 'package:linyu_mobile/pages/chat_frame/chat_content/file.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/image.dart';
+import 'package:linyu_mobile/pages/chat_frame/chat_content/retraction.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/time.dart';
+import 'package:linyu_mobile/pages/chat_frame/chat_content/voice.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -85,16 +88,14 @@ class ChatMessage extends StatelessThemeWidget {
           value: msg,
           isRight: isRight,
         );
-      // case 'file':
-      //   return (args) =>
-      //       FileMessage(value: args['value'], isRight: args['isRight']);
+      case 'file':
+        return FileMessage(value: msg, isRight: isRight);
       case 'img':
         return ImageMessage(value: msg, isRight: isRight);
-      // case 'retraction':
-      //   return (args) =>
-      //       RetractionMessage(value: args['value'], isRight: args['isRight']);
-      // case 'voice':
-      //   return VoiceMessage(value: msg, isRight: isRight);
+      case 'retraction':
+        return RetractionMessage(isRight: isRight);
+      case 'voice':
+        return VoiceMessage(value: msg, isRight: isRight);
       case 'call':
         return CallMessage(value: msg, isRight: isRight);
       default:

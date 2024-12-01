@@ -1,6 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/qr_api.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -24,7 +24,8 @@ class QRCodeScanLogic extends GetxController {
       isScanning = false;
       mobileScannerController.stop();
       update([const Key("qr_code_scan")]);
-      await player.play(AssetSource('sounds/success.mp3'));
+      await player.setAsset('assets/sounds/success.mp3');
+      await player.play();
       final result = await _qrApi.status(qrText!);
       if (result['code'] == 0) {
         switch (result['data']['action']) {
