@@ -41,7 +41,6 @@ dependencies:
   get: 4.6.6
   # add this line to your dependencies
   fluttertoast: ^8.2.8
-  audioplayers: ^6.1.0
   qr_flutter: ^4.1.0
   mobile_scanner: ^6.0.2
   web_socket_channel: ^3.0.1
@@ -52,6 +51,7 @@ dependencies:
   photo_view: ^0.15.0
   path_provider: ^2.1.5
   image_gallery_saver: ^2.0.3
+  just_audio: ^0.9.42
 
 
   # The following adds the Cupertino Icons font to your application.
