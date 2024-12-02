@@ -1,15 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart' show Get, GetNavigation, GetxController;
+import 'package:get/get.dart'
+    show Get, GetInstance, GetNavigation, GetxController;
 import 'package:linyu_mobile/api/chat_group_api.dart';
 import 'package:linyu_mobile/api/chat_group_member.dart';
 import 'package:linyu_mobile/components/CustomDialog/index.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
+import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
 
 class ChatGroupInformationLogic extends GetxController {
+  final ContactsLogic _contactsLogic = GetInstance().find<ContactsLogic>();
   final _chatGroupApi = ChatGroupApi();
   final _chatGroupMemberApi = ChatGroupMemberApi();
   late String? _currentUserId = '';
@@ -20,13 +23,28 @@ class ChatGroupInformationLogic extends GetxController {
     'ownerUserId': '',
     'portrait': '',
     'name': '',
-    'notice': {},
+    'notice': {
+      "id": "",
+      "chatGroupId": "",
+      "userId": "",
+      "noticeContent": "",
+      "createTime": "",
+      "updateTime": ""
+    },
     'memberNum': '',
     'groupName': '',
     'groupRemark': '',
   };
   late List<dynamic> chatGroupMembers = [];
   final String chatGroupId = Get.arguments['chatGroupId'];
+  double _groupMemberWidth = 0;
+
+  double get groupMemberWidth => _groupMemberWidth;
+
+  set groupMemberWidth(double value) {
+    _groupMemberWidth = value;
+    update([const Key('chat_group_info')]);
+  }
 
   @override
   void onInit() {
@@ -55,7 +73,11 @@ class ChatGroupInformationLogic extends GetxController {
     _chatGroupMemberApi.listPage(chatGroupId).then((res) {
       if (res['code'] == 0) {
         chatGroupMembers = res['data'];
-        update([const Key('chat_group_info')]);
+        groupMemberWidth = chatGroupMembers.length * 40 + 10;
+        if (groupMemberWidth >= 190) {
+          groupMemberWidth = 190;
+        }
+        // update([const Key('chat_group_info')]);
       }
     });
   }
@@ -141,6 +163,14 @@ class ChatGroupInformationLogic extends GetxController {
     onGetGroupChatDetails();
   }
 
+  void onGroupMemberPress(dynamic member) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String currentUser = prefs.getString('userId')!;
+    Get.toNamed('/friend_info', arguments: {
+      'friendId': currentUser == member['userId'] ? '0' : member['userId']
+    });
+  }
+
   void onQuitGroup(context) async {
     CustomDialog.showTipDialog(context, text: "确定退出该群聊?", onOk: () {
       _chatGroupApi.quitChatGroup(chatGroupId).then((res) {
@@ -161,5 +191,11 @@ class ChatGroupInformationLogic extends GetxController {
         }
       });
     }, onCancel: () {});
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    _contactsLogic.init();
   }
 }

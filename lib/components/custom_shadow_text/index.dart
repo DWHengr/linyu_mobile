@@ -50,7 +50,12 @@ class CustomShadowText extends StatelessThemeWidget {
         ),
         Text(
           text,
-          style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

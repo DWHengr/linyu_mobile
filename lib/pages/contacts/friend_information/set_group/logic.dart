@@ -97,8 +97,6 @@ class SetGroupLogic extends Logic<SetGroupPage> {
   }
 
   void onDeleteGroup(dynamic group) async {
-    print(group);
-
     if (group['value'] == '0') {
       CustomFlutterToast.showErrorToast("操作有误");
       return;

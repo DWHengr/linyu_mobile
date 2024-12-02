@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
@@ -99,12 +100,12 @@ abstract class Logic<W extends Widget> extends GetxController {
 abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
   /// 构造函数
   CustomWidgetNew({
-    this.key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// 当传入key的时候，若更新widget需使用controller.update([key],)
-  @override
-  final Key? key;
+  // @override
+  // final Key? key;
 
   /// 传入的参数
   final dynamic arguments = Get.arguments;
@@ -122,7 +123,9 @@ abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
 
   /// 初始化
   void init(BuildContext context) {
-    print("init>$runtimeType");
+    if (kDebugMode) {
+      print("init>$runtimeType");
+    }
     if (controller.initialized) {
       controller.widget = this;
       controller.theme = theme;
@@ -153,7 +156,7 @@ abstract class CustomWidgetNew<T extends Logic> extends StatelessWidget {
   /// 构建
   @override
   Widget build(BuildContext context) => GetBuilder<T>(
-        id: this.key,
+        id: key,
         initState: (GetBuilderState<T> state) => this.init(context),
         didChangeDependencies: (GetBuilderState<T> state) =>
             this.didChangeDependencies(context),

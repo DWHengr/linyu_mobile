@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
+import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_icon_button/index.dart';
 import 'package:linyu_mobile/components/custom_label_value_button/index.dart';
 import 'package:linyu_mobile/components/custom_least_button/index.dart';
@@ -12,15 +14,27 @@ import 'package:linyu_mobile/utils/getx_config/config.dart';
 class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
   ChatGroupInformationPage({super.key});
 
-  PopupMenuEntry<int> _buildPopupDivider() {
-    return PopupMenuItem<int>(
-      enabled: false,
-      height: 1,
-      child: Container(
-        height: 1,
-        padding: const EdgeInsets.all(0),
-        color: Colors.grey[200],
-      ),
+  Widget _selectedUserItem(dynamic member) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CustomPortrait(
+          url: member['portrait'],
+          size: 40,
+        ),
+        const SizedBox(height: 4),
+        SizedBox(
+          width: 40,
+          child: Center(
+            child: Text(
+              member['name'],
+              style: const TextStyle(
+                  fontSize: 12, overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -134,28 +148,22 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                             spacing: 5,
                             runSpacing: 5,
                             children: [
-                              ...controller.chatGroupMembers.map(
-                                (member) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomPortrait(
-                                      url: member['portrait'],
-                                      size: 40,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    SizedBox(
-                                      width: 40,
-                                      child: Center(
-                                        child: Text(
-                                          member['name'],
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                              SizedBox(
+                                width: controller.groupMemberWidth,
+                                height: 62,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: controller.chatGroupMembers
+                                      .map((member) => Container(
+                                            margin:
+                                                const EdgeInsets.only(right: 5),
+                                            child: GestureDetector(
+                                                onTap: () => controller
+                                                    .onGroupMemberPress(member),
+                                                child:
+                                                    _selectedUserItem(member)),
+                                          ))
+                                      .toList(),
                                 ),
                               ),
                               CustomIconButton(
@@ -173,7 +181,14 @@ class ChatGroupInformationPage extends CustomWidget<ChatGroupInformationLogic> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 25),
+                    CustomButton(
+                      text: '发送消息',
+                      width: MediaQuery.of(context).size.width,
+                      type: 'gradient',
+                      onTap: () {},
+                    ),
+                    const SizedBox(height: 10),
                     if (controller.isOwner)
                       CustomLeastButton(
                         onTap: () => controller.onDissolveGroup(context),
