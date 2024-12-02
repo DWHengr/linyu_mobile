@@ -164,7 +164,6 @@ class MinePage extends CustomWidget<MineLogic> {
                     const SizedBox(height: 2),
                     _leastSelectButton(
                         '退出',
-                        color: const Color(0xFFFFF4C4C),
                         controller.handlerLogout),
                   ],
                 ),

@@ -7,11 +7,13 @@ class GlobalData extends GetxController {
   final _userApi = UserApi();
   var unread = <String, int>{}.obs;
   var currentUserId = '';
+  var currentUserAccount = '';
 
   Future<void> init() async {
     await onGetUserUnreadInfo();
     SharedPreferences.getInstance().then((prefs) {
       currentUserId = prefs.getString('userId') ?? '';
+      currentUserAccount = prefs.getString('account') ?? '';
     });
   }
 
