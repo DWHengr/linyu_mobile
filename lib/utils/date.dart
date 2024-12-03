@@ -88,11 +88,18 @@ class DateUtil {
     return '$age岁';
   }
 
-  static String formatTimingTime(String time) {
+  static String formatTimingTime(dynamic time) {
     if (time == null || time == '') {
       return '';
     }
-    final int totalSeconds = int.tryParse(time) ?? 0;
+    int totalSeconds;
+    if (time is int) {
+      totalSeconds = time;
+    } else if (time is String) {
+      totalSeconds = int.tryParse(time) ?? 0;
+    } else {
+      return '';
+    }
     final hours = totalSeconds ~/ 3600;
     final minutes = (totalSeconds % 3600) ~/ 60;
     final seconds = totalSeconds % 60;

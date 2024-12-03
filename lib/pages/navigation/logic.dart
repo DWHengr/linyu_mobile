@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
@@ -9,6 +11,7 @@ import 'package:linyu_mobile/utils/web_socket.dart';
 class NavigationLogic extends GetxController {
   late int currentIndex = 0;
   final _wsManager = WebSocketUtil();
+  StreamSubscription? _subscription;
 
   GlobalData get globalData => GetInstance().find<GlobalData>();
 
@@ -34,8 +37,18 @@ class NavigationLogic extends GetxController {
 
   void eventListen() {
     // 监听消息
-    _wsManager.eventStream.listen((event) {
+    _subscription = _wsManager.eventStream.listen((event) {
       globalData.onGetUserUnreadInfo();
+      if (event['type'] == 'on-receive-video') {
+        var data = event['content'];
+        if (data['type'] == "invite") {
+          Get.toNamed('/video_chat', arguments: {
+            'userId': data['fromId'],
+            'isSender': false,
+            'isOnlyAudio': data['isOnlyAudio'],
+          });
+        }
+      }
     });
   }
 
@@ -73,5 +86,6 @@ class NavigationLogic extends GetxController {
   void onClose() {
     super.onClose();
     _wsManager.dispose();
+    _subscription?.cancel();
   }
 }

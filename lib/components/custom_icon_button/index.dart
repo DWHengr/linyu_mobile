@@ -8,6 +8,7 @@ class CustomIconButton extends StatelessWidget {
   final IconData icon;
   final double iconSize;
   final Color? iconColor;
+  final double? radius;
   final Function() onTap;
   final String? text;
 
@@ -21,6 +22,7 @@ class CustomIconButton extends StatelessWidget {
     this.iconColor,
     required this.icon,
     this.text,
+    this.radius,
   });
 
   @override
@@ -31,7 +33,7 @@ class CustomIconButton extends StatelessWidget {
       children: [
         CustomMaterialButton(
           color: color ?? const Color(0xFFE3ECFF),
-          borderRadius: width / 2,
+          borderRadius: radius ?? width / 2,
           onTap: onTap,
           child: Container(
             width: width,

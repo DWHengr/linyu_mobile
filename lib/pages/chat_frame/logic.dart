@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/msg_api.dart';
+import 'package:linyu_mobile/api/video_api.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
 
@@ -10,12 +13,15 @@ class ChatFrameLogic extends GetxController {
   final _msgApi = MsgApi();
   final _chatListApi = ChatListApi();
   final _wsManager = WebSocketUtil();
+  final _videoApi = VideoApi();
   final TextEditingController msgContentController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   late List<dynamic> msgList = [];
   late String targetId = '';
   late dynamic chatInfo = {targetId: ''};
   late RxBool isSend = false.obs;
+  late RxBool isShowMore = false.obs;
+  StreamSubscription? _subscription;
 
   // 分页相关
   int num = 20;
@@ -45,7 +51,7 @@ class ChatFrameLogic extends GetxController {
 
   void eventListen() {
     // 监听消息
-    _wsManager.eventStream.listen((event) {
+    _subscription = _wsManager.eventStream.listen((event) {
       if (event['type'] == 'on-receive-msg') {
         if (event['content']['fromId'] == targetId) {
           msgListAddMsg(event['content']);
@@ -64,9 +70,7 @@ class ChatFrameLogic extends GetxController {
         index += msgList.length;
         hasMore = res['data'].length >= 0;
         update([const Key('chat_frame')]);
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          scrollBottom();
-        });
+        scrollBottom();
       }
     } finally {
       isLoading = false;
@@ -116,11 +120,13 @@ class ChatFrameLogic extends GetxController {
 
   void scrollBottom() {
     if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+        );
+      });
     }
   }
 
@@ -152,13 +158,23 @@ class ChatFrameLogic extends GetxController {
     msgList.add(msg);
     index = msgList.length;
     update([const Key('chat_frame')]);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      scrollBottom();
-    });
+    scrollBottom();
   }
 
   void onRead() {
     _chatListApi.read(targetId);
+  }
+
+  void onInviteVideoChat(isOnlyAudio) {
+    _videoApi.invite(targetId, isOnlyAudio).then((res) {
+      if (res['code'] == 0) {
+        Get.toNamed('video_chat', arguments: {
+          'userId': targetId,
+          'isSender': true,
+          'isOnlyAudio': isOnlyAudio,
+        });
+      }
+    });
   }
 
   @override
@@ -166,5 +182,6 @@ class ChatFrameLogic extends GetxController {
     super.onClose();
     msgContentController.dispose();
     scrollController.dispose();
+    _subscription?.cancel();
   }
 }

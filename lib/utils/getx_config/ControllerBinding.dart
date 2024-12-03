@@ -36,6 +36,7 @@ import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 import 'package:linyu_mobile/pages/talk/talk_create/logic.dart';
 import 'package:linyu_mobile/pages/talk/talk_details/logic.dart';
+import 'package:linyu_mobile/pages/video_chat/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/pages/mine/edit/logic.dart';
@@ -84,5 +85,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => SystemNotifyLogic(), fenix: true);
     Get.lazyPut(() => ChatFrameLogic(), fenix: true);
     Get.lazyPut(() => FileDetailsLogic(), fenix: true);
+    Get.lazyPut(() => VideoChatLogic(), fenix: true);
   }
 }

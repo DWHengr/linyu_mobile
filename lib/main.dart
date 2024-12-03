@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      smartManagement:SmartManagement.keepFactory,
+      smartManagement: SmartManagement.keepFactory,
       title: '林语',
       //国际化
       localizationsDelegates: const [
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF4C9BFF),
           surface: const Color(0xFFFFFFFF),
-          onSurface: Colors.black,
+          onSurface: const Color(0xFF1F1F1F),
           primary: const Color(0xFF4C9BFF),
           onPrimary: Colors.white,
         ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/linyu_msg.dart';
 import 'package:linyu_mobile/utils/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,10 +17,10 @@ class WebSocketUtil {
   int _reconnectCount = 0;
 
   // 事件总线，用于消息分发
-  static final _eventController =
+  static final eventController =
       StreamController<Map<String, dynamic>>.broadcast();
 
-  Stream<Map<String, dynamic>> get eventStream => _eventController.stream;
+  Stream<Map<String, dynamic>> get eventStream => eventController.stream;
 
   factory WebSocketUtil() {
     _instance ??= WebSocketUtil._internal();
@@ -80,15 +79,16 @@ class WebSocketUtil {
         switch (wsContent['type']) {
           case 'msg':
             sendNotification(wsContent['content']);
-            _eventController.add(
+            eventController.add(
                 {'type': 'on-receive-msg', 'content': wsContent['content']});
             break;
           case 'notify':
-            _eventController.add(
+            eventController.add(
                 {'type': 'on-receive-notify', 'content': wsContent['content']});
             break;
           case 'video':
-            // 处理视频消息
+            eventController.add(
+                {'type': 'on-receive-video', 'content': wsContent['content']});
             break;
         }
       }
@@ -160,7 +160,7 @@ class WebSocketUtil {
     _clearHeartbeat();
     _clearTimer();
     _channel?.sink.close();
-    _eventController.close();
+    eventController.close();
     _instance = null;
   }
 
