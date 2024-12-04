@@ -88,8 +88,17 @@ class _ChatContentVoiceState extends State<VoiceMessage> {
                   );
                 } else {
                   return Container(
-                    color: Colors.grey[300],
-                    child: const Center(
+                    width: 120,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color:
+                          widget.isRight ? _theme.primaryColor : Colors.white,
+                    ),
+                    alignment: Alignment.center,
+                    child: const SizedBox(
+                      width: 14,
+                      height: 14,
                       child: CircularProgressIndicator(
                         color: Color(0xffffffff),
                         strokeWidth: 2,

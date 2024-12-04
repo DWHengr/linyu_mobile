@@ -1,26 +1,35 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'
+    show BoolExtension, Get, GetNavigation, GetxController, RxBool, obs;
+import 'package:linyu_mobile/api/chat_group_member.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/msg_api.dart';
 import 'package:linyu_mobile/api/video_api.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
+import 'package:dio/dio.dart' show MultipartFile, FormData;
 
 class ChatFrameLogic extends GetxController {
   final _msgApi = MsgApi();
   final _chatListApi = ChatListApi();
   final _wsManager = WebSocketUtil();
   final _videoApi = VideoApi();
+  final _chatGroupMemberApi = ChatGroupMemberApi();
   final TextEditingController msgContentController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final FocusNode focusNode = FocusNode();
+  late Map<String, dynamic> members = {};
   late List<dynamic> msgList = [];
   late String targetId = '';
   late dynamic chatInfo = {targetId: ''};
   late RxBool isSend = false.obs;
   late RxBool isShowMore = false.obs;
+  late RxBool isRecording = false.obs;
   StreamSubscription? _subscription;
 
   // 分页相关
@@ -34,6 +43,7 @@ class ChatFrameLogic extends GetxController {
     chatInfo = Get.arguments['chatInfo'] ?? '';
     targetId = chatInfo['fromId'];
     super.onInit();
+    onGetMembers();
     onGetMsgRecode();
     eventListen();
     onRead();
@@ -53,11 +63,24 @@ class ChatFrameLogic extends GetxController {
     // 监听消息
     _subscription = _wsManager.eventStream.listen((event) {
       if (event['type'] == 'on-receive-msg') {
-        if (event['content']['fromId'] == targetId) {
+        final data = event['content'];
+        if ((data['fromId'] == targetId && data['source'] == 'user') ||
+            (data['toId'] == targetId && data['source'] == 'group')) {
           msgListAddMsg(event['content']);
         }
       }
     });
+  }
+
+  void onGetMembers() async {
+    if (chatInfo['type'] == 'group') {
+      await _chatGroupMemberApi.list(targetId).then((res) {
+        if (res['code'] == 0) {
+          members = res['data'];
+          update([const Key('chat_frame')]);
+        }
+      });
+    }
   }
 
   Future<void> onGetMsgRecode() async {
@@ -177,11 +200,50 @@ class ChatFrameLogic extends GetxController {
     });
   }
 
+  void onSendVoiceMsg(filePath, time) async {
+    if (StringUtil.isNullOrEmpty(filePath)) {
+      return;
+    }
+    if (time == 0) {
+      CustomFlutterToast.showSuccessToast('录制时间太短~');
+      return;
+    }
+    MultipartFile file =
+        await MultipartFile.fromFile(filePath, filename: 'voice.wav');
+    dynamic msg = {
+      'toUserId': targetId,
+      'source': chatInfo['type'],
+      'msgContent': {
+        'type': "voice",
+        'content': jsonEncode({
+          'name': 'voice.wav',
+          'size': file.length,
+          'time': time,
+        })
+      }
+    };
+    _msgApi.send(msg).then((res) {
+      if (res['code'] == 0) {
+        if (StringUtil.isNotNullOrEmpty(res['data']?['id'])) {
+          Map<String, dynamic> map = {};
+          map["file"] = file;
+          map['msgId'] = res['data']['id'];
+          FormData formData = FormData.fromMap(map);
+          _msgApi.sendMedia(formData).then((v) {
+            msgListAddMsg(res['data']);
+            onRead();
+          });
+        }
+      }
+    });
+  }
+
   @override
   void onClose() {
     super.onClose();
     msgContentController.dispose();
     scrollController.dispose();
     _subscription?.cancel();
+    focusNode.dispose();
   }
 }

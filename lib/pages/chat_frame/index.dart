@@ -6,6 +6,7 @@ import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_icon_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_field/index.dart';
+import 'package:linyu_mobile/components/custom_voice_record_buttom/index.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/msg.dart';
 import 'package:linyu_mobile/pages/chat_frame/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
@@ -94,7 +95,10 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                   ),
                                 ),
                               ...controller.msgList.map((msg) => ChatMessage(
-                                  msg: msg, chatInfo: controller.chatInfo)),
+                                    msg: msg,
+                                    chatInfo: controller.chatInfo,
+                                    member: controller.members[msg['fromId']],
+                                  )),
                             ],
                           ),
                           if (controller.isLoading)
@@ -116,67 +120,81 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                 ),
               ),
             ),
-            Container(
-              color: const Color(0xFFEDF2F9),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CustomIconButton(
-                        onTap: () {},
-                        icon: const IconData(0xe602, fontFamily: 'IconFont'),
-                        width: 36,
-                        height: 36,
-                        iconSize: 26,
-                        iconColor: Colors.black,
-                        color: Colors.transparent,
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: CustomTextField(
-                          controller: controller.msgContentController,
-                          maxLines: 3,
-                          minLines: 1,
-                          hintTextColor: theme.primaryColor,
-                          hintText: '请输入消息',
-                          vertical: 8,
-                          fillColor: Colors.white.withOpacity(0.9),
-                          onTap: () {
-                            controller.isShowMore.value = false;
-                            controller.scrollBottom();
-                          },
-                          onChanged: (value) {
-                            controller.isSend.value = value.trim().isNotEmpty;
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      CustomIconButton(
-                        onTap: () {},
-                        icon: const IconData(0xe632, fontFamily: 'IconFont'),
-                        width: 36,
-                        height: 36,
-                        iconSize: 26,
-                        iconColor: Colors.black,
-                        color: Colors.transparent,
-                      ),
-                      Obx(() {
-                        if (controller.isSend.value) {
-                          return CustomButton(
+            Obx(
+              () => Container(
+                color: const Color(0xFFEDF2F9),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (controller.isRecording.value)
+                          _buildIconButton1(
+                            const IconData(0xe661, fontFamily: 'IconFont'),
+                            () {
+                              controller.isShowMore.value = false;
+                              controller.isRecording.value = false;
+                              controller.focusNode.requestFocus();
+                            },
+                          )
+                        else
+                          _buildIconButton1(
+                            const IconData(0xe7e2, fontFamily: 'IconFont'),
+                            () {
+                              controller.isShowMore.value = false;
+                              controller.isRecording.value = true;
+                            },
+                          ),
+                        const SizedBox(width: 5),
+                        if (controller.isRecording.value)
+                          Expanded(
+                            child: CustomVoiceRecordButton(
+                                onFinish: controller.onSendVoiceMsg),
+                          )
+                        else
+                          Expanded(
+                            child: CustomTextField(
+                              controller: controller.msgContentController,
+                              maxLines: 3,
+                              minLines: 1,
+                              hintTextColor: theme.primaryColor,
+                              hintText: '请输入消息',
+                              vertical: 8,
+                              focusNode: controller.focusNode,
+                              fillColor: Colors.white.withOpacity(0.9),
+                              onTap: () {
+                                controller.isShowMore.value = false;
+                                controller.scrollBottom();
+                              },
+                              onChanged: (value) {
+                                controller.isSend.value =
+                                    value.trim().isNotEmpty;
+                              },
+                            ),
+                          ),
+                        const SizedBox(width: 5),
+                        if (!controller.isRecording.value)
+                          _buildIconButton1(
+                            const IconData(0xe632, fontFamily: 'IconFont'),
+                            () {},
+                          ),
+                        if (controller.isSend.value)
+                          CustomButton(
                             text: '发送',
                             onTap: controller.sendTextMsg,
                             width: 60,
                             textSize: 14,
                             height: 34,
-                          );
-                        } else {
-                          return CustomIconButton(
-                            onTap: () {
+                          )
+                        else
+                          _buildIconButton1(
+                            const IconData(0xe636, fontFamily: 'IconFont'),
+                            () {
                               FocusScope.of(context).unfocus();
+                              controller.isRecording.value = false;
                               controller.isShowMore.value =
                                   !controller.isShowMore.value;
                               if (controller.isShowMore.value) {
@@ -186,29 +204,19 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                 });
                               }
                             },
-                            icon:
-                                const IconData(0xe636, fontFamily: 'IconFont'),
-                            width: 36,
-                            height: 36,
-                            iconSize: 26,
-                            iconColor: Colors.black,
-                            color: Colors.transparent,
-                          );
-                        }
-                      }),
-                    ],
-                  ),
-                  Obx(() {
-                    return AnimatedContainer(
+                          ),
+                      ],
+                    ),
+                    AnimatedContainer(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
                       height: controller.isShowMore.value ? 240 : 0,
                       child: controller.isShowMore.value
                           ? _buildMoreOperation()
                           : Container(),
-                    );
-                  }),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -225,7 +233,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.grey.withOpacity(0.1),
             width: 1.0,
           ),
         ),
@@ -234,22 +242,24 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
         spacing: 10,
         runSpacing: 10,
         children: [
-          _buildIconButton(
-            '语音通话',
-            const IconData(0xe969, fontFamily: 'IconFont'),
-            () => controller.onInviteVideoChat(true),
-          ),
-          _buildIconButton(
-            '视频通话',
-            const IconData(0xe9f5, fontFamily: 'IconFont'),
-            () => controller.onInviteVideoChat(false),
-          ),
-          _buildIconButton(
+          if (controller.chatInfo['type'] == 'user')
+            _buildIconButton2(
+              '语音通话',
+              const IconData(0xe969, fontFamily: 'IconFont'),
+              () => controller.onInviteVideoChat(true),
+            ),
+          if (controller.chatInfo['type'] == 'user')
+            _buildIconButton2(
+              '视频通话',
+              const IconData(0xe9f5, fontFamily: 'IconFont'),
+              () => controller.onInviteVideoChat(false),
+            ),
+          _buildIconButton2(
             '图片',
             const IconData(0xe9f4, fontFamily: 'IconFont'),
             () => {},
           ),
-          _buildIconButton(
+          _buildIconButton2(
             '文件',
             const IconData(0xeac4, fontFamily: 'IconFont'),
             () => {},
@@ -259,7 +269,19 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
     );
   }
 
-  Widget _buildIconButton(text, iconData, onTap) {
+  Widget _buildIconButton1(iconData, onTap) {
+    return CustomIconButton(
+      onTap: onTap,
+      icon: iconData,
+      width: 36,
+      height: 36,
+      iconSize: 26,
+      iconColor: Colors.black,
+      color: Colors.transparent,
+    );
+  }
+
+  Widget _buildIconButton2(text, iconData, onTap) {
     return CustomIconButton(
       onTap: onTap,
       icon: iconData,

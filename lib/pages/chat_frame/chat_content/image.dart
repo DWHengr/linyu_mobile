@@ -39,8 +39,13 @@ class ImageMessage extends StatelessThemeWidget {
             return CustomImage(url: snapshot.data ?? '');
           } else {
             return Container(
-              color: Colors.grey[300],
-              child: const Center(
+              width: MediaQuery.of(Get.context!).size.width * 0.4,
+              color: isRight ? theme.primaryColor : Colors.white,
+              height: MediaQuery.of(Get.context!).size.width * 0.4,
+              alignment: Alignment.center,
+              child: const SizedBox(
+                width: 40,
+                height: 40,
                 child: CircularProgressIndicator(
                   color: Color(0xffffffff),
                   strokeWidth: 2,

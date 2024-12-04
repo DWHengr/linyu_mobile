@@ -29,4 +29,10 @@ class MsgApi {
         .get('/v1/api/message/get/media', queryParameters: {'msgId': msgId});
     return response.data;
   }
+
+  Future<Map<String, dynamic>> sendMedia(FormData formData) async {
+    final response =
+        await _dio.post('/v1/api/message/send/file/form', data: formData);
+    return response.data;
+  }
 }

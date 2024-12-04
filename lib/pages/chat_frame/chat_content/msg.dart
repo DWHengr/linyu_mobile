@@ -4,6 +4,7 @@ import 'package:linyu_mobile/pages/chat_frame/chat_content/call.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/file.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/image.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/retraction.dart';
+import 'package:linyu_mobile/pages/chat_frame/chat_content/system.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/time.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/voice.dart';
 import 'package:linyu_mobile/utils/date.dart';
@@ -14,11 +15,13 @@ import 'text.dart';
 class ChatMessage extends StatelessThemeWidget {
   final Map<String, dynamic> msg;
   final Map<String, dynamic> chatInfo;
+  final Map<String, dynamic>? member;
 
   const ChatMessage({
     super.key,
     required this.msg,
     required this.chatInfo,
+    required this.member,
   });
 
   @override
@@ -30,8 +33,7 @@ class ChatMessage extends StatelessThemeWidget {
         if (msg['isShowTime'] == true)
           TimeContent(value: DateUtil.formatTime(msg['createTime'])),
         // 系统消息
-        if (msg['type'] == 'system')
-          Text(DateUtil.formatTime(msg['msgContent']['content'])),
+        if (msg['type'] == 'system') SystemMessage(value: msg['msgContent']),
         // 群聊消息
         if (chatInfo['type'] == 'group' && msg['type'] != 'system')
           Align(
@@ -39,37 +41,40 @@ class ChatMessage extends StatelessThemeWidget {
             child: Row(
               mainAxisAlignment:
                   isRight ? MainAxisAlignment.end : MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (!isRight)
                   CustomPortrait(
                     url: msg['msgContent']?['formUserPortrait'],
+                    size: 40,
                   ),
                 const SizedBox(width: 5),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: isRight
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
                   children: [
-                    // 用户名
-                    if (!isRight)
-                      Text(
-                        msg['msgContent']?['formUserName'] ?? '',
-                        style: const TextStyle(
-                          color: Color(0xFF969696),
-                          fontSize: 12,
-                        ),
+                    Text(
+                      handlerGroupDisplayName() ?? '',
+                      style: const TextStyle(
+                        color: Color(0xFF969696),
+                        fontSize: 12,
                       ),
+                    ),
+                    const SizedBox(height: 5),
                     // 动态组件
-
                     getComponentByType(msg['msgContent']['type'], isRight),
                   ],
                 ),
+                const SizedBox(width: 5),
                 if (isRight)
                   CustomPortrait(
                     url: msg['msgContent']?['formUserPortrait'],
+                    size: 40,
                   ),
               ],
             ),
           ),
-
         // 私聊消息
         if (chatInfo['type'] == 'user')
           Align(
@@ -79,6 +84,19 @@ class ChatMessage extends StatelessThemeWidget {
         const SizedBox(height: 15),
       ],
     );
+  }
+
+  String handlerGroupDisplayName() {
+    if (member == null) {
+      return msg?['msgContent']?['formUserName'] ?? '';
+    }
+    if (member!.containsKey('groupName') && member!['groupName'] != null) {
+      return member!['groupName']!;
+    } else if (member!.containsKey('remark') && member!['remark'] != null) {
+      return member!['remark']!;
+    } else {
+      return member!['name'] ?? '';
+    }
   }
 
   Widget getComponentByType(String? type, bool isRight) {

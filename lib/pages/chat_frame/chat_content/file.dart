@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/msg_api.dart';
-import 'package:linyu_mobile/pages/file_details/index.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -108,8 +107,13 @@ class FileMessage extends StatelessThemeWidget {
             );
           } else {
             return Container(
-              color: Colors.grey[300],
-              child: const Center(
+              width: MediaQuery.of(Get.context!).size.width * 0.6,
+              color: isRight ? theme.primaryColor : Colors.white,
+              height: 85,
+              alignment: Alignment.center,
+              child: const SizedBox(
+                height: 40,
+                width: 40,
                 child: CircularProgressIndicator(
                   color: Color(0xffffffff),
                   strokeWidth: 2,
