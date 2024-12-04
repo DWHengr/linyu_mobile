@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_icon_button/index.dart';
@@ -238,10 +239,26 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
           ),
         ),
       ),
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 10,
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 4,
+        mainAxisSpacing: 10,
         children: [
+          _buildIconButton2(
+            '图片',
+            const IconData(0xe9f4, fontFamily: 'IconFont'),
+            () => controller.cropChatBackgroundPicture(null),
+          ),
+          _buildIconButton2(
+            '拍照',
+            const IconData(0xe9f3, fontFamily: 'IconFont'),
+            () => controller.cropChatBackgroundPicture(ImageSource.camera),
+          ),
+          _buildIconButton2(
+            '文件',
+            const IconData(0xeac4, fontFamily: 'IconFont'),
+            () => controller.selectFile(),
+          ),
           if (controller.chatInfo['type'] == 'user')
             _buildIconButton2(
               '语音通话',
@@ -254,16 +271,6 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
               const IconData(0xe9f5, fontFamily: 'IconFont'),
               () => controller.onInviteVideoChat(false),
             ),
-          _buildIconButton2(
-            '图片',
-            const IconData(0xe9f4, fontFamily: 'IconFont'),
-            () => {},
-          ),
-          _buildIconButton2(
-            '文件',
-            const IconData(0xeac4, fontFamily: 'IconFont'),
-            () => {},
-          ),
         ],
       ),
     );
@@ -292,32 +299,6 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
       text: text,
       color: Colors.white.withOpacity(0.9),
       iconColor: const Color(0xFF1F1F1F),
-    );
-  }
-
-  Widget _buildMsgContent(msg) {
-    bool isRight = msg['fromId'] == globalData.currentUserId;
-    return Column(
-      children: [
-        Align(
-          alignment: isRight ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: isRight ? theme.primaryColor : Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(Get.context!).size.width * 0.8,
-            ),
-            child: Text(
-              msg['msgContent']['content'],
-              style: TextStyle(color: isRight ? Colors.white : Colors.black),
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-      ],
     );
   }
 

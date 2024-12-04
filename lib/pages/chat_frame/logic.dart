@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart'
     show BoolExtension, Get, GetNavigation, GetxController, RxBool, obs;
+import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/api/chat_group_member.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/msg_api.dart';
 import 'package:linyu_mobile/api/video_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/String.dart';
+import 'package:linyu_mobile/utils/cropPicture.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
 
@@ -196,6 +200,56 @@ class ChatFrameLogic extends GetxController {
           'isSender': true,
           'isOnlyAudio': isOnlyAudio,
         });
+      }
+    });
+  }
+
+  void selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    final path = result?.files.single.path;
+    if (path != null) {
+      File file = File(path);
+      onSendImgOrFileMsg(file, 'file');
+    }
+  }
+
+  Future cropChatBackgroundPicture(ImageSource? type) async =>
+      cropPicture(type, onUploadImg, isVariable: true);
+
+  Future<void> onUploadImg(File file) async {
+    onSendImgOrFileMsg(file, 'img');
+  }
+
+  void onSendImgOrFileMsg(File file, type) async {
+    if (StringUtil.isNullOrEmpty(file.path)) {
+      return;
+    }
+    String fileName = file.path.split('/').last;
+    final fileData =
+        await MultipartFile.fromFile(file.path, filename: fileName);
+    dynamic msg = {
+      'toUserId': targetId,
+      'source': chatInfo['type'],
+      'msgContent': {
+        'type': type,
+        'content': jsonEncode({
+          'name': fileName,
+          'size': fileData.length,
+        })
+      }
+    };
+    _msgApi.send(msg).then((res) {
+      if (res['code'] == 0) {
+        if (StringUtil.isNotNullOrEmpty(res['data']?['id'])) {
+          Map<String, dynamic> map = {};
+          map["file"] = fileData;
+          map['msgId'] = res['data']['id'];
+          FormData formData = FormData.fromMap(map);
+          _msgApi.sendMedia(formData).then((v) {
+            msgListAddMsg(res['data']);
+            onRead();
+          });
+        }
       }
     });
   }

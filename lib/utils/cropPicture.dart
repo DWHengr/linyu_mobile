@@ -8,9 +8,8 @@ import 'getx_config/GlobalThemeConfig.dart';
 typedef UploadPictureCallback = Future<void> Function(File picture);
 
 //图片剪切
-Future cropPicture(
-    ImageSource? type, UploadPictureCallback uploadPicture) async {
-  Get.back();
+Future cropPicture(ImageSource? type, UploadPictureCallback uploadPicture,
+    {isVariable = false}) async {
   final GlobalThemeConfig theme = GetInstance().find<GlobalThemeConfig>();
   final ImagePicker picker = ImagePicker();
   final XFile? pickedFile =
@@ -20,15 +19,17 @@ Future cropPicture(
     sourcePath: pickedFile!.path,
     aspectRatioPresets: Platform.isAndroid
         ? [
-            CropAspectRatioPreset.square,
+            isVariable
+                ? CropAspectRatioPreset.original
+                : CropAspectRatioPreset.square,
             // CropAspectRatioPreset.ratio3x2,
-            // CropAspectRatioPreset.original,
             // CropAspectRatioPreset.ratio4x3,
             // CropAspectRatioPreset.ratio16x9
           ]
         : [
-            // CropAspectRatioPreset.original,
-            CropAspectRatioPreset.square,
+            isVariable
+                ? CropAspectRatioPreset.original
+                : CropAspectRatioPreset.square,
             // CropAspectRatioPreset.ratio3x2,
             // CropAspectRatioPreset.ratio4x3,
             // CropAspectRatioPreset.ratio5x3,
@@ -44,8 +45,7 @@ Future cropPicture(
       cropFrameColor: theme.primaryColor,
       activeControlsWidgetColor: theme.primaryColor,
       initAspectRatio: CropAspectRatioPreset.original,
-      // lockAspectRatio: false,
-      lockAspectRatio: true,
+      lockAspectRatio: !isVariable,
     ),
     iosUiSettings: const IOSUiSettings(
       title: '剪切',

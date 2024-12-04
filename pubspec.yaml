@@ -60,6 +60,7 @@ dependencies:
   flutter_pickers: 2.1.9
   record: 4.4.4
   vibration: ^2.0.1
+  file_picker: ^8.1.4
 
 dev_dependencies:
   flutter_test:
