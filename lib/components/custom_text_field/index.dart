@@ -73,6 +73,7 @@ class CustomTextField extends StatelessWidget {
                 ),
               Expanded(
                 child: TextField(
+                  autofocus: false,
                   controller: controller,
                   focusNode: focusNode,
                   obscureText: obscureText,

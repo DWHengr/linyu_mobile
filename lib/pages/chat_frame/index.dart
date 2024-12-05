@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
@@ -11,6 +12,7 @@ import 'package:linyu_mobile/components/custom_voice_record_buttom/index.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/msg.dart';
 import 'package:linyu_mobile/pages/chat_frame/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
+import 'package:linyu_mobile/utils/emoji.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 class ChatFramePage extends CustomWidget<ChatFrameLogic>
@@ -33,12 +35,14 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
     final keyboardHeight = MediaQuery.of(Get.context!).viewInsets.bottom;
     if (keyboardHeight == 0) {
       controller.isShowMore.value = false;
+      controller.isShowEmoji.value = false;
     }
   }
 
   @override
   Widget buildWidget(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusScope.of(context).unfocus();
       },
@@ -70,6 +74,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
               child: GestureDetector(
                 onTap: () {
                   controller.isShowMore.value = false;
+                  controller.isShowEmoji.value = false;
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -95,11 +100,20 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                     ),
                                   ),
                                 ),
-                              ...controller.msgList.map((msg) => ChatMessage(
+                              ...controller.msgList.map(
+                                (msg) => GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  // 捕获点击事件并传递
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  child: ChatMessage(
                                     msg: msg,
                                     chatInfo: controller.chatInfo,
                                     member: controller.members[msg['fromId']],
-                                  )),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           if (controller.isLoading)
@@ -138,6 +152,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                             () {
                               controller.isShowMore.value = false;
                               controller.isRecording.value = false;
+                              controller.isShowEmoji.value = false;
                               controller.focusNode.requestFocus();
                             },
                           )
@@ -146,6 +161,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                             const IconData(0xe7e2, fontFamily: 'IconFont'),
                             () {
                               controller.isShowMore.value = false;
+                              controller.isShowEmoji.value = false;
                               controller.isRecording.value = true;
                             },
                           ),
@@ -168,6 +184,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                               fillColor: Colors.white.withOpacity(0.9),
                               onTap: () {
                                 controller.isShowMore.value = false;
+                                controller.isShowEmoji.value = false;
                                 controller.scrollBottom();
                               },
                               onChanged: (value) {
@@ -180,7 +197,23 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         if (!controller.isRecording.value)
                           _buildIconButton1(
                             const IconData(0xe632, fontFamily: 'IconFont'),
-                            () {},
+                            () {
+                              FocusScope.of(context).unfocus();
+                              controller.isRecording.value = false;
+                              controller.isShowMore.value = false;
+                              controller.isShowEmoji.value =
+                                  !controller.isShowEmoji.value;
+                              if (controller.isShowEmoji.value) {
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
+                                FocusScope.of(context)
+                                    .requestFocus(controller.focusNode);
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  controller.scrollBottom();
+                                });
+                              }
+                            },
                           ),
                         if (controller.isSend.value)
                           CustomButton(
@@ -196,6 +229,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                             () {
                               FocusScope.of(context).unfocus();
                               controller.isRecording.value = false;
+                              controller.isShowEmoji.value = false;
                               controller.isShowMore.value =
                                   !controller.isShowMore.value;
                               if (controller.isShowMore.value) {
@@ -216,11 +250,68 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           ? _buildMoreOperation()
                           : Container(),
                     ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                      height: controller.isShowEmoji.value ? 240 : 0,
+                      child: controller.isShowEmoji.value
+                          ? _buildEmoji()
+                          : Container(),
+                    ),
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmoji() {
+    return Container(
+      width: MediaQuery.of(Get.context!).size.width,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1.0,
+          ),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: SingleChildScrollView(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 10,
+          runSpacing: 10,
+          children: Emoji.emojis
+              .map(
+                (emoji) => GestureDetector(
+                  onTap: () {
+                    final text = controller.msgContentController.text;
+                    final selection = controller.msgContentController.selection;
+                    final newText = text.replaceRange(
+                      selection.start,
+                      selection.end,
+                      emoji,
+                    );
+                    controller.msgContentController.value = TextEditingValue(
+                      text: newText,
+                      selection: TextSelection.collapsed(
+                        offset: selection.start + emoji.length,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    emoji,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
+              )
+              .toList(),
         ),
       ),
     );

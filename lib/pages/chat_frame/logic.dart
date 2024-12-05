@@ -34,6 +34,7 @@ class ChatFrameLogic extends GetxController {
   late RxBool isSend = false.obs;
   late RxBool isShowMore = false.obs;
   late RxBool isRecording = false.obs;
+  late RxBool isShowEmoji = false.obs;
   StreamSubscription? _subscription;
 
   // 分页相关

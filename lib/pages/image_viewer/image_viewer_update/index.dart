@@ -24,20 +24,21 @@ class ImageViewerUpdatePage extends CustomWidget<ImageViewerUpdateLogic> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Obx(
-                () => PhotoView(
-                  minScale: PhotoViewComputedScale.contained * 0.5,
-                  maxScale: PhotoViewComputedScale.covered * 2,
-                  imageProvider: NetworkImage(controller.imageUrl.value),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Obx(
+                  () => PhotoView(
+                    minScale: PhotoViewComputedScale.contained * 0.5,
+                    maxScale: PhotoViewComputedScale.covered * 2,
+                    imageProvider: NetworkImage(controller.imageUrl.value),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             Obx(
               () {
                 if (controller.isUpdate.value) {
@@ -61,6 +62,7 @@ class ImageViewerUpdatePage extends CustomWidget<ImageViewerUpdateLogic> {
               type: 'minor',
               width: MediaQuery.of(context).size.width / 2,
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
