@@ -1,6 +1,7 @@
+import 'package:chat_bottom_container/panel_container.dart';
+import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
@@ -14,6 +15,13 @@ import 'package:linyu_mobile/pages/chat_frame/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/emoji.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
+
+enum PanelType {
+  none,
+  keyboard,
+  emoji,
+  tool,
+}
 
 class ChatFramePage extends CustomWidget<ChatFrameLogic>
     with WidgetsBindingObserver {
@@ -35,6 +43,10 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
     });
   }
 
+  final panelController = ChatBottomPanelContainerController<PanelType>();
+
+  PanelType currentPanelType = PanelType.none;
+
   @override
   Widget buildWidget(BuildContext context) {
     return GestureDetector(
@@ -42,7 +54,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
         controller.panelType.value = 'none';
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFFF9FBFF),
         appBar: AppBar(
           centerTitle: true,
@@ -68,7 +80,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  controller.panelType.value = 'none';
+                  hidePanel();
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -98,7 +110,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                 (msg) => GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    controller.panelType.value = 'none';
+                                    hidePanel();
                                   },
                                   child: ChatMessage(
                                     msg: msg,
@@ -143,7 +155,6 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe661, fontFamily: 'IconFont'),
                             () {
-                              controller.panelType.value = 'none';
                               controller.isRecording.value = false;
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 controller.focusNode.requestFocus();
@@ -154,8 +165,8 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe7e2, fontFamily: 'IconFont'),
                             () {
-                              controller.panelType.value = 'none';
                               controller.isRecording.value = true;
+                              hidePanel();
                             },
                           ),
                         const SizedBox(width: 5),
@@ -179,7 +190,9 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                 fillColor: Colors.white.withOpacity(0.9),
                                 onTap: () {
                                   controller.isReadOnly.value = false;
-                                  controller.panelType.value = 'keyboard';
+                                  panelController.updatePanelType(
+                                      ChatBottomPanelType.keyboard);
+                                  controller.scrollBottom();
                                 },
                                 onChanged: (value) {
                                   controller.isSend.value =
@@ -194,9 +207,16 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                             const IconData(0xe632, fontFamily: 'IconFont'),
                             () {
                               controller.isReadOnly.value = true;
-                              controller.panelType.value = 'emoji';
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                controller.focusNode.requestFocus();
+                                panelController.updatePanelType(
+                                    ChatBottomPanelType.other,
+                                    data: PanelType.emoji,
+                                    forceHandleFocus:
+                                        ChatBottomHandleFocus.requestFocus);
+                              });
+                              Future.delayed(const Duration(milliseconds: 220),
+                                  () {
+                                controller.scrollBottom();
                               });
                             },
                           ),
@@ -212,13 +232,20 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe636, fontFamily: 'IconFont'),
                             () {
-                              controller.focusNode.unfocus();
-                              controller.panelType.value = 'more';
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                panelController.updatePanelType(
+                                    ChatBottomPanelType.other,
+                                    data: PanelType.tool);
+                                Future.delayed(
+                                    const Duration(milliseconds: 220), () {
+                                  controller.scrollBottom();
+                                });
+                              });
                             },
                           ),
                       ],
                     ),
-                    Obx(() => _buildPanelContainer(controller.panelType.value)),
+                    _buildPanelContainer(),
                   ],
                 ),
               );
@@ -229,119 +256,162 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
     );
   }
 
-  Widget _buildPanelContainer(type) {
-    controller.scrollBottom();
-    switch (type) {
-      case 'emoji':
-        return _buildEmoji();
-      case 'more':
-        return _buildMoreOperation();
-      case 'none':
-        FocusScope.of(Get.context!).unfocus();
-        return const SizedBox.shrink();
-      case 'keyboard':
-        return const SizedBox.shrink();
-      default:
-        return const SizedBox.shrink();
+  Widget _buildPanelContainer() {
+    return ChatBottomPanelContainer<PanelType>(
+      controller: panelController,
+      inputFocusNode: controller.focusNode,
+      otherPanelWidget: (type) {
+        if (type == null) return const SizedBox.shrink();
+        switch (type) {
+          case PanelType.emoji:
+            return _buildEmoji();
+          case PanelType.tool:
+            return _buildMoreOperation();
+          default:
+            return const SizedBox.shrink();
+        }
+      },
+      panelBgColor: Colors.transparent,
+      changeKeyboardPanelHeight: (height) {
+        return height;
+      },
+    );
+  }
+
+  void hidePanel() {
+    if (controller.focusNode.hasFocus) {
+      controller.focusNode.unfocus();
     }
+    controller.isReadOnly.value = false;
+    panelController.updatePanelType(ChatBottomPanelType.none);
   }
 
   Widget _buildEmoji() {
-    return Container(
-      height: 240,
-      width: MediaQuery.of(Get.context!).size.width,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey.withOpacity(0.1),
-            width: 1.0,
-          ),
-        ),
-      ),
-      alignment: Alignment.center,
-      child: SingleChildScrollView(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 10,
-          runSpacing: 10,
-          children: Emoji.emojis
-              .map(
-                (emoji) => GestureDetector(
-                  onTap: () {
-                    final text = controller.msgContentController.text;
-                    final selection = controller.msgContentController.selection;
-                    final newText = text.replaceRange(
-                      selection.start,
-                      selection.end,
-                      emoji,
-                    );
-                    controller.msgContentController.value = TextEditingValue(
-                      text: newText,
-                      selection: TextSelection.collapsed(
-                        offset: selection.start + emoji.length,
-                      ),
-                    );
-                  },
-                  child: Text(
-                    emoji,
-                    style: const TextStyle(fontSize: 24),
+    double height = 300;
+    final keyboardHeight = panelController.keyboardHeight;
+    if (keyboardHeight != 0) {
+      height = keyboardHeight;
+    }
+    return SizedBox(
+      height: height,
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
+              width: MediaQuery.of(Get.context!).size.width,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey.withOpacity(0.1),
+                    width: 1.0,
                   ),
                 ),
-              )
-              .toList(),
-        ),
+              ),
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: Emoji.emojis
+                      .map(
+                        (emoji) => GestureDetector(
+                          onTap: () {
+                            final text = controller.msgContentController.text;
+                            final selection =
+                                controller.msgContentController.selection;
+                            final newText = text.replaceRange(
+                              selection.start,
+                              selection.end,
+                              emoji,
+                            );
+                            controller.msgContentController.value =
+                                TextEditingValue(
+                              text: newText,
+                              selection: TextSelection.collapsed(
+                                offset: selection.start + emoji.length,
+                              ),
+                            );
+                          },
+                          child: Text(
+                            emoji,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildMoreOperation() {
-    return Container(
-      height: 240,
-      width: MediaQuery.of(Get.context!).size.width,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey.withOpacity(0.1),
-            width: 1.0,
-          ),
-        ),
-      ),
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: 4,
-        mainAxisSpacing: 10,
+    double height = 300;
+    final keyboardHeight = panelController.keyboardHeight;
+    if (keyboardHeight != 0) {
+      height = keyboardHeight;
+    }
+    return SizedBox(
+      height: height,
+      child: Column(
         children: [
-          _buildIconButton2(
-            '图片',
-            const IconData(0xe9f4, fontFamily: 'IconFont'),
-            () => controller.cropChatBackgroundPicture(null),
-          ),
-          _buildIconButton2(
-            '拍照',
-            const IconData(0xe9f3, fontFamily: 'IconFont'),
-            () => controller.cropChatBackgroundPicture(ImageSource.camera),
-          ),
-          _buildIconButton2(
-            '文件',
-            const IconData(0xeac4, fontFamily: 'IconFont'),
-            () => controller.selectFile(),
-          ),
-          if (controller.chatInfo['type'] == 'user')
-            _buildIconButton2(
-              '语音通话',
-              const IconData(0xe969, fontFamily: 'IconFont'),
-              () => controller.onInviteVideoChat(true),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
+              height: height,
+              width: MediaQuery.of(Get.context!).size.width,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey.withOpacity(0.1),
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 4,
+                mainAxisSpacing: 10,
+                children: [
+                  _buildIconButton2(
+                    '图片',
+                    const IconData(0xe9f4, fontFamily: 'IconFont'),
+                    () => controller.cropChatBackgroundPicture(null),
+                  ),
+                  _buildIconButton2(
+                    '拍照',
+                    const IconData(0xe9f3, fontFamily: 'IconFont'),
+                    () => controller
+                        .cropChatBackgroundPicture(ImageSource.camera),
+                  ),
+                  _buildIconButton2(
+                    '文件',
+                    const IconData(0xeac4, fontFamily: 'IconFont'),
+                    () => controller.selectFile(),
+                  ),
+                  if (controller.chatInfo['type'] == 'user')
+                    _buildIconButton2(
+                      '语音通话',
+                      const IconData(0xe969, fontFamily: 'IconFont'),
+                      () => controller.onInviteVideoChat(true),
+                    ),
+                  if (controller.chatInfo['type'] == 'user')
+                    _buildIconButton2(
+                      '视频通话',
+                      const IconData(0xe9f5, fontFamily: 'IconFont'),
+                      () => controller.onInviteVideoChat(false),
+                    ),
+                ],
+              ),
             ),
-          if (controller.chatInfo['type'] == 'user')
-            _buildIconButton2(
-              '视频通话',
-              const IconData(0xe9f5, fontFamily: 'IconFont'),
-              () => controller.onInviteVideoChat(false),
-            ),
+          ),
         ],
       ),
     );
