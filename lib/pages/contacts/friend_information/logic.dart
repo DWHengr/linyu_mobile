@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
+import 'package:linyu_mobile/api/video_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
@@ -15,6 +17,8 @@ class FriendInformationLogic extends Logic {
 
   //好友api
   final _friendApi = FriendApi();
+  final _videoApi = VideoApi();
+  final _chatListApi = ChatListApi();
 
   //初始化获取从联系人页面传递过来的好友信息参数
   Map<String, dynamic> get friendData => arguments['friend'];
@@ -137,7 +141,7 @@ class FriendInformationLogic extends Logic {
 
   //获取好友信息
   Future<Map<String, dynamic>> getFriendInfo() async {
-    if(friendId != '0'){
+    if (friendId != '0') {
       final response = await _friendApi.details(friendId);
       if (response['code'] == 0) {
         final data = response['data'];
@@ -154,11 +158,9 @@ class FriendInformationLogic extends Logic {
       }
       update([const Key('friend_info')]);
       return response['data'];
-    }else {
+    } else {
       return {};
     }
-
-
   }
 
   @override
@@ -166,7 +168,6 @@ class FriendInformationLogic extends Logic {
     super.onInit();
     getFriendInfo();
   }
-
 
   //设置特别关心
   void setConcern() async {
@@ -198,6 +199,28 @@ class FriendInformationLogic extends Logic {
     } else {
       CustomFlutterToast.showErrorToast(response['msg']);
     }
+  }
+
+  void onVideoChat() {
+    _videoApi.invite(friendId, false).then((res) {
+      if (res['code'] == 0) {
+        Get.toNamed('video_chat', arguments: {
+          'userId': friendId,
+          'isSender': true,
+          'isOnlyAudio': false,
+        });
+      }
+    });
+  }
+
+  void onToSendMsg() {
+    _chatListApi.create(friendId, 'user').then((res) {
+      if (res['code'] == 0) {
+        Get.toNamed('/chat_frame', arguments: {
+          'chatInfo': res['data'],
+        });
+      }
+    });
   }
 
   @override

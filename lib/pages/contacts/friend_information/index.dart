@@ -341,14 +341,18 @@ class FriendInformationPage extends CustomWidget<FriendInformationLogic> {
                 Expanded(
                   child: CustomButton(
                     text: '发消息',
-                    onTap: () {},
+                    onTap: () {
+                      controller.onToSendMsg();
+                    },
                   ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: CustomButton(
                     text: '视频聊天',
-                    onTap: () {},
+                    onTap: () {
+                      controller.onVideoChat();
+                    },
                     type: 'minor',
                   ),
                 ),

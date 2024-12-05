@@ -28,7 +28,7 @@ class VideoChatPage extends CustomWidget<VideoChatLogic> {
         child: Scaffold(
           body: Stack(
             children: [
-              StringUtil.isNotNullOrEmpty(controller.userInfo['portrait'])
+              StringUtil.isNotNullOrEmpty(controller.userInfo['portrait'] ?? '')
                   ? Image.network(
                       controller.userInfo['portrait'] ?? '',
                       fit: BoxFit.cover,

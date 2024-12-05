@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/chat_group_api.dart';
+import 'package:linyu_mobile/api/chat_list_api.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/notify_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
@@ -13,7 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ContactsLogic extends GetxController {
   final _friendApi = FriendApi();
   final _chatGroupApi = ChatGroupApi();
-  final _notifyApi = NotifyApi(); //主题配置
+  final _notifyApi = NotifyApi();
+  final _chatListApi = ChatListApi();
   final GlobalData _globalData = GetInstance().find<GlobalData>();
   List<String> tabs = ['我的群聊', '我的好友', '好友通知'];
   int selectedIndex = 1;
@@ -152,5 +154,15 @@ class ContactsLogic extends GetxController {
   void onClose() {
     _subscription?.cancel();
     super.onClose();
+  }
+
+  void onToSendGroupMsg(id) {
+    _chatListApi.create(id, 'group').then((res) {
+      if (res['code'] == 0) {
+        Get.toNamed('/chat_frame', arguments: {
+          'chatInfo': res['data'],
+        });
+      }
+    });
   }
 }

@@ -41,11 +41,11 @@ class VideoChatLogic extends GetxController {
     isOnlyAudio = Get.arguments['isOnlyAudio'];
     isSender = Get.arguments['isSender'];
     smallWindowOffset = Offset(Get.size.width - 116, 16).obs;
-    videoEvent();
     await onGetChatDetail();
     await initializeRenderers();
     await initRTCPeerConnection();
     await videoCall();
+    videoEvent();
   }
 
   Future<void> onGetChatDetail() async {

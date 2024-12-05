@@ -250,9 +250,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
       color: Colors.white,
       child: InkWell(
         onTap: () async {
-          var result = await Get.toNamed('/chat_group_info',
-              arguments: {'chatGroupId': group['id']});
-          if (result != null && result) controller.onChatGroupList();
+          controller.onToSendGroupMsg(group['id']);
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(
