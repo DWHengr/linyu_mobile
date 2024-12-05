@@ -6,8 +6,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart'
-    show BoolExtension, Get, GetNavigation, GetxController, Inst, RxBool, obs;
-import 'package:get/get_common/get_reset.dart';
+    show
+        BoolExtension,
+        Get,
+        GetNavigation,
+        GetxController,
+        Inst,
+        RxBool,
+        RxString,
+        StringExtension,
+        obs;
 import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/api/chat_group_member.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
@@ -28,15 +36,15 @@ class ChatFrameLogic extends GetxController {
   final _chatGroupMemberApi = ChatGroupMemberApi();
   final TextEditingController msgContentController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final FocusNode focusNode = FocusNode();
+  final FocusNode focusNode = FocusNode(skipTraversal: true);
+  final RxString panelType = "none".obs;
   late Map<String, dynamic> members = {};
   late List<dynamic> msgList = [];
   late String targetId = '';
   late dynamic chatInfo = {targetId: ''};
   late RxBool isSend = false.obs;
-  late RxBool isShowMore = false.obs;
   late RxBool isRecording = false.obs;
-  late RxBool isShowEmoji = false.obs;
+  late RxBool isReadOnly = false.obs;
   StreamSubscription? _subscription;
   final GlobalData _globalData = Get.find<GlobalData>();
 

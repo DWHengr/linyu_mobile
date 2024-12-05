@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatelessThemeWidget {
   final String? labelText;
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final IconData? iconData;
   final VoidCallback? onTap;
   final Color? fillColor;
+  final bool? showCursor;
 
   const CustomTextField({
     super.key,
@@ -41,6 +43,7 @@ class CustomTextField extends StatelessWidget {
     this.iconData,
     this.onTap,
     this.fillColor,
+    this.showCursor,
   });
 
   @override
@@ -81,6 +84,7 @@ class CustomTextField extends StatelessWidget {
                   readOnly: readOnly,
                   maxLines: maxLines,
                   minLines: minLines,
+                  showCursor: showCursor ?? true,
                   onTap: onTap,
                   // 使用maxLines参数
                   inputFormatters: inputLimit != null

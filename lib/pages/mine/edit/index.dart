@@ -135,6 +135,7 @@ class EditMinePage extends CustomWidget<EditMineLogic> {
                     labelText: "生日",
                     controller: controller.birthdayController,
                     readOnly: true,
+                    showCursor: false,
                     suffixIcon: IconButton(
                       onPressed: () => controller.selectDate(context),
                       icon: Icon(Icons.calendar_today,

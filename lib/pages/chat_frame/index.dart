@@ -27,24 +27,19 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
+    final keyboardHeight = MediaQuery.of(Get.context!).viewInsets.bottom;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (MediaQuery.of(Get.context!).viewInsets.bottom > 0) {
+      if (keyboardHeight > 0) {
         controller.scrollBottom();
       }
     });
-    final keyboardHeight = MediaQuery.of(Get.context!).viewInsets.bottom;
-    if (keyboardHeight == 0) {
-      controller.isShowMore.value = false;
-      controller.isShowEmoji.value = false;
-    }
   }
 
   @override
   Widget buildWidget(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
       onTap: () {
-        FocusScope.of(context).unfocus();
+        controller.panelType.value = 'none';
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -73,8 +68,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  controller.isShowMore.value = false;
-                  controller.isShowEmoji.value = false;
+                  controller.panelType.value = 'none';
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -103,9 +97,8 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                               ...controller.msgList.map(
                                 (msg) => GestureDetector(
                                   behavior: HitTestBehavior.translucent,
-                                  // 捕获点击事件并传递
                                   onTap: () {
-                                    FocusScope.of(context).unfocus();
+                                    controller.panelType.value = 'none';
                                   },
                                   child: ChatMessage(
                                     msg: msg,
@@ -135,8 +128,8 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                 ),
               ),
             ),
-            Obx(
-              () => Container(
+            Obx(() {
+              return Container(
                 color: const Color(0xFFEDF2F9),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
@@ -150,18 +143,18 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe661, fontFamily: 'IconFont'),
                             () {
-                              controller.isShowMore.value = false;
+                              controller.panelType.value = 'none';
                               controller.isRecording.value = false;
-                              controller.isShowEmoji.value = false;
-                              controller.focusNode.requestFocus();
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                controller.focusNode.requestFocus();
+                              });
                             },
                           )
                         else
                           _buildIconButton1(
                             const IconData(0xe7e2, fontFamily: 'IconFont'),
                             () {
-                              controller.isShowMore.value = false;
-                              controller.isShowEmoji.value = false;
+                              controller.panelType.value = 'none';
                               controller.isRecording.value = true;
                             },
                           ),
@@ -173,24 +166,26 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           )
                         else
                           Expanded(
-                            child: CustomTextField(
-                              controller: controller.msgContentController,
-                              maxLines: 3,
-                              minLines: 1,
-                              hintTextColor: theme.primaryColor,
-                              hintText: '请输入消息',
-                              vertical: 8,
-                              focusNode: controller.focusNode,
-                              fillColor: Colors.white.withOpacity(0.9),
-                              onTap: () {
-                                controller.isShowMore.value = false;
-                                controller.isShowEmoji.value = false;
-                                controller.scrollBottom();
-                              },
-                              onChanged: (value) {
-                                controller.isSend.value =
-                                    value.trim().isNotEmpty;
-                              },
+                            child: Obx(
+                              () => CustomTextField(
+                                controller: controller.msgContentController,
+                                maxLines: 3,
+                                minLines: 1,
+                                readOnly: controller.isReadOnly.value,
+                                hintTextColor: theme.primaryColor,
+                                hintText: '请输入消息',
+                                vertical: 8,
+                                focusNode: controller.focusNode,
+                                fillColor: Colors.white.withOpacity(0.9),
+                                onTap: () {
+                                  controller.isReadOnly.value = false;
+                                  controller.panelType.value = 'keyboard';
+                                },
+                                onChanged: (value) {
+                                  controller.isSend.value =
+                                      value.trim().isNotEmpty;
+                                },
+                              ),
                             ),
                           ),
                         const SizedBox(width: 5),
@@ -198,21 +193,11 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe632, fontFamily: 'IconFont'),
                             () {
-                              FocusScope.of(context).unfocus();
-                              controller.isRecording.value = false;
-                              controller.isShowMore.value = false;
-                              controller.isShowEmoji.value =
-                                  !controller.isShowEmoji.value;
-                              if (controller.isShowEmoji.value) {
-                                SystemChannels.textInput
-                                    .invokeMethod('TextInput.hide');
-                                FocusScope.of(context)
-                                    .requestFocus(controller.focusNode);
-                                Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  controller.scrollBottom();
-                                });
-                              }
+                              controller.isReadOnly.value = true;
+                              controller.panelType.value = 'emoji';
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                controller.focusNode.requestFocus();
+                              });
                             },
                           ),
                         if (controller.isSend.value)
@@ -227,49 +212,43 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                           _buildIconButton1(
                             const IconData(0xe636, fontFamily: 'IconFont'),
                             () {
-                              FocusScope.of(context).unfocus();
-                              controller.isRecording.value = false;
-                              controller.isShowEmoji.value = false;
-                              controller.isShowMore.value =
-                                  !controller.isShowMore.value;
-                              if (controller.isShowMore.value) {
-                                Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  controller.scrollBottom();
-                                });
-                              }
+                              controller.focusNode.unfocus();
+                              controller.panelType.value = 'more';
                             },
                           ),
                       ],
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                      height: controller.isShowMore.value ? 240 : 0,
-                      child: controller.isShowMore.value
-                          ? _buildMoreOperation()
-                          : Container(),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                      height: controller.isShowEmoji.value ? 240 : 0,
-                      child: controller.isShowEmoji.value
-                          ? _buildEmoji()
-                          : Container(),
-                    ),
+                    Obx(() => _buildPanelContainer(controller.panelType.value)),
                   ],
                 ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildPanelContainer(type) {
+    controller.scrollBottom();
+    switch (type) {
+      case 'emoji':
+        return _buildEmoji();
+      case 'more':
+        return _buildMoreOperation();
+      case 'none':
+        FocusScope.of(Get.context!).unfocus();
+        return const SizedBox.shrink();
+      case 'keyboard':
+        return const SizedBox.shrink();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
   Widget _buildEmoji() {
     return Container(
+      height: 240,
       width: MediaQuery.of(Get.context!).size.width,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.only(top: 10),
@@ -319,6 +298,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
 
   Widget _buildMoreOperation() {
     return Container(
+      height: 240,
       width: MediaQuery.of(Get.context!).size.width,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.only(top: 10),
