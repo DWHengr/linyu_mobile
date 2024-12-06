@@ -15,7 +15,7 @@ class QRLoginAffirmLogic extends GetxController {
     _userAPi.qrLogin(qrCode).then((res) {
       if (res['code'] == 0) {
         CustomFlutterToast.showSuccessToast("登录成功~");
-        Get.until((route) => Get.currentRoute == "/");
+        Get.offAllNamed('/');
       }
     });
   }

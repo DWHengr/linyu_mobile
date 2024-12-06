@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/components/custom_material_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
+import 'package:linyu_mobile/components/custom_shadow_text/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 import 'logic.dart';
@@ -67,50 +68,8 @@ class MinePage extends CustomWidget<MineLogic> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  top: 13,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 0),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5),
-                                      height: 15,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            theme.primaryColor.withOpacity(0.1),
-                                            theme.primaryColor,
-                                          ],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10), // 圆角
-                                      ),
-                                      child: Opacity(
-                                        opacity: 0,
-                                        child: Text(
-                                          controller.currentUserInfo['name'] ??
-                                              '',
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  controller.currentUserInfo['name'] ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                            CustomShadowText(
+                                text: controller.currentUserInfo['name'] ?? ''),
                             const SizedBox(height: 10), // 间距
                             Text(
                               '账号：${controller.currentUserInfo['account'] ?? ''}',
@@ -162,9 +121,8 @@ class MinePage extends CustomWidget<MineLogic> {
                     const SizedBox(height: 30),
                     _leastSelectButton('切换账号', () {}),
                     const SizedBox(height: 2),
-                    _leastSelectButton(
-                        '退出',
-                        controller.handlerLogout),
+                    _leastSelectButton('退出', controller.handlerLogout,
+                        color: theme.errorColor),
                   ],
                 ),
               ),

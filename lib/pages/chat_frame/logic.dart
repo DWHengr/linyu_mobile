@@ -56,8 +56,8 @@ class ChatFrameLogic extends GetxController {
 
   @override
   void onInit() {
-    chatInfo = Get.arguments['chatInfo'] ?? '';
-    targetId = chatInfo['fromId'];
+    chatInfo = Get.arguments?['chatInfo'] ?? {};
+    targetId = chatInfo['fromId'] ?? '';
     super.onInit();
     onGetMembers();
     onGetMsgRecode();
@@ -81,7 +81,11 @@ class ChatFrameLogic extends GetxController {
       if (event['type'] == 'on-receive-msg') {
         final data = event['content'];
         if ((data['fromId'] == targetId && data['source'] == 'user') ||
-            (data['toId'] == targetId && data['source'] == 'group')) {
+            (data['toId'] == targetId && data['source'] == 'group') ||
+            (data['fromId'] == _globalData.currentUserId &&
+                data['source'] == 'user' &&
+                data['toId'] == targetId)) {
+          onRead();
           msgListAddMsg(event['content']);
         }
       }
@@ -137,7 +141,7 @@ class ChatFrameLogic extends GetxController {
           index = msgList.length;
           hasMore = res['data'].length >= 0;
 
-          SchedulerBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             final double newMaxScrollExtent =
                 scrollController.position.maxScrollExtent;
             final double newOffset = previousScrollOffset +
@@ -159,7 +163,7 @@ class ChatFrameLogic extends GetxController {
 
   void scrollBottom() {
     if (scrollController.hasClients) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 500),
@@ -186,6 +190,7 @@ class ChatFrameLogic extends GetxController {
     };
     _msgApi.send(msg).then((res) {
       if (res['code'] == 0) {
+        isSend.value = false;
         msgContentController.text = '';
         msgListAddMsg(res['data']);
         onRead();

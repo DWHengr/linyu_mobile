@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:vibration/vibration.dart';
 
@@ -30,6 +32,10 @@ class _VoiceRecordButtonState extends State<CustomVoiceRecordButton> {
   GlobalThemeConfig theme = Get.find<GlobalThemeConfig>();
 
   void startRecording() async {
+    var status = await Permission.microphone.request();
+    if (!status.isGranted) {
+      CustomFlutterToast.showErrorToast("权限申请失败，请在设置中手动开启麦克风权限");
+    }
     if (await Vibration.hasVibrator() ?? false) {
       Vibration.vibrate(duration: 50);
     }
@@ -53,6 +59,7 @@ class _VoiceRecordButtonState extends State<CustomVoiceRecordButton> {
         setState(() {
           _recordingSeconds++;
         });
+        _overlayEntry.markNeedsBuild();
       }
     });
   }
@@ -76,6 +83,7 @@ class _VoiceRecordButtonState extends State<CustomVoiceRecordButton> {
           // 在最右端添加新的振幅值
           _amplitudes[_amplitudes.length - 1] = normalizedAmplitude;
         });
+        _overlayEntry.markNeedsBuild();
       } catch (e) {
         print(e);
       }

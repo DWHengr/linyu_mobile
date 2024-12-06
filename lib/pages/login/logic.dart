@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linyu_mobile/api/user_api.dart';
 import 'package:linyu_mobile/utils/encrypt.dart';
@@ -8,34 +9,20 @@ import 'package:url_launcher/url_launcher.dart';
 class LoginPageLogic extends GetxController {
   final _useApi = UserApi();
 
-  int _accountTextLength = 0;
+  RxInt accountTextLength = 0.obs;
 
-  int get accountTextLength => _accountTextLength;
-
-  set accountTextLength(int value) {
-    _accountTextLength = value;
-    update([const Key("login")]);
-  }
-
-  int _passwordTextLength = 0;
-
-  int get passwordTextLength => _passwordTextLength;
-
-  set passwordTextLength(int value) {
-    _passwordTextLength = value;
-    update([const Key("login")]);
-  }
+  RxInt passwordTextLength = 0.obs;
 
 //用户账号输入长度
   void onAccountTextChanged(String value) {
-    accountTextLength = value.length;
-    if (accountTextLength >= 30) accountTextLength = 30;
+    accountTextLength.value = value.length;
+    if (accountTextLength.value >= 30) accountTextLength.value = 30;
   }
 
 //用户密码输入长度
   void onPasswordTextChanged(String value) {
-    passwordTextLength = value.length;
-    if (passwordTextLength >= 16) passwordTextLength = 16;
+    passwordTextLength.value = value.length;
+    if (passwordTextLength.value >= 16) passwordTextLength.value = 16;
   }
 
   void _dialog(

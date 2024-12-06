@@ -27,7 +27,7 @@ class FileDetailsPage extends CustomWidget<FileDetailsLogic> {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/file-${theme.themeMode}.png',
+                    'assets/images/file-${theme.themeMode.value}.png',
                     width: 70,
                   ),
                   Transform.translate(

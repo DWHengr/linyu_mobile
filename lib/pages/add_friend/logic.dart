@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/user_api.dart';
-import 'package:linyu_mobile/pages/navigation/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 class AddFriendLogic extends Logic {
   final _userApi = new UserApi();
-
-  final NavigationLogic _navigationLogic = Get.find<NavigationLogic>();
 
   late List<dynamic> searchList = [];
 
@@ -37,6 +34,5 @@ class AddFriendLogic extends Logic {
   @override
   void onClose() {
     super.onClose();
-    _navigationLogic.initData();
   }
 }

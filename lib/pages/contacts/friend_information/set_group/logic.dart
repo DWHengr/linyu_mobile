@@ -18,6 +18,7 @@ class SetGroupLogic extends Logic<SetGroupPage> {
   final FriendInformationLogic _friendInformationLogic =
       GetInstance().find<FriendInformationLogic>();
   final TextEditingController groupController = TextEditingController();
+  final RxInt groupLength = 0.obs;
 
   @override
   void onInit() {
@@ -56,7 +57,7 @@ class SetGroupLogic extends Logic<SetGroupPage> {
       return;
     }
     if (group != null) {
-      _groupApi.update(group['value'], groupController.text).then((res){
+      _groupApi.update(group['value'], groupController.text).then((res) {
         if (res['code'] == 0) {
           onGetGroupList();
           groupController.text = '';
@@ -82,9 +83,10 @@ class SetGroupLogic extends Logic<SetGroupPage> {
     }
   }
 
-  void onUpdateGroupPress(BuildContext context,dynamic group){
+  void onUpdateGroupPress(BuildContext context, dynamic group) {
     if (group['value'] == '0') {
       Get.back();
+      CustomFlutterToast.showSuccessToast("默认分组不能重命名~");
       return;
     }
     Get.back();
@@ -97,10 +99,9 @@ class SetGroupLogic extends Logic<SetGroupPage> {
   }
 
   void onDeleteGroup(dynamic group) async {
-    print(group);
-
     if (group['value'] == '0') {
-      CustomFlutterToast.showErrorToast("操作有误");
+      CustomFlutterToast.showSuccessToast("默认分组不能删除~");
+      Get.back();
       return;
     }
     var res = await _groupApi.delete(group['value']);

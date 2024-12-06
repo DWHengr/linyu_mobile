@@ -4,6 +4,7 @@ import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
+import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/pages/add_friend/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
@@ -86,11 +87,11 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
             title: const AppBarTitle('好友搜索'),
             centerTitle: true,
             actions: [
-              //取消按钮
-              TextButton(
-                child: const Text('取消'),
-                onPressed: () => Get.back(),
-              ),
+              CustomTextButton('取消',
+                  onTap: () => Get.back(),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  fontSize: 14),
             ]),
         body: GestureDetector(
           onTap: () {},

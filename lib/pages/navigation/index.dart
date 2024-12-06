@@ -28,12 +28,12 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return Scaffold(
-      body: _buildPage((controller.currentIndex)),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          currentIndex: controller.currentIndex,
-          onTap: controller.onTap,
+    return Obx(
+      () => Scaffold(
+        body: _buildPage((controller.currentIndex.value)),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: controller.currentIndex.value,
+          onTap: (index) => controller.currentIndex.value = index,
           selectedItemColor: theme.primaryColor,
           showUnselectedLabels: true,
           backgroundColor: const Color(0xFFEDF2F9),
@@ -45,7 +45,7 @@ class NavigationPage extends CustomWidget<NavigationLogic> {
                 clipBehavior: Clip.none,
                 children: [
                   Image.asset(
-                    controller.currentIndex == index
+                    controller.currentIndex.value == index
                         ? 'assets/images/${controller.selectedIcons[index]}-${theme.themeMode.value}.png'
                         : controller.unselectedIcons[index],
                     width: 26,

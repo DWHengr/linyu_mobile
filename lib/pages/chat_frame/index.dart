@@ -36,11 +36,19 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
   void didChangeMetrics() {
     super.didChangeMetrics();
     final keyboardHeight = MediaQuery.of(Get.context!).viewInsets.bottom;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (keyboardHeight > 0) {
-        controller.scrollBottom();
-      }
-    });
+    if (keyboardHeight > 0) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (controller.scrollController.hasClients) {
+            controller.scrollController.animateTo(
+              controller.scrollController.position.maxScrollExtent + 500,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.fastOutSlowIn,
+            );
+          }
+        });
+      });
+    }
   }
 
   final panelController = ChatBottomPanelContainerController<PanelType>();
@@ -190,9 +198,15 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                 fillColor: Colors.white.withOpacity(0.9),
                                 onTap: () {
                                   controller.isReadOnly.value = false;
-                                  panelController.updatePanelType(
-                                      ChatBottomPanelType.keyboard);
-                                  controller.scrollBottom();
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    panelController.updatePanelType(
+                                        ChatBottomPanelType.keyboard);
+                                  });
+                                  Future.delayed(
+                                      const Duration(milliseconds: 500), () {
+                                    controller.scrollBottom();
+                                  });
                                 },
                                 onChanged: (value) {
                                   controller.isSend.value =
@@ -214,7 +228,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                     forceHandleFocus:
                                         ChatBottomHandleFocus.requestFocus);
                               });
-                              Future.delayed(const Duration(milliseconds: 220),
+                              Future.delayed(const Duration(milliseconds: 500),
                                   () {
                                 controller.scrollBottom();
                               });
@@ -237,7 +251,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                     ChatBottomPanelType.other,
                                     data: PanelType.tool);
                                 Future.delayed(
-                                    const Duration(milliseconds: 220), () {
+                                    const Duration(milliseconds: 500), () {
                                   controller.scrollBottom();
                                 });
                               });

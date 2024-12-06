@@ -5,6 +5,7 @@ import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_image_group/index.dart';
 import 'package:linyu_mobile/components/custom_label_value_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
+import 'package:linyu_mobile/components/custom_shadow_text/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/date.dart';
@@ -140,57 +141,8 @@ class FriendInformationPage extends CustomWidget<FriendInformationLogic> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Stack(
-                                          alignment: Alignment.center,
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            Positioned(
-                                              top: 13,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0,
-                                                        vertical: 0),
-                                                child: Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                  height: 15,
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      colors: [
-                                                        theme.primaryColor
-                                                            .withOpacity(0.1),
-                                                        theme.primaryColor,
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end:
-                                                          Alignment.centerRight,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10), // 圆角
-                                                  ),
-                                                  child: Opacity(
-                                                    opacity: 0,
-                                                    child: Text(
-                                                      controller.friendName ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Text(
-                                              controller.friendName ?? '',
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
+                                        CustomShadowText(
+                                            text: controller.friendName ?? ''),
                                         const SizedBox(height: 10),
                                         Text(
                                           controller.friendAccount ?? '',

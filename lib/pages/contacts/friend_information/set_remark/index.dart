@@ -30,7 +30,7 @@ class SetRemarkPage extends CustomWidget<SetRemarkLogic> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: "备注",
               controller: controller.remarkController,

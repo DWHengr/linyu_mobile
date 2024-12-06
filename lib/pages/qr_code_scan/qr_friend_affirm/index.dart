@@ -3,6 +3,7 @@ import 'package:linyu_mobile/components/app_bar_title/index.dart';
 import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_label_value/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
+import 'package:linyu_mobile/components/custom_shadow_text/index.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_friend_affirm/logic.dart';
 import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
@@ -65,52 +66,8 @@ class QRFriendAffirmPage extends CustomWidget<QRFriendAffirmLogic> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Positioned(
-                                        top: 13,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 0, vertical: 0),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            height: 15,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  theme.primaryColor
-                                                      .withOpacity(0.1),
-                                                  theme.primaryColor,
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      10), // 圆角
-                                            ),
-                                            child: Opacity(
-                                              opacity: 0,
-                                              child: Text(
-                                                controller.result['name'] ?? '',
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        controller.result['name'] ?? '',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
+                                  CustomShadowText(
+                                      text: controller.result['name'] ?? ''),
                                   const SizedBox(height: 10), // 间距
                                   Text(
                                     controller.result['account'] ?? '',

@@ -305,22 +305,32 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
     );
   }
 
-  void _showDeleteGroupBottomSheet(dynamic friend) => Get.bottomSheet(
-        backgroundColor: Colors.white,
-        Wrap(
+  void _showDeleteGroupBottomSheet(dynamic friend) {
+    showModalBottomSheet(
+      context: Get.context!,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+      ),
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: TextButton(
-                onPressed: () => controller.onSetConcernFriend(friend),
-                child: Text(
-                  friend['isConcern'] ? '取消特别关心' : '设置特别关心',
-                  style: TextStyle(color: theme.primaryColor),
-                ),
-              ),
+            SizedBox(
+              width: double.infinity,
+              child: CustomTextButton(friend['isConcern'] ? '取消特别关心' : '设置特别关心',
+                  onTap: () => controller.onSetConcernFriend(friend),
+                  textColor: theme.primaryColor,
+                  padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  fontSize: 16),
             ),
           ],
-        ),
-      );
+        );
+      },
+    );
+  }
 
   Widget _buildFriendItem(dynamic friend) {
     return Material(

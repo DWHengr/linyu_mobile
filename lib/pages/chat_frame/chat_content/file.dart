@@ -86,7 +86,7 @@ class FileMessage extends StatelessThemeWidget {
                         Image.asset(
                           isRight
                               ? 'assets/images/file-white.png'
-                              : 'assets/images/file-${theme.themeMode}.png',
+                              : 'assets/images/file-${theme.themeMode.value}.png',
                           width: 50,
                         ),
                         Transform.translate(

@@ -53,8 +53,12 @@ class SetGroupPage extends CustomWidgetNew<SetGroupLogic> {
                     controller: controller.groupController,
                     inputLimit: 10,
                     hintText: hintText!,
-                    suffix:
-                        Text('${controller.groupController.text.length}/10'),
+                    onChanged: (value) {
+                      controller.groupLength.value = value.length;
+                    },
+                    suffix: Obx(
+                      () => Text('${controller.groupLength.value}/10'),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -87,32 +91,40 @@ class SetGroupPage extends CustomWidgetNew<SetGroupLogic> {
         },
       );
 
-  void _showGroupBottomSheet(BuildContext context, dynamic group) =>
-      Get.bottomSheet(
-        backgroundColor: Colors.white,
-        Wrap(
+  void _showGroupBottomSheet(BuildContext context, dynamic group) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+      ),
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: TextButton(
-                onPressed: ()=>controller.onUpdateGroupPress(context,group),
-                child: Text(
-                  '重新命名',
-                  style: TextStyle(color: theme.primaryColor),
-                ),
-              ),
+            SizedBox(
+              width: double.infinity,
+              child: CustomTextButton('重新命名',
+                  onTap: () => controller.onUpdateGroupPress(context, group),
+                  textColor: theme.primaryColor,
+                  padding: const EdgeInsets.only(top: 20, bottom: 10),
+                  fontSize: 16),
             ),
-            Center(
-              child: TextButton(
-                onPressed: () => controller.onDeleteGroup(group),
-                child: const Text(
-                  '删除分组',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
+            SizedBox(
+              width: double.infinity,
+              child: CustomTextButton('删除分组',
+                  onTap: () => controller.onDeleteGroup(group),
+                  textColor: theme.errorColor,
+                  padding: const EdgeInsets.only(top: 10, bottom: 20),
+                  fontSize: 16),
             ),
           ],
-        ),
-      );
+        );
+      },
+    );
+  }
 
   @override
   Widget buildWidget(BuildContext context) => Scaffold(
