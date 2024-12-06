@@ -2,6 +2,7 @@ import 'package:chat_bottom_container/panel_container.dart';
 import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
@@ -115,12 +116,20 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                                   ),
                                 ),
                               ...controller.msgList.map(
-                                (msg) => GestureDetector(
+                                    (msg) => GestureDetector(
+                                  key: ValueKey(msg['id']),
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     hidePanel();
                                   },
                                   child: ChatMessage(
+                                    onTapCopy: (data) =>
+                                    //复制到剪切板
+                                    Clipboard.setData(ClipboardData(
+                                        text: msg['msgContent']
+                                        ['content'])),
+                                    onTapRetract: (data) =>
+                                        controller.retractMsg(data, msg),
                                     msg: msg,
                                     chatInfo: controller.chatInfo,
                                     member: controller.members[msg['fromId']],
@@ -152,7 +161,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
               return Container(
                 color: const Color(0xFFEDF2F9),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -162,7 +171,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         if (controller.isRecording.value)
                           _buildIconButton1(
                             const IconData(0xe661, fontFamily: 'IconFont'),
-                            () {
+                                () {
                               controller.isRecording.value = false;
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 controller.focusNode.requestFocus();
@@ -172,7 +181,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         else
                           _buildIconButton1(
                             const IconData(0xe7e2, fontFamily: 'IconFont'),
-                            () {
+                                () {
                               controller.isRecording.value = true;
                               hidePanel();
                             },
@@ -186,7 +195,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         else
                           Expanded(
                             child: Obx(
-                              () => CustomTextField(
+                                  () => CustomTextField(
                                 controller: controller.msgContentController,
                                 maxLines: 3,
                                 minLines: 1,
@@ -219,19 +228,19 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         if (!controller.isRecording.value)
                           _buildIconButton1(
                             const IconData(0xe632, fontFamily: 'IconFont'),
-                            () {
+                                () {
                               controller.isReadOnly.value = true;
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 panelController.updatePanelType(
                                     ChatBottomPanelType.other,
                                     data: PanelType.emoji,
                                     forceHandleFocus:
-                                        ChatBottomHandleFocus.requestFocus);
+                                    ChatBottomHandleFocus.requestFocus);
                               });
                               Future.delayed(const Duration(milliseconds: 500),
-                                  () {
-                                controller.scrollBottom();
-                              });
+                                      () {
+                                    controller.scrollBottom();
+                                  });
                             },
                           ),
                         if (controller.isSend.value)
@@ -245,7 +254,7 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                         else
                           _buildIconButton1(
                             const IconData(0xe636, fontFamily: 'IconFont'),
-                            () {
+                                () {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 panelController.updatePanelType(
                                     ChatBottomPanelType.other,
@@ -332,29 +341,29 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                   children: Emoji.emojis
                       .map(
                         (emoji) => GestureDetector(
-                          onTap: () {
-                            final text = controller.msgContentController.text;
-                            final selection =
-                                controller.msgContentController.selection;
-                            final newText = text.replaceRange(
-                              selection.start,
-                              selection.end,
-                              emoji,
-                            );
-                            controller.msgContentController.value =
-                                TextEditingValue(
+                      onTap: () {
+                        final text = controller.msgContentController.text;
+                        final selection =
+                            controller.msgContentController.selection;
+                        final newText = text.replaceRange(
+                          selection.start,
+                          selection.end,
+                          emoji,
+                        );
+                        controller.msgContentController.value =
+                            TextEditingValue(
                               text: newText,
                               selection: TextSelection.collapsed(
                                 offset: selection.start + emoji.length,
                               ),
                             );
-                          },
-                          child: Text(
-                            emoji,
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                        ),
-                      )
+                      },
+                      child: Text(
+                        emoji,
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  )
                       .toList(),
                 ),
               ),
@@ -397,30 +406,30 @@ class ChatFramePage extends CustomWidget<ChatFrameLogic>
                   _buildIconButton2(
                     '图片',
                     const IconData(0xe9f4, fontFamily: 'IconFont'),
-                    () => controller.cropChatBackgroundPicture(null),
+                        () => controller.cropChatBackgroundPicture(null),
                   ),
                   _buildIconButton2(
                     '拍照',
                     const IconData(0xe9f3, fontFamily: 'IconFont'),
-                    () => controller
+                        () => controller
                         .cropChatBackgroundPicture(ImageSource.camera),
                   ),
                   _buildIconButton2(
                     '文件',
                     const IconData(0xeac4, fontFamily: 'IconFont'),
-                    () => controller.selectFile(),
+                        () => controller.selectFile(),
                   ),
                   if (controller.chatInfo['type'] == 'user')
                     _buildIconButton2(
                       '语音通话',
                       const IconData(0xe969, fontFamily: 'IconFont'),
-                      () => controller.onInviteVideoChat(true),
+                          () => controller.onInviteVideoChat(true),
                     ),
                   if (controller.chatInfo['type'] == 'user')
                     _buildIconButton2(
                       '视频通话',
                       const IconData(0xe9f5, fontFamily: 'IconFont'),
-                      () => controller.onInviteVideoChat(false),
+                          () => controller.onInviteVideoChat(false),
                     ),
                 ],
               ),
