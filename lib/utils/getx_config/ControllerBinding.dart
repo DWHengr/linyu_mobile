@@ -7,6 +7,7 @@ import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_nic
 import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_name/logic.dart';
 import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_remark/logic.dart';
 import 'package:linyu_mobile/pages/contacts/create_chat_group/logic.dart';
+import 'package:linyu_mobile/pages/contacts/create_chat_group/select_user/logic.dart';
 import 'package:linyu_mobile/pages/file_details/logic.dart';
 import 'package:linyu_mobile/pages/image_viewer/image_viewer_update/logic.dart';
 import 'package:linyu_mobile/pages/image_viewer/logic.dart';
@@ -83,6 +84,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => ChatGroupMemberLogic(), fenix: true);
     Get.lazyPut(() => CreateChatGroupLogic(), fenix: true);
     Get.lazyPut(() => SystemNotifyLogic(), fenix: true);
+    Get.lazyPut(() => ChatGroupSelectUserLogic(), fenix: true);
     Get.lazyPut(() => ChatFrameLogic(), fenix: true);
     Get.lazyPut(() => FileDetailsLogic(), fenix: true);
     Get.lazyPut(() => VideoChatLogic(), fenix: true);

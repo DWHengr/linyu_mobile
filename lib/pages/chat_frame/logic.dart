@@ -4,18 +4,19 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart'
     show
-        BoolExtension,
-        Get,
-        GetNavigation,
-        GetxController,
-        Inst,
-        RxBool,
-        RxString,
-        StringExtension,
-        obs;
+    BoolExtension,
+    Get,
+    GetNavigation,
+    GetxController,
+    Inst,
+    RxBool,
+    RxString,
+    StringExtension,
+    obs;
 import 'package:image_picker/image_picker.dart';
 import 'package:linyu_mobile/api/chat_group_member.dart';
 import 'package:linyu_mobile/api/chat_list_api.dart';
@@ -24,6 +25,7 @@ import 'package:linyu_mobile/api/video_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/utils/String.dart';
 import 'package:linyu_mobile/utils/cropPicture.dart';
+import 'package:linyu_mobile/utils/extension.dart';
 import 'package:linyu_mobile/utils/getx_config/GlobalData.dart';
 import 'package:linyu_mobile/utils/web_socket.dart';
 import 'package:dio/dio.dart' show MultipartFile, FormData;
@@ -59,40 +61,77 @@ class ChatFrameLogic extends GetxController {
     chatInfo = Get.arguments?['chatInfo'] ?? {};
     targetId = chatInfo['fromId'] ?? '';
     super.onInit();
-    onGetMembers();
-    onGetMsgRecode();
-    eventListen();
-    onRead();
-
+    _onGetMembers();
+    _onGetMsgRecode();
+    _eventListen();
+    _onRead();
     // 添加滚动监听
     scrollController.addListener(() {
       if (scrollController.hasClients) {
         if (scrollController.position.pixels ==
             scrollController.position.minScrollExtent) {
-          loadMore();
+          _loadMore();
         }
       }
     });
   }
 
-  void eventListen() {
+  void retractMsg(dynamic data, dynamic msg) async {
+    try {
+      final result = await _msgApi.retract(msg['id'],targetId);
+      if (result['code'] == 0) {
+        msgList = msgList.replace(oldValue: msg,newValue:  result['data']);
+        CustomFlutterToast.showSuccessToast('撤回成功');
+      } else {
+        CustomFlutterToast.showErrorToast(
+            '撤回失败: ${result['message'] ?? '未知错误'}');
+      }
+    } catch (e) {
+      CustomFlutterToast.showErrorToast('撤回失败: $e');
+    } finally {
+      isLoading = false;
+      update([const Key('chat_frame')]);
+    }
+  }
+
+  void _eventListen() {
     // 监听消息
     _subscription = _wsManager.eventStream.listen((event) {
       if (event['type'] == 'on-receive-msg') {
         final data = event['content'];
-        if ((data['fromId'] == targetId && data['source'] == 'user') ||
-            (data['toId'] == targetId && data['source'] == 'group') ||
-            (data['fromId'] == _globalData.currentUserId &&
-                data['source'] == 'user' &&
-                data['toId'] == targetId)) {
-          onRead();
-          msgListAddMsg(event['content']);
+        try {
+          bool isRelevantMsg = (data['fromId'] == targetId && data['source'] == 'user') ||
+              (data['toId'] == targetId && data['source'] == 'group') ||
+              (data['fromId'] == _globalData.currentUserId &&
+                  data['toId'] == targetId);
+          if (isRelevantMsg) {
+
+            if (kDebugMode) {
+              print(data);
+            }
+
+            if(data['msgContent']['type'] == 'retraction'){
+              msgList = msgList.replace(newValue: data);
+              _onRead();
+              update([const Key('chat_frame')]);
+              return;
+            }
+
+
+            _onRead();
+            msgListAddMsg(event['content']);
+          }
+        } catch (e) {
+          CustomFlutterToast.showErrorToast('处理消息时发生错误: $e');
         }
       }
+    }, onError: (error) {
+      CustomFlutterToast.showErrorToast('WebSocket发生错误: $error');
     });
   }
 
-  void onGetMembers() async {
+
+  void _onGetMembers() async {
     if (chatInfo['type'] == 'group') {
       await _chatGroupMemberApi.list(targetId).then((res) {
         if (res['code'] == 0) {
@@ -103,7 +142,7 @@ class ChatFrameLogic extends GetxController {
     }
   }
 
-  Future<void> onGetMsgRecode() async {
+  Future<void> _onGetMsgRecode() async {
     isLoading = true;
     update([const Key('chat_frame')]);
     try {
@@ -121,7 +160,7 @@ class ChatFrameLogic extends GetxController {
     }
   }
 
-  Future<void> loadMore() async {
+  Future<void> _loadMore() async {
     if (isLoading || !hasMore) return;
 
     isLoading = true;
@@ -175,9 +214,12 @@ class ChatFrameLogic extends GetxController {
 
   void toDetailsPage() {
     if (chatInfo['type'] == 'group') {
-      Get.toNamed('/chat_group_info', arguments: {'chatGroupId': targetId});
+      // Get.toNamed('/chat_group_info', arguments: {'chatGroupId': targetId});
+      Get.offAndToNamed('/chat_group_info',
+          arguments: {'chatGroupId': targetId});
     } else {
-      Get.toNamed('/friend_info', arguments: {'friendId': targetId});
+      // Get.toNamed('/friend_info', arguments: {'friendId': targetId});
+      Get.offAndToNamed('/friend_info', arguments: {'friendId': targetId});
     }
   }
 
@@ -192,20 +234,24 @@ class ChatFrameLogic extends GetxController {
       if (res['code'] == 0) {
         isSend.value = false;
         msgContentController.text = '';
+        isSend.value = false;
         msgListAddMsg(res['data']);
-        onRead();
+        _onRead();
       }
     });
   }
 
   void msgListAddMsg(msg) {
+    if (kDebugMode) {
+      print('msgListAddMsg: $msg');
+    }
     msgList.add(msg);
     index = msgList.length;
     update([const Key('chat_frame')]);
     scrollBottom();
   }
 
-  void onRead() async {
+  void _onRead() async {
     await _chatListApi.read(targetId);
     _globalData.onGetUserUnreadInfo();
   }
@@ -244,7 +290,7 @@ class ChatFrameLogic extends GetxController {
     }
     String fileName = file.path.split('/').last;
     final fileData =
-        await MultipartFile.fromFile(file.path, filename: fileName);
+    await MultipartFile.fromFile(file.path, filename: fileName);
     dynamic msg = {
       'toUserId': targetId,
       'source': chatInfo['type'],
@@ -265,7 +311,7 @@ class ChatFrameLogic extends GetxController {
           FormData formData = FormData.fromMap(map);
           _msgApi.sendMedia(formData).then((v) {
             msgListAddMsg(res['data']);
-            onRead();
+            _onRead();
           });
         }
       }
@@ -281,7 +327,7 @@ class ChatFrameLogic extends GetxController {
       return;
     }
     MultipartFile file =
-        await MultipartFile.fromFile(filePath, filename: 'voice.wav');
+    await MultipartFile.fromFile(filePath, filename: 'voice.wav');
     dynamic msg = {
       'toUserId': targetId,
       'source': chatInfo['type'],
@@ -303,11 +349,27 @@ class ChatFrameLogic extends GetxController {
           FormData formData = FormData.fromMap(map);
           _msgApi.sendMedia(formData).then((v) {
             msgListAddMsg(res['data']);
-            onRead();
+            _onRead();
           });
         }
       }
     });
+  }
+
+  void reEditMsg(dynamic msg) async{
+    if (kDebugMode) {
+      print(msg);
+    }
+    final result = await _msgApi.reEdit(msg['id'],);
+    if (result['code'] == 0) {
+      // msgList = msgList.replace(msg, result['data']);
+      // CustomFlutterToast.showSuccessToast('修改成功');
+      if (kDebugMode) {
+        print(result['data']);
+      }
+      msgContentController.text = result['data']['msgContent']['content'];
+      update([const Key('chat_frame')]);
+    }
   }
 
   @override
