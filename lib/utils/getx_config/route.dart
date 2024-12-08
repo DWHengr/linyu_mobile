@@ -8,6 +8,7 @@ import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_nic
 import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_name/index.dart';
 import 'package:linyu_mobile/pages/contacts/chat_group_information/set_group_remark/index.dart';
 import 'package:linyu_mobile/pages/contacts/create_chat_group/index.dart';
+import 'package:linyu_mobile/pages/contacts/create_chat_group/select_user/index.dart';
 import 'package:linyu_mobile/pages/file_details/index.dart';
 import 'package:linyu_mobile/pages/image_viewer/image_viewer_update/index.dart';
 import 'package:linyu_mobile/pages/image_viewer/index.dart';
@@ -51,6 +52,36 @@ class AppRoutes {
       ),
       binding: ControllerBinding(),
       transition: Transition.fade,
+      children: [
+        GetPage(
+          name: '/chat_list',
+          page: () => ChatListPage(
+            key: const Key('chat_list'),
+          ),
+          binding: ControllerBinding(),
+        ),
+        GetPage(
+          name: '/contacts',
+          page: () => ContactsPage(
+            key: const Key('contacts'),
+          ),
+          binding: ControllerBinding(),
+        ),
+        GetPage(
+          name: '/talk',
+          page: () => TalkPage(
+            key: const Key('talk'),
+          ),
+          binding: ControllerBinding(),
+        ),
+        GetPage(
+          name: '/mine',
+          page: () => MinePage(
+            key: const Key('mine'),
+          ),
+          binding: ControllerBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: '/login',
@@ -78,34 +109,6 @@ class AppRoutes {
       name: '/update_password',
       page: () => UpdatePasswordPage(
         key: const Key('update_password'),
-      ),
-      binding: ControllerBinding(),
-    ),
-    GetPage(
-      name: '/chat_list',
-      page: () => ChatListPage(
-        key: const Key('chat_list'),
-      ),
-      binding: ControllerBinding(),
-    ),
-    GetPage(
-      name: '/contacts',
-      page: () => ContactsPage(
-        key: const Key('contacts'),
-      ),
-      binding: ControllerBinding(),
-    ),
-    GetPage(
-      name: '/mine',
-      page: () => MinePage(
-        key: const Key('mine'),
-      ),
-      binding: ControllerBinding(),
-    ),
-    GetPage(
-      name: '/talk',
-      page: () => TalkPage(
-        key: const Key('talk'),
       ),
       binding: ControllerBinding(),
     ),
@@ -178,6 +181,7 @@ class AppRoutes {
         key: const Key('add_friend'),
       ),
       binding: ControllerBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: '/search_info',
@@ -234,6 +238,8 @@ class AppRoutes {
         key: const Key('image_viewer'),
       ),
       binding: ControllerBinding(),
+      transition: Transition.size,
+      transitionDuration: const Duration(milliseconds: 350),
     ),
     GetPage(
       name: '/image_viewer_update',
@@ -290,11 +296,19 @@ class AppRoutes {
         key: const Key('create_chat_group'),
       ),
       binding: ControllerBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: '/system_notify',
       page: () => SystemNotifyPage(
         key: const Key('system_notify'),
+      ),
+      binding: ControllerBinding(),
+    ),
+    GetPage(
+      name: '/chat_group_select_user',
+      page: () => ChatGroupSelectUserPage(
+        key: const Key('chat_group_select_user'),
       ),
       binding: ControllerBinding(),
     ),

@@ -31,6 +31,16 @@ class ChatGroupApi {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> createWithPerson(
+      String name, String? notice, List users) async {
+    final response = await _dio.post('/v1/api/chat-group/create', data: {
+      'name': name,
+      'notice': notice,
+      'users': users,
+    });
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> update(
       String chatGroupId, String key, dynamic value) async {
     final response = await _dio.post('/v1/api/chat-group/update',

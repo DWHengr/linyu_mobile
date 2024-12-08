@@ -62,6 +62,7 @@ dependencies:
   vibration: ^2.0.1
   file_picker: ^8.1.4
   chat_bottom_container: ^0.3.0
+  custom_pop_up_menu_fork: ^2.0.0
 
 dev_dependencies:
   flutter_test:
