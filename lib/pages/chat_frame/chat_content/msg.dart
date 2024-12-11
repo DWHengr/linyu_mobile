@@ -1,5 +1,8 @@
+import 'package:custom_pop_up_menu_fork/custom_pop_up_menu.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
+import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/call.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/file.dart';
 import 'package:linyu_mobile/pages/chat_frame/chat_content/image.dart';
@@ -12,13 +15,45 @@ import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 import 'text.dart';
 
+typedef CallBack = dynamic Function(dynamic data);
+
 class ChatMessage extends StatelessThemeWidget {
   final Map<String, dynamic> msg;
   final Map<String, dynamic> chatInfo;
   final Map<String, dynamic>? member;
+  final String? chatPortrait;
+  final void Function()? onTapMsg;
+  final void Function()? reEdit;
+
+  // 点击复制回调
+  final CallBack? onTapCopy;
+
+  // 点击转发回调
+  final CallBack? onTapRetransmission;
+
+  // 点击删除回调
+  final CallBack? onTapDelete;
+
+  // 点击撤回回调
+  final CallBack? onTapRetract;
+
+  // 点击引用回调
+  final CallBack? onTapCite;
+
+  // 点击转文字回调
+  final CallBack? onTapVoice;
 
   const ChatMessage({
     super.key,
+    this.chatPortrait = 'http://192.168.101.4:9000/linyu/default-portrait.jpg',
+    this.onTapCopy,
+    this.onTapRetransmission,
+    this.onTapDelete,
+    this.onTapRetract,
+    this.onTapCite,
+    this.onTapMsg,
+    this.reEdit,
+    this.onTapVoice,
     required this.msg,
     required this.chatInfo,
     required this.member,
@@ -39,11 +74,14 @@ class ChatMessage extends StatelessThemeWidget {
           Align(
             alignment: isRight ? Alignment.centerRight : Alignment.centerLeft,
             child: Row(
-              mainAxisAlignment:
-                  isRight ? MainAxisAlignment.end : MainAxisAlignment.start,
+              mainAxisAlignment: msg['msgContent']['type'] == 'retraction'
+                  ? MainAxisAlignment.center
+                  : isRight
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (!isRight)
+                if (!isRight && msg['msgContent']['type'] != 'retraction')
                   CustomPortrait(
                     url: msg['msgContent']?['formUserPortrait'],
                     size: 40,
@@ -54,41 +92,95 @@ class ChatMessage extends StatelessThemeWidget {
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      handlerGroupDisplayName() ?? '',
-                      style: const TextStyle(
-                        color: Color(0xFF969696),
-                        fontSize: 12,
+                    if (msg['msgContent']['type'] != 'retraction')
+                      Text(
+                        _handlerGroupDisplayName(),
+                        style: const TextStyle(
+                          color: Color(0xFF969696),
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 5),
                     // 动态组件
-                    getComponentByType(msg['msgContent']['type'], isRight),
+                    // getComponentByType(msg['msgContent']['type'], isRight),
+                    getComponentByType(msg, isRight),
                   ],
                 ),
-                const SizedBox(width: 5),
-                if (isRight)
-                  CustomPortrait(
-                    url: msg['msgContent']?['formUserPortrait'],
-                    size: 40,
+                if (msg['msgContent']['type'] == 'retraction' &&
+                    isRight &&
+                    msg['msgContent']['ext'] != null &&
+                    msg['msgContent']['ext'] == 'text')
+                  const SizedBox(width: 5),
+                if (msg['msgContent']['type'] == 'retraction' &&
+                    isRight &&
+                    msg['msgContent']['ext'] != null &&
+                    msg['msgContent']['ext'] == 'text')
+                  Column(
+                    children: [
+                      const SizedBox(height: 6),
+                      CustomTextButton('重新编辑',
+                          fontSize: 12,
+                          onTap: reEdit ??
+                                  () {
+                                debugPrint("重新编辑");
+                              }),
+                    ],
                   ),
+                const SizedBox(width: 5),
               ],
             ),
           ),
         // 私聊消息
         if (chatInfo['type'] == 'user')
           Align(
-            alignment: isRight ? Alignment.centerRight : Alignment.centerLeft,
-            child: getComponentByType(msg['msgContent']['type'], isRight),
-          ),
+              alignment: isRight ? Alignment.centerRight : Alignment.centerLeft,
+              child: Row(
+                mainAxisAlignment: msg['msgContent']['type'] == 'retraction'
+                    ? MainAxisAlignment.center
+                    : isRight
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isRight && msg['msgContent']['type'] != 'retraction')
+                    CustomPortrait(
+                      url: chatPortrait ?? '',
+                      size: 38.7,
+                    ),
+                  const SizedBox(width: 5),
+                  // getComponentByType(msg['msgContent']['type'], isRight),
+                  getComponentByType(msg, isRight),
+                  if (msg['msgContent']['type'] == 'retraction' &&
+                      isRight &&
+                      msg['msgContent']['ext'] != null &&
+                      msg['msgContent']['ext'] == 'text')
+                    const SizedBox(width: 1),
+                  if (msg['msgContent']['type'] == 'retraction' &&
+                      isRight &&
+                      msg['msgContent']['ext'] != null &&
+                      msg['msgContent']['ext'] == 'text')
+                    Column(
+                      children: [
+                        const SizedBox(height: 1.2),
+                        CustomTextButton('重新编辑',
+                            fontSize: 12,
+                            onTap: reEdit ??
+                                    () {
+                                  debugPrint("重新编辑");
+                                }),
+                      ],
+                    ),
+                  const SizedBox(width: 5),
+                ],
+              )),
         const SizedBox(height: 15),
       ],
     );
   }
 
-  String handlerGroupDisplayName() {
+  String _handlerGroupDisplayName() {
     if (member == null) {
-      return msg?['msgContent']?['formUserName'] ?? '';
+      return msg['msgContent']?['formUserName'] ?? '';
     }
     if (member!.containsKey('groupName') && member!['groupName'] != null) {
       return member!['groupName']!;
@@ -99,25 +191,105 @@ class ChatMessage extends StatelessThemeWidget {
     }
   }
 
-  Widget getComponentByType(String? type, bool isRight) {
-    switch (type) {
-      case 'text':
-        return TextMessage(
-          value: msg,
-          isRight: isRight,
-        );
-      case 'file':
-        return FileMessage(value: msg, isRight: isRight);
-      case 'img':
-        return ImageMessage(value: msg, isRight: isRight);
-      case 'retraction':
-        return RetractionMessage(isRight: isRight);
-      case 'voice':
-        return VoiceMessage(value: msg, isRight: isRight);
-      case 'call':
-        return CallMessage(value: msg, isRight: isRight);
-      default:
-        return const Text('暂不支持该消息类型');
+  List<PopMenuItemModel> menuItems(String type) => [
+    // if (msg['msgContent']['type'] == 'text')
+    if (type == 'text')
+      PopMenuItemModel(
+        title: '复制',
+        icon: Icons.content_copy,
+        callback:
+        onTapCopy ?? (data) => debugPrint("data: ${data.toString()}"),
+      ),
+    if (type == 'voice')
+      PopMenuItemModel(
+        title: '转文字',
+        icon: Icons.text_fields,
+        callback:
+        onTapVoice ?? (data) => debugPrint("data: ${data.toString()}"),
+      ),
+    PopMenuItemModel(
+        title: '转发',
+        icon: Icons.send,
+        callback: onTapRetransmission ??
+                (data) => debugPrint("data: ${data.toString()}")),
+    // PopMenuItemModel(
+    //     title: '收藏',
+    //     icon: Icons.collections,
+    //     callback: (data) {
+    //       debugPrint("data: " + data);
+    //     }),
+    PopMenuItemModel(
+        title: '删除',
+        icon: Icons.delete,
+        callback: onTapDelete ??
+                (data) => debugPrint("data: ${data.toString()}")),
+    if (msg['fromId'] == globalData.currentUserId)
+      PopMenuItemModel(
+          title: '撤回',
+          icon: Icons.reply,
+          callback: onTapRetract ??
+                  (data) => debugPrint("data: ${data.toString()}")),
+    // PopMenuItemModel(
+    //     title: '多选',
+    //     icon: Icons.playlist_add_check,
+    //     callback:  (data) {
+    //       debugPrint("data: ${data.toString()}");
+    //     }),
+    PopMenuItemModel(
+        title: '引用',
+        icon: Icons.format_quote,
+        callback:
+        onTapCite ?? (data) => debugPrint("data: ${data.toString()}")),
+    // PopMenuItemModel(
+    //     title: '提醒',
+    //     icon: Icons.add_alert,
+    //     callback: (data) {
+    //       debugPrint("data: " + data);
+    //     }),
+    // PopMenuItemModel(
+    //     title: '搜一搜',
+    //     icon: Icons.search,
+    //     callback: (data) {
+    //       debugPrint("data: " + data);
+    //     }),
+  ];
+
+  Widget getComponentByType(Map<String, dynamic> msg, bool isRight) {
+    if (kDebugMode) {
+      print('msg: ${msg['msgContent']['ext']}');
+    }
+    String? type = msg['msgContent']['type'];
+    final messageMap = {
+      'text': (String? username) => TextMessage(value: msg, isRight: isRight),
+      'file': (String? username) => FileMessage(value: msg, isRight: isRight),
+      'img': (String? username) => ImageMessage(value: msg, isRight: isRight),
+      'retraction': (String? username) => RetractionMessage(
+        isRight: isRight,
+        userName: username,
+      ),
+      'voice': (String? username) => VoiceMessage(value: msg, isRight: isRight),
+      'call': (String? username) => CallMessage(value: msg, isRight: isRight),
+    };
+
+    if (messageMap.containsKey(type)) {
+      final messageWidget =
+      messageMap[type]!(msg['msgContent']['formUserName']);
+      return type == 'retraction'
+          ? messageWidget
+          : QuickPopUpMenu(
+        showArrow: true,
+        useGridView: false,
+        pressType: PressType.longPress,
+        menuItems: menuItems(type!),
+        dataObj: messageWidget,
+        child: GestureDetector(
+          onTap: onTapMsg,
+          child: messageWidget,
+        ),
+      );
+    } else {
+      // 异常处理
+      return const Text('暂不支持该消息类型');
     }
   }
 }
