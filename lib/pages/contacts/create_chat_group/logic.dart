@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/api/chat_group_api.dart';
@@ -6,7 +7,6 @@ import 'package:linyu_mobile/pages/contacts/logic.dart';
 import 'package:linyu_mobile/utils/String.dart';
 
 class CreateChatGroupLogic extends GetxController {
-
   final TextEditingController nameController = TextEditingController();
 
   final TextEditingController noticeController = TextEditingController();
@@ -93,17 +93,30 @@ class CreateChatGroupLogic extends GetxController {
   }
 
   //群名称输入框内容变化
-  void onRemarkChanged(String value) {
-    nameLength = value.length;
-  }
+  void onRemarkChanged(String value) =>
+      value.isNotEmpty ? nameLength = value.length : nameLength = 0;
 
   //群公告输入框内容变化
-  void onNoticeTextChanged(String value) {
-    if (noticeLength >= 100) {
-      noticeLength = 100;
-      return;
+  void onNoticeTextChanged(String value) => value.isNotEmpty
+      ? noticeLength = value.length.clamp(0, 100) // 使用clamp限制长度
+      : noticeLength = 0; // 空值时设置长度为0
+
+  //选择用户
+  void onTapUserSelected() async {
+    try {
+      final result = await Get.toNamed('/chat_group_select_user', arguments: {
+        'users': List.from(users), // 防止修改原数组
+      });
+      if (result != null) {
+        // 只在结果不为空时更新
+        users = result;
+        update([const Key('create_chat_group')]);
+      }
+    } catch (e) {
+      // 错误处理
+      CustomFlutterToast.showErrorToast('无法选择用户，请重试。');
+      if (kDebugMode) print('Error while selecting users: $e'); // 记录错误信息
     }
-    noticeLength = value.length;
   }
 
   @override

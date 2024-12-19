@@ -22,10 +22,21 @@ class CallMessage extends StatelessThemeWidget {
 
     return Container(
       width: 150,
-      height: 34,
+      height: 40,
       decoration: BoxDecoration(
         color: isRight ? theme.primaryColor : Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        // borderRadius: BorderRadius.circular(5),
+        borderRadius: isRight
+            ? const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        )
+            : const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

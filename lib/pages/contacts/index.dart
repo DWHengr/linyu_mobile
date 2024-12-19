@@ -11,12 +11,7 @@ import 'package:linyu_mobile/utils/getx_config/config.dart';
 class ContactsPage extends CustomWidget<ContactsLogic> {
   ContactsPage({super.key});
 
-  @override
-  init(BuildContext context) {
-    controller.init();
-  }
-
-  Widget getContent(String tab) {
+  Widget _getContent(String tab) {
     switch (tab) {
       case '好友通知':
         return RefreshIndicator(
@@ -27,9 +22,9 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           child: ListView(
             children: [
               ...controller.notifyFriendList.map((notify) => Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: _buildNotifyFriendItem(notify),
-                  )),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: _buildNotifyFriendItem(notify),
+              )),
             ],
           ),
         );
@@ -42,7 +37,7 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           child: ListView(
             children: [
               ...controller.chatGroupList.map(
-                (group) => Container(
+                    (group) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: _buildChatGroupItem(group),
                 ),
@@ -59,37 +54,35 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
           child: ListView(
             children: [
               ...controller.friendList.map(
-                (group) {
-                  return GestureDetector(
-                    onLongPress: controller.onLongPressGroup,
-                    child: ExpansionTile(
-                      iconColor: theme.primaryColor,
-                      visualDensity:
-                          const VisualDensity(horizontal: 0, vertical: -4),
-                      dense: true,
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      title: Text(
-                        '${group['name']}（${group['friends'].length}）',
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                      children: [
-                        ...group['friends'].map(
-                          (friend) => Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: _buildFriendItem(friend),
-                          ),
-                        ),
-                      ],
+                    (group) => GestureDetector(
+                  key: Key(group['name']),
+                  onLongPress: controller.onLongPressGroup,
+                  child: ExpansionTile(
+                    iconColor: theme.primaryColor,
+                    visualDensity:
+                    const VisualDensity(horizontal: 0, vertical: -4),
+                    dense: true,
+                    collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  );
-                },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    title: Text(
+                      '${group['name']}（${group['friends'].length}）',
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    children: [
+                      ...group['friends'].map(
+                            (friend) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: _buildFriendItem(friend),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -147,10 +140,10 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _getNotifyContentTip(
+                        controller.getNotifyContentTip(
                             notify['status'], isFromCurrentUser),
                         style:
-                            TextStyle(fontSize: 12, color: theme.primaryColor),
+                        TextStyle(fontSize: 12, color: theme.primaryColor),
                       ),
                       const SizedBox(height: 2),
                       Row(
@@ -179,25 +172,6 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
         ),
       ),
     );
-  }
-
-  String _getNotifyContentTip(status, isFromCurrentUser) {
-    if (!isFromCurrentUser) return "请求加你为好友";
-    switch (status) {
-      case "wait":
-        {
-          return "正在验证请求";
-        }
-      case "reject":
-        {
-          return "已拒绝申请请求";
-        }
-      case "agree":
-        {
-          return "已同意申请请求";
-        }
-    }
-    return "";
   }
 
   Widget _getNotifyOperateTip(status, isFromCurrentUser, [dynamic notify]) {
@@ -244,228 +218,263 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
     return const Text("");
   }
 
-  Widget _buildChatGroupItem(dynamic group) {
-    return Material(
+  Widget _buildChatGroupItem(dynamic group) => Material(
+    borderRadius: BorderRadius.circular(12),
+    color: Colors.white,
+    child: InkWell(
+      onTap: () async => controller.toChatGroupInfo(group),
       borderRadius: BorderRadius.circular(12),
-      color: Colors.white,
-      child: InkWell(
-        onTap: () async {
-          controller.onToSendGroupMsg(group['id']);
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0),
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.grey[200]!,
-                width: 0.5,
-              ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey[200]!,
+              width: 0.5,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                CustomPortrait(url: group['portrait']),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              CustomPortrait(url: group['portrait']),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          group['name'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        if (group['groupRemark'] != null &&
+                            group['groupRemark']?.toString().trim() != '')
                           Text(
-                            group['name'],
+                            '(${group['groupRemark']})',
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          if (group['groupRemark'] != null &&
-                              group['groupRemark']?.toString().trim() != '')
-                            Text(
-                              '(${group['groupRemark']})',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showDeleteGroupBottomSheet(dynamic friend) {
-    showModalBottomSheet(
-      context: Get.context!,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
-      ),
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: CustomTextButton(friend['isConcern'] ? '取消特别关心' : '设置特别关心',
-                  onTap: () => controller.onSetConcernFriend(friend),
-                  textColor: theme.primaryColor,
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  fontSize: 16),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildFriendItem(dynamic friend) {
-    return Material(
-      borderRadius: BorderRadius.circular(12),
-      color: Colors.white,
-      child: InkWell(
-        onLongPress: () => _showDeleteGroupBottomSheet(friend),
-        onTap: () => controller.handlerFriendTapped(friend),
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0),
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.grey[200]!,
-                width: 0.5,
-              ),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                CustomPortrait(url: friend['portrait']),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            friend['name'],
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          if (friend['remark'] != null &&
-                              friend['remark']?.toString().trim() != '')
-                            Text(
-                              '(${friend['remark']})',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget buildWidget(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF9FBFF),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const AppBarTitle('通讯列表'),
-        backgroundColor: const Color(0xFFF9FBFF),
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.add, size: 32),
-            offset: const Offset(0, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            color: const Color(0xFFFFFFFF),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-              PopupMenuItem(
-                value: 1,
-                height: 40,
-                onTap: () => Get.toNamed('/qr_code_scan'),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(IconData(0xe61e, fontFamily: 'IconFont'), size: 20),
-                    SizedBox(width: 12),
-                    Text('扫一扫', style: TextStyle(fontSize: 14)),
-                  ],
-                ),
-              ),
-              _buildPopupDivider(),
-              PopupMenuItem(
-                value: 1,
-                height: 40,
-                onTap: () => Get.toNamed('/add_friend'),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.person_add, size: 20),
-                    SizedBox(width: 12),
-                    Text('添加好友', style: TextStyle(fontSize: 14)),
-                  ],
-                ),
-              ),
-              _buildPopupDivider(),
-              PopupMenuItem(
-                value: 2,
-                height: 40,
-                onTap: () async {
-                  var result = await Get.toNamed('/create_chat_group');
-                  if (result != null && result) controller.onChatGroupList();
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.group_add, size: 20),
-                    SizedBox(width: 12),
-                    Text('创建群聊', style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-        ],
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-        child: Column(
-          children: [
-            CustomSearchBox(
-              isCentered: false,
-              onChanged: (value) {},
+    ),
+  );
+
+  void _showDeleteGroupBottomSheet(dynamic friend) => showModalBottomSheet(
+    context: Get.context!,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+    ),
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: CustomTextButton(
+                friend['isConcern'] ? '取消特别关心' : '设置特别关心',
+                onTap: () => controller.onSetConcernFriend(friend),
+                textColor: theme.primaryColor,
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                fontSize: 16),
+          ),
+        ],
+      );
+    },
+  );
+
+  Widget _buildFriendItem(dynamic friend) => Material(
+    borderRadius: BorderRadius.circular(12),
+    color: Colors.white,
+    child: InkWell(
+      onLongPress: () => _showDeleteGroupBottomSheet(friend),
+      onTap: () => controller.handlerFriendTapped(friend),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey[200]!,
+              width: 0.5,
             ),
-            const SizedBox(height: 5),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              CustomPortrait(url: friend['portrait']),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          friend['name'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        if (friend['remark'] != null &&
+                            friend['remark']?.toString().trim() != '')
+                          Text(
+                            '(${friend['remark']})',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
+  PopupMenuEntry<int> _buildPopupDivider() => PopupMenuItem<int>(
+    enabled: false,
+    height: 1,
+    child: Container(
+      height: 1,
+      padding: const EdgeInsets.all(0),
+      color: Colors.grey[200],
+    ),
+  );
+
+  @override
+  init(BuildContext context) => controller.init();
+
+  @override
+  Widget buildWidget(BuildContext context) => Scaffold(
+    backgroundColor: const Color(0xFFF9FBFF),
+    appBar: AppBar(
+      // leading: Container(
+      //   margin: const EdgeInsets.only(left: 13.2, top: 10.8),
+      //   child: CustomPortrait(
+      //     url: globalData.currentAvatarUrl ?? '',
+      //     size: 40,
+      //     radius: 20,
+      //     onTap: () => Scaffold.of(context).openDrawer(),
+      //   ),
+      // ),
+      centerTitle: true,
+      title: const AppBarTitle('通讯列表'),
+      backgroundColor: const Color(0xFFF9FBFF),
+      actions: [
+        PopupMenuButton(
+          icon: const Icon(Icons.add, size: 32),
+          offset: const Offset(0, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          color: const Color(0xFFFFFFFF),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+            PopupMenuItem(
+              value: 1,
+              height: 40,
+              onTap: () => Get.toNamed('/qr_code_scan'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(IconData(0xe61e, fontFamily: 'IconFont'), size: 20),
+                  SizedBox(width: 12),
+                  Text('扫一扫', style: TextStyle(fontSize: 14)),
+                ],
+              ),
+            ),
+            _buildPopupDivider(),
+            PopupMenuItem(
+              value: 1,
+              height: 40,
+              onTap: () => Get.toNamed('/add_friend'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.person_add, size: 20),
+                  SizedBox(width: 12),
+                  Text('添加好友', style: TextStyle(fontSize: 14)),
+                ],
+              ),
+            ),
+            _buildPopupDivider(),
+            PopupMenuItem(
+              value: 2,
+              height: 40,
+              onTap: () => Get.toNamed('/create_chat_group'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.group_add, size: 20),
+                  SizedBox(width: 12),
+                  Text('创建群聊', style: TextStyle(fontSize: 14)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+    body: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomSearchBox(
+            textEditingController: controller.searchBoxController,
+            isCentered: false,
+            onChanged: (value) => controller.onSearchFriend(value),
+          ),
+          if (controller.searchList.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                "搜索结果",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: theme.primaryColor,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  ...controller.searchList
+                      .map((friend) => _buildFriendItem(friend)),
+                ],
+              ),
+            )
+          ],
+          const SizedBox(height: 5),
+          if (controller.searchList.isEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(controller.tabs.length, (index) {
@@ -483,8 +492,9 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                             curve: Curves.easeInOut,
                             padding: const EdgeInsets.all(5),
                             margin: EdgeInsets.symmetric(
-                              horizontal:
-                                  index == controller.selectedIndex ? 4.0 : 0.0,
+                              horizontal: index == controller.selectedIndex
+                                  ? 4.0
+                                  : 0.0,
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(1),
@@ -508,7 +518,9 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                                   fontSize: 16,
                                 ),
                                 child: GestureDetector(
-                                  onLongPress: controller.onLongPressGroup,
+                                  onLongPress: index == 1
+                                      ? controller.onLongPressGroup
+                                      : () {},
                                   child: Text(controller.tabs[index]),
                                 ),
                               ),
@@ -517,39 +529,30 @@ class ContactsPage extends CustomWidget<ContactsLogic> {
                         ),
                       ),
                       if (index == 2)
-                        Obx(() => globalData.getUnreadCount('friendNotify') > 0
+                        Obx(() => globalData
+                            .getUnreadCount('friendNotify') >
+                            0
                             ? CustomTip(
-                                globalData.getUnreadCount('friendNotify'),
-                                right: 7,
-                                top: -2)
+                            globalData.getUnreadCount('friendNotify'),
+                            right: 7,
+                            top: -2)
                             : const SizedBox.shrink()),
                     ],
                   ),
                 );
               }),
             ),
-            const SizedBox(height: 5),
+          if (controller.searchList.isEmpty) const SizedBox(height: 5),
+          if (controller.searchList.isEmpty)
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
-                child: getContent(controller.tabs[controller.selectedIndex]),
+                child:
+                _getContent(controller.tabs[controller.selectedIndex]),
               ),
             ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
-
-  PopupMenuEntry<int> _buildPopupDivider() {
-    return PopupMenuItem<int>(
-      enabled: false,
-      height: 1,
-      child: Container(
-        height: 1,
-        padding: const EdgeInsets.all(0),
-        color: Colors.grey[200],
-      ),
-    );
-  }
+    ),
+  );
 }

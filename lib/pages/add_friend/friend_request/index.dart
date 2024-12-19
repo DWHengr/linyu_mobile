@@ -7,12 +7,12 @@ import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/pages/add_friend/friend_request/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class FriendRequestPage extends CustomWidgetNew<FriendRequestLogic> {
+class FriendRequestPage extends CustomView<FriendRequestLogic> {
   FriendRequestPage({super.key});
 
   //申请好友页面
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
+  Widget buildView(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFFF9FBFF),
         appBar: AppBar(
           backgroundColor: const Color(0xFFF9FBFF),

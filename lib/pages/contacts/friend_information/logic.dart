@@ -5,26 +5,22 @@ import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/api/video_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
 import 'package:linyu_mobile/pages/contacts/logic.dart';
-import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
 class FriendInformationLogic extends Logic {
-  //主题配置
-  final GlobalThemeConfig _theme = GetInstance().find<GlobalThemeConfig>();
-
   //联系人逻辑
   final ContactsLogic _contactsLogic = GetInstance().find<ContactsLogic>();
 
-  //好友api
-  final _friendApi = FriendApi();
-  final _videoApi = VideoApi();
-  final _chatListApi = ChatListApi();
+  //后端api
+  final _friendApi = new FriendApi();
+  final _videoApi = new VideoApi();
+  final _chatListApi = new ChatListApi();
 
   //初始化获取从联系人页面传递过来的好友信息参数
   Map<String, dynamic> get friendData => arguments['friend'];
 
   //好友id
-  String get friendId => arguments['friendId'].toString();
+  final String friendId = Get.arguments['friendId'].toString();
 
   //好友头像
   String _friendPortrait = '';
@@ -163,12 +159,6 @@ class FriendInformationLogic extends Logic {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getFriendInfo();
-  }
-
   //设置特别关心
   void setConcern() async {
     if (isConcern) {
@@ -201,26 +191,29 @@ class FriendInformationLogic extends Logic {
     }
   }
 
-  void onVideoChat() {
-    _videoApi.invite(friendId, false).then((res) {
-      if (res['code'] == 0) {
-        Get.toNamed('video_chat', arguments: {
-          'userId': friendId,
-          'isSender': true,
-          'isOnlyAudio': false,
-        });
-      }
-    });
-  }
+  void onVideoChat({bool isOnlyAudio = false}) =>
+      _videoApi.invite(friendId, isOnlyAudio).then((res) {
+        if (res['code'] == 0) {
+          Get.toNamed('video_chat', arguments: {
+            'userId': friendId,
+            'isSender': true,
+            'isOnlyAudio': isOnlyAudio,
+          });
+        }
+      });
 
-  void onToSendMsg() {
-    _chatListApi.create(friendId, 'user').then((res) {
-      if (res['code'] == 0) {
-        Get.toNamed('/chat_frame', arguments: {
-          'chatInfo': res['data'],
-        });
-      }
-    });
+  void onToSendMsg() => _chatListApi.createChat(friendId, type: 'user').then((res) {
+    if (res['code'] == 0) {
+      Get.offAndToNamed('/chat_frame', arguments: {
+        'chatInfo': res['data'],
+      });
+    }
+  });
+
+  @override
+  void onInit() {
+    super.onInit();
+    getFriendInfo();
   }
 
   @override

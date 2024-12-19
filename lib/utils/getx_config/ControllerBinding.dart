@@ -33,6 +33,7 @@ import 'package:linyu_mobile/pages/qr_code_scan/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_friend_affirm/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_login_affirm/logic.dart';
 import 'package:linyu_mobile/pages/qr_code_scan/qr_other_result/logic.dart';
+import 'package:linyu_mobile/pages/re_forward/logic.dart';
 import 'package:linyu_mobile/pages/register/logic.dart';
 import 'package:linyu_mobile/pages/talk/logic.dart';
 import 'package:linyu_mobile/pages/talk/talk_create/logic.dart';
@@ -46,47 +47,58 @@ import 'package:linyu_mobile/pages/mine/edit/logic.dart';
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(GlobalThemeConfig(), permanent: true);
-    Get.put(GlobalData(), permanent: true);
-    Get.lazyPut(() => NavigationLogic(), fenix: true);
-    Get.lazyPut(() => LoginPageLogic(), fenix: true);
-    Get.lazyPut(() => RegisterPageLogic(), fenix: true);
-    Get.lazyPut(() => RetrievePasswordLogic(), fenix: true);
-    Get.lazyPut(() => UpdatePasswordLogic(), fenix: true);
-    Get.lazyPut(() => ChatListLogic(), fenix: true);
-    Get.lazyPut(() => ContactsLogic(), fenix: true);
-    Get.lazyPut(() => MineLogic(), fenix: true);
-    Get.lazyPut(() => TalkLogic(), fenix: true);
-    Get.lazyPut(() => QRCodeScanLogic(), fenix: true);
-    Get.lazyPut(() => QRLoginAffirmLogic(), fenix: true);
-    Get.lazyPut(() => EditMineLogic(), fenix: true);
-    Get.lazyPut(() => MineQRCodeLogic(), fenix: true);
-    Get.lazyPut(() => QRFriendAffirmLogic(), fenix: true);
-    Get.lazyPut(() => QrOtherResultLogic(), fenix: true);
-    Get.lazyPut(() => AboutLogic(), fenix: true);
-    Get.lazyPut(() => FriendInformationLogic(), fenix: true);
-    Get.lazyPut(() => SetRemarkLogic(), fenix: true);
-    Get.lazyPut(() => SetGroupLogic(), fenix: true);
-    Get.lazyPut(() => AddFriendLogic(), fenix: true);
-    Get.lazyPut(() => SearchInfoLogic(), fenix: true);
-    Get.lazyPut(() => FriendRequestLogic(), fenix: true);
-    Get.lazyPut(() => TalkDetailsLogic(), fenix: true);
-    Get.lazyPut(() => TalkCreateLogic(), fenix: true);
-    Get.lazyPut(() => UserSelectLogic(), fenix: true);
-    Get.lazyPut(() => ChatGroupInformationLogic(), fenix: true);
-    Get.lazyPut(() => ImageViewerLogic(), fenix: true);
-    Get.lazyPut(() => ImageViewerUpdateLogic(), fenix: true);
-    Get.lazyPut(() => SetGroupNameLogic(), fenix: true);
-    Get.lazyPut(() => SetGroupRemarkLogic(), fenix: true);
-    Get.lazyPut(() => SetGroupNameNickLogic(), fenix: true);
-    Get.lazyPut(() => ChatGroupNoticeLogic(), fenix: true);
-    Get.lazyPut(() => AddChatGroupNoticeLogic(), fenix: true);
-    Get.lazyPut(() => ChatGroupMemberLogic(), fenix: true);
-    Get.lazyPut(() => CreateChatGroupLogic(), fenix: true);
-    Get.lazyPut(() => SystemNotifyLogic(), fenix: true);
-    Get.lazyPut(() => ChatGroupSelectUserLogic(), fenix: true);
-    Get.lazyPut(() => ChatFrameLogic(), fenix: true);
-    Get.lazyPut(() => FileDetailsLogic(), fenix: true);
-    Get.lazyPut(() => VideoChatLogic(), fenix: true);
+    Get.put<GlobalThemeConfig>(GlobalThemeConfig(), permanent: true);
+    Get.put<GlobalData>(GlobalData(), permanent: true);
+    Get.lazyPut<NavigationLogic>(() => NavigationLogic(), fenix: true);
+    Get.lazyPut<LoginPageLogic>(() => LoginPageLogic(), fenix: true);
+    Get.lazyPut<RegisterPageLogic>(() => RegisterPageLogic(), fenix: true);
+    Get.lazyPut<RetrievePasswordLogic>(() => RetrievePasswordLogic(),
+        fenix: true);
+    Get.lazyPut<UpdatePasswordLogic>(() => UpdatePasswordLogic(), fenix: true);
+    Get.lazyPut<ChatListLogic>(() => ChatListLogic(), fenix: true);
+    Get.lazyPut<ContactsLogic>(() => ContactsLogic(), fenix: true);
+    Get.lazyPut<MineLogic>(() => MineLogic(), fenix: true);
+    Get.lazyPut<TalkLogic>(() => TalkLogic(), fenix: true);
+    Get.lazyPut<QRCodeScanLogic>(() => QRCodeScanLogic(), fenix: true);
+    Get.lazyPut<QRLoginAffirmLogic>(() => QRLoginAffirmLogic(), fenix: true);
+    Get.lazyPut<EditMineLogic>(() => EditMineLogic(), fenix: true);
+    Get.lazyPut<MineQRCodeLogic>(() => MineQRCodeLogic(), fenix: true);
+    Get.lazyPut<QRFriendAffirmLogic>(() => QRFriendAffirmLogic(), fenix: true);
+    Get.lazyPut<QrOtherResultLogic>(() => QrOtherResultLogic(), fenix: true);
+    Get.lazyPut<AboutLogic>(() => AboutLogic(), fenix: true);
+    Get.lazyPut<FriendInformationLogic>(() => FriendInformationLogic(),
+        fenix: true);
+    Get.lazyPut<SetRemarkLogic>(() => SetRemarkLogic(), fenix: true);
+    Get.lazyPut<SetGroupLogic>(() => SetGroupLogic(), fenix: true);
+    Get.lazyPut<AddFriendLogic>(() => AddFriendLogic(), fenix: true);
+    Get.lazyPut<SearchInfoLogic>(() => SearchInfoLogic(), fenix: true);
+    Get.lazyPut<FriendRequestLogic>(() => FriendRequestLogic(), fenix: true);
+    Get.lazyPut<TalkDetailsLogic>(() => TalkDetailsLogic(), fenix: true);
+    Get.lazyPut<TalkCreateLogic>(() => TalkCreateLogic(), fenix: true);
+    Get.lazyPut<UserSelectLogic>(() => UserSelectLogic(), fenix: true);
+    Get.lazyPut<ChatGroupInformationLogic>(() => ChatGroupInformationLogic(),
+        fenix: true);
+    Get.lazyPut<ImageViewerLogic>(() => ImageViewerLogic(), fenix: true);
+    Get.lazyPut<ImageViewerUpdateLogic>(() => ImageViewerUpdateLogic(),
+        fenix: true);
+    Get.lazyPut<SetGroupNameLogic>(() => SetGroupNameLogic(), fenix: true);
+    Get.lazyPut<SetGroupRemarkLogic>(() => SetGroupRemarkLogic(), fenix: true);
+    Get.lazyPut<SetGroupNameNickLogic>(() => SetGroupNameNickLogic(),
+        fenix: true);
+    Get.lazyPut<ChatGroupNoticeLogic>(() => ChatGroupNoticeLogic(),
+        fenix: true);
+    Get.lazyPut<AddChatGroupNoticeLogic>(() => AddChatGroupNoticeLogic(),
+        fenix: true);
+    Get.lazyPut<ChatGroupMemberLogic>(() => ChatGroupMemberLogic(),
+        fenix: true);
+    Get.lazyPut<CreateChatGroupLogic>(() => CreateChatGroupLogic(),
+        fenix: true);
+    Get.lazyPut<SystemNotifyLogic>(() => SystemNotifyLogic(), fenix: true);
+    Get.lazyPut<ChatGroupSelectUserLogic>(() => ChatGroupSelectUserLogic(),
+        fenix: true);
+    Get.lazyPut<ChatFrameLogic>(() => ChatFrameLogic(), fenix: true);
+    Get.lazyPut<FileDetailsLogic>(() => FileDetailsLogic(), fenix: true);
+    Get.lazyPut<VideoChatLogic>(() => VideoChatLogic(), fenix: true);
+    Get.lazyPut<ReForwardLogic>(() => ReForwardLogic(), fenix: true);
   }
 }

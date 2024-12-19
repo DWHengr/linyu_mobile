@@ -90,7 +90,7 @@ class SetGroupLogic extends Logic<SetGroupPage> {
       return;
     }
     Get.back();
-    widget?.showAddAndUpdateGroupDialog(
+    view?.showAddAndUpdateGroupDialog(
       context,
       group: group,
       title: '修改分组',

@@ -1,11 +1,8 @@
-// ignore_for_file: unnecessary_new, avoid_function_literals_in_foreach_calls
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:linyu_mobile/api/friend_api.dart';
 import 'package:linyu_mobile/components/custom_flutter_toast/index.dart';
-import 'package:linyu_mobile/pages/contacts/create_chat_group/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'index.dart';
 import 'package:linyu_mobile/utils/extension.dart';
@@ -14,9 +11,6 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
   final _friendApi = FriendApi();
 
   final TextEditingController searchBoxController = new TextEditingController();
-
-  final CreateChatGroupLogic createChatGroupLogic =
-  GetInstance().find<CreateChatGroupLogic>();
 
   //所有的分组以及好友
   List<dynamic> friendList = [];
@@ -61,9 +55,7 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
   }
 
   void _getSelectUser() {
-    if (createChatGroupLogic.users.isNotEmpty) {
-      users = createChatGroupLogic.users.copy();
-    }
+    users = arguments['users'];
     userTapWidth = users.length * 40;
   }
 
@@ -94,9 +86,6 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
 
   //当被选中时进行的操作
   void onSelect(dynamic user) {
-    if (kDebugMode) {
-      print('user:$user');
-    }
     if (!users.include(user)) {
       addUsers(user);
       return;
@@ -107,11 +96,6 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
   //监听键盘 backspace键 事件
   void onBackKeyPress(KeyEvent event) {
     if (event is KeyUpEvent && searchBoxController.text.isEmpty) subUsers(null);
-  }
-
-  void onSubmitPress() {
-    createChatGroupLogic.users = users;
-    Get.back();
   }
 
   void onSearchFriend(String friendInfo) {
@@ -131,15 +115,11 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
   }
 
   void onSelectGroup(dynamic group) {
-    if (kDebugMode) {
-      print('group:$group');
-      print('friends:${group['friends']}');
-    }
     // 检查是否存在'friends'字段并且是一个列表
     final List<dynamic>? friends =
     group['friends'] is List ? group['friends'] : null;
     if (friends == null || friends.isEmpty) {
-      CustomFlutterToast.showErrorToast('该群组没有成员');
+      CustomFlutterToast.showErrorToast('该分组没有成员');
       return;
     }
     bool allIncluded = friends.every((friend) => users.include(friend));
@@ -150,24 +130,13 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
     }
     // 否则，将所有未被选中的好友添加到选中列表中
     friends.forEach((friend) => addUsers(friend));
-    // for (var friend in friends) {
-    //   if (!users.include(friend)) {
-    //     addUsers(friend);
-    //   }
-    //   // onSelect(friend);
-    // }
   }
 
   Color checkBoxFillColor(dynamic group) {
     try {
       final List<dynamic>? friends = group['friends'] as List<dynamic>?;
-      if (kDebugMode) {
-        print('${group['name']} friends is null:${friends?.isEmpty}');
-      }
       // 如果没有朋友列表，返回默认颜色
       if (friends == null || friends.isEmpty) return Colors.transparent;
-
-      // if (friends == null) return Colors.transparent;
       // 使用任何函数检查是否有未包含的用户
       bool allIncluded = friends.every((friend) => users.include(friend));
       return allIncluded ? theme.primaryColor : Colors.transparent;
@@ -189,8 +158,12 @@ class ChatGroupSelectUserLogic extends Logic<ChatGroupSelectUserPage> {
   @override
   void onClose() {
     super.onClose();
-    createChatGroupLogic.update([const Key('create_chat_group')]);
-    searchBoxController.dispose();
-    users = [];
+    try {
+      searchBoxController.dispose();
+      users = [];
+    } catch (e) {
+      if (kDebugMode) print('onClose error: $e');
+      CustomFlutterToast.showErrorToast('关闭页面时出错');
+    }
   }
 }

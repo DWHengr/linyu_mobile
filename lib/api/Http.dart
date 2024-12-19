@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:pretty_dio_logger/pretty_dio_logger.dart' show PrettyDioLogger;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Http {
@@ -30,5 +32,12 @@ class Http {
       }
       return handler.next(error);
     }));
+    if (!kReleaseMode)
+      dio.interceptors.add(PrettyDioLogger(
+        // requestHeader: true,
+        // requestBody: true,
+        // responseHeader: true,
+        responseBody: true,
+      ));
   }
 }

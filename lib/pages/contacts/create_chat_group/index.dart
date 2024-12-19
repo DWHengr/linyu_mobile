@@ -94,7 +94,7 @@ class CreateChatGroupPage extends CustomWidget<CreateChatGroupLogic> {
             label: '邀请好友',
             color: const Color(0xFFEDF2F9),
             width: 80,
-            onTap: () => Get.toNamed('/chat_group_select_user'),
+            onTap: controller.onTapUserSelected,
             child: controller.users.isNotEmpty
                 ? SizedBox(
               width: 70,
@@ -119,3 +119,4 @@ class CreateChatGroupPage extends CustomWidget<CreateChatGroupLogic> {
     ),
   );
 }
+

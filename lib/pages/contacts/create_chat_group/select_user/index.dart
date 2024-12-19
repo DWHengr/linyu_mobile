@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linyu_mobile/components/app_bar_title/index.dart';
-import 'package:linyu_mobile/components/custom_button/index.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_search_box/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -10,7 +9,7 @@ import 'package:linyu_mobile/utils/extension.dart';
 import 'logic.dart';
 
 class ChatGroupSelectUserPage
-    extends CustomWidgetNew<ChatGroupSelectUserLogic> {
+    extends CustomView<ChatGroupSelectUserLogic> {
   ChatGroupSelectUserPage({super.key});
 
   Widget _selectedUserItem(dynamic user) => Container(
@@ -103,7 +102,7 @@ class ChatGroupSelectUserPage
   );
 
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
+  Widget buildView(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFFF9FBFF),
     appBar: AppBar(
       leading: TextButton(
@@ -116,11 +115,13 @@ class ChatGroupSelectUserPage
       centerTitle: true,
       title: const AppBarTitle('选择好友'),
       backgroundColor: const Color(0xFFF9FBFF),
-      actions: [ CustomTextButton('完成(${controller.users.length})',
-          onTap: controller.onSubmitPress,
-          padding: const EdgeInsets.symmetric(
-              horizontal: 20.0, vertical: 5.0),
-          fontSize: 14),],
+      actions: [
+        CustomTextButton('完成(${controller.users.length})',
+            onTap: () => Get.back(result: controller.users),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+            fontSize: 14),
+      ],
     ),
     body: Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
@@ -137,17 +138,17 @@ class ChatGroupSelectUserPage
                     textEditingController: controller.searchBoxController,
                     // prefix: controller.users.isNotEmpty
                     //     ? SizedBox(
-                    //         height: 36.8,
-                    //         width: controller.userTapWidth >= 200
-                    //             ? 210
-                    //             : controller.userTapWidth,
-                    //         child: ListView(
-                    //           scrollDirection: Axis.horizontal,
-                    //           children: controller.users
-                    //               .map((user) => _selectedUserItem(user))
-                    //               .toList(),
-                    //         ),
-                    //       )
+                    //   height: 36.8,
+                    //   width: controller.userTapWidth >= 200
+                    //       ? 210
+                    //       : controller.userTapWidth,
+                    //   child: ListView(
+                    //     scrollDirection: Axis.horizontal,
+                    //     children: controller.users
+                    //         .map((user) => _selectedUserItem(user))
+                    //         .toList(),
+                    //   ),
+                    // )
                     //     : null,
                     isCentered: false,
                     onChanged: (value) => controller.onSearchFriend(value),
@@ -237,3 +238,4 @@ class ChatGroupSelectUserPage
     ),
   );
 }
+
