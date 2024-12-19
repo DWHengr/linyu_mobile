@@ -14,303 +14,322 @@ import 'package:linyu_mobile/utils/getx_config/config.dart';
 class FriendInformationPage extends CustomWidget<FriendInformationLogic> {
   FriendInformationPage({super.key});
 
-  PopupMenuEntry<int> _buildPopupDivider() {
-    return PopupMenuItem<int>(
-      enabled: false,
+  PopupMenuEntry<int> _buildPopupDivider() => PopupMenuItem<int>(
+    enabled: false,
+    height: 1,
+    child: Container(
       height: 1,
-      child: Container(
-        height: 1,
-        padding: const EdgeInsets.all(0),
-        color: Colors.grey[200],
-      ),
-    );
-  }
+      padding: const EdgeInsets.all(0),
+      color: Colors.grey[200],
+    ),
+  );
 
   @override
   Widget buildWidget(BuildContext context) => GestureDetector(
-        child: Scaffold(
+    child: Scaffold(
+      backgroundColor: const Color(0xFFF9FBFF),
+      appBar: AppBar(
+          centerTitle: true,
+          title: const AppBarTitle('好友资料'),
           backgroundColor: const Color(0xFFF9FBFF),
-          appBar: AppBar(
-              centerTitle: true,
-              title: const AppBarTitle('好友资料'),
-              backgroundColor: const Color(0xFFF9FBFF),
-              actions: [
-                IconButton(
-                  onPressed: controller.setConcern,
-                  icon: controller.isConcern
-                      ? Icon(
-                          Icons.favorite,
-                          size: 32,
-                          color: theme.primaryColor,
-                        )
-                      : const Icon(
-                          Icons.favorite_border,
-                          size: 32,
-                          color: Color(0xFF989898),
-                        ),
-                ),
-                PopupMenuButton(
-                  icon: const Icon(Icons.more_vert, size: 32),
-                  offset: const Offset(0, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+          actions: [
+            IconButton(
+              onPressed: controller.setConcern,
+              icon: controller.isConcern
+                  ? Icon(
+                Icons.favorite,
+                size: 32,
+                color: theme.primaryColor,
+              )
+                  : const Icon(
+                Icons.favorite_border,
+                size: 32,
+                color: Color(0xFF989898),
+              ),
+            ),
+            PopupMenuButton(
+              icon: const Icon(Icons.more_vert, size: 32),
+              offset: const Offset(0, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: const Color(0xFFFFFFFF),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                PopupMenuItem(
+                  value: 1,
+                  height: 40,
+                  onTap: controller.deleteFriend,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.delete, size: 20),
+                      SizedBox(width: 12),
+                      Text('删除好友', style: TextStyle(fontSize: 14)),
+                    ],
                   ),
-                  color: const Color(0xFFFFFFFF),
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                    PopupMenuItem(
-                      value: 1,
-                      height: 40,
-                      onTap: controller.deleteFriend,
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.delete, size: 20),
-                          SizedBox(width: 12),
-                          Text('删除好友', style: TextStyle(fontSize: 14)),
-                        ],
-                      ),
-                    ),
-                    _buildPopupDivider(),
-                    PopupMenuItem(
-                      value: 1,
-                      height: 40,
-                      onTap: controller.setConcern,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.favorite, size: 20),
-                          const SizedBox(width: 12),
-                          Text(controller.isConcern ? '取消特别关心' : '特别关心',
-                              style: const TextStyle(fontSize: 14)),
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
-              ]),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                _buildPopupDivider(),
+                PopupMenuItem(
+                  value: 1,
+                  height: 40,
+                  onTap: controller.setConcern,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.favorite, size: 20),
+                      const SizedBox(width: 12),
+                      Text(controller.isConcern ? '取消特别关心' : '特别关心',
+                          style: const TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ]),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                theme.minorColor,
-                                const Color(0xFFFFFFFF)
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          height: 100,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 5,
-                                  ),
-                                  borderRadius: BorderRadius.circular(35),
-                                ),
-                                child: CustomPortrait(
-                                    url: controller.friendPortrait ?? '',
-                                    size: 70,
-                                    radius: 35),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            theme.minorColor,
+                            const Color(0xFFFFFFFF)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      height: 100,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 5,
                               ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Row(
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: CustomPortrait(
+                                url: controller.friendPortrait,
+                                size: 70,
+                                radius: 35),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.center,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CustomShadowText(
-                                            text: controller.friendName ?? ''),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          controller.friendAccount ?? '',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey[700]),
-                                        ),
-                                      ],
+                                    CustomShadowText(
+                                        text: controller.friendName),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      controller.friendAccount,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[700]),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                              controller.friendGender == "男"
+                                  ? Icons.male
+                                  : Icons.female,
+                              color: controller.friendGender == "男"
+                                  ? const Color(0xFF4C9BFF)
+                                  : const Color(0xFFFFA0CF),
+                              size: 18),
+                          const SizedBox(width: 2),
+                          Text(
+                            controller.friendGender,
+                            style: const TextStyle(
+                                color: Colors.black54, fontSize: 14),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                  controller.friendGender == "男"
-                                      ? Icons.male
-                                      : Icons.female,
-                                  color: controller.friendGender == "男"
-                                      ? const Color(0xFF4C9BFF)
-                                      : const Color(0xFFFFA0CF),
-                                  size: 18),
-                              const SizedBox(width: 2),
-                              Text(
-                                controller.friendGender,
-                                style: const TextStyle(
-                                    color: Colors.black54, fontSize: 14),
-                              ),
-                              Container(
-                                width: 1,
-                                height: 14,
-                                color: Colors.black38,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 6),
-                              ),
-                              Text(
-                                DateUtil.calculateAge(
-                                    controller.friendBirthday),
-                                style: const TextStyle(
-                                    color: Colors.black54, fontSize: 14),
-                              ),
-                              Container(
-                                width: 1,
-                                height: 14,
-                                color: Colors.black38,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 6),
-                              ),
-                              Text(
-                                DateUtil.getYearDayMonth(
-                                    controller.friendBirthday),
-                                style: const TextStyle(
-                                    color: Colors.black54, fontSize: 14),
-                              ),
-                            ],
+                          Container(
+                            width: 1,
+                            height: 14,
+                            color: Colors.black38,
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 6),
                           ),
-                        ),
-                        const SizedBox(height: 1),
-                        CustomLabelValueButton(
-                            onTap: () => Get.toNamed('set_remark', arguments: {
-                                  'remark': controller.friendRemark,
-                                  'friendId': controller.friendId
-                                }),
-                            width: 50,
-                            label: '备注',
-                            hint: '未设置备注',
-                            value: controller.friendRemark),
-                        const SizedBox(height: 1),
-                        CustomLabelValueButton(
-                            onTap: () => Get.toNamed('set_group', arguments: {
-                                  'groupName': controller.friendGroup,
-                                  'friendId': controller.friendId
-                                }),
-                            width: 50,
-                            label: '分组',
-                            value: controller.friendGroup),
-                        const SizedBox(height: 1),
-                        CustomLabelValueButton(
-                            onTap: () {},
-                            width: 50,
-                            label: '签名',
-                            hint: 'ta没有要说的签名~',
-                            maxLines: 10,
-                            value: controller.friendSignature),
-                        const SizedBox(height: 1),
-                        CustomLabelValueButton(
-                          onTap: () => Get.toNamed('/talk', arguments: {
-                            'userId': controller.friendId,
-                            'title': StringUtil.isNotNullOrEmpty(
-                                    controller.friendRemark)
-                                ? controller.friendRemark
-                                : controller.friendName,
-                          }),
-                          width: 50,
-                          label: '说说',
-                          hint: '这个人很懒，什么都没留下~',
-                          child: (controller.talkContent['text']?.isNotEmpty ==
-                                      true ||
-                                  (controller.talkContent['img']?.isNotEmpty ??
-                                      false))
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (controller
-                                            .talkContent['text']?.isNotEmpty ==
-                                        true)
-                                      Text(
-                                        controller.talkContent['text'],
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    if (controller
-                                            .talkContent['img']?.isNotEmpty ==
-                                        true)
-                                      CustomImageGroup(
-                                        imagesList:
-                                            controller.talkContent['img'],
-                                        userId: controller.friendId,
-                                      ),
-                                  ],
-                                )
-                              : null,
-                        ),
-                      ],
+                          Text(
+                            DateUtil.calculateAge(
+                                controller.friendBirthday),
+                            style: const TextStyle(
+                                color: Colors.black54, fontSize: 14),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 14,
+                            color: Colors.black38,
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 6),
+                          ),
+                          Text(
+                            DateUtil.getYearDayMonth(
+                                controller.friendBirthday),
+                            style: const TextStyle(
+                                color: Colors.black54, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    CustomLabelValueButton(
+                        onTap: () => Get.toNamed('set_remark', arguments: {
+                          'remark': controller.friendRemark,
+                          'friendId': controller.friendId
+                        }),
+                        width: 50,
+                        label: '备注',
+                        hint: '未设置备注',
+                        value: controller.friendRemark),
+                    const SizedBox(height: 1),
+                    CustomLabelValueButton(
+                        onTap: () => Get.toNamed('set_group', arguments: {
+                          'groupName': controller.friendGroup,
+                          'friendId': controller.friendId
+                        }),
+                        width: 50,
+                        label: '分组',
+                        value: controller.friendGroup),
+                    const SizedBox(height: 1),
+                    CustomLabelValueButton(
+                        onTap: () {},
+                        width: 50,
+                        label: '签名',
+                        hint: 'ta没有要说的签名~',
+                        maxLines: 10,
+                        value: controller.friendSignature),
+                    const SizedBox(height: 1),
+                    CustomLabelValueButton(
+                      onTap: () => Get.toNamed('/talk', arguments: {
+                        'userId': controller.friendId,
+                        'title': StringUtil.isNotNullOrEmpty(
+                            controller.friendRemark)
+                            ? controller.friendRemark
+                            : controller.friendName,
+                      }),
+                      width: 50,
+                      label: '说说',
+                      hint: '这个人很懒，什么都没留下~',
+                      child: (controller.talkContent['text']?.isNotEmpty ==
+                          true ||
+                          (controller.talkContent['img']?.isNotEmpty ??
+                              false))
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (controller
+                              .talkContent['text']?.isNotEmpty ==
+                              true)
+                            Text(
+                              controller.talkContent['text'],
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          if (controller
+                              .talkContent['img']?.isNotEmpty ==
+                              true)
+                            CustomImageGroup(
+                              imagesList:
+                              controller.talkContent['img'],
+                              userId: controller.friendId,
+                            ),
+                        ],
+                      )
+                          : null,
                     ),
                   ],
-                ),
-              ),
-            ),
-          ),
-          bottomNavigationBar: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    text: '发消息',
-                    onTap: () {
-                      controller.onToSendMsg();
-                    },
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: CustomButton(
-                    text: '视频聊天',
-                    onTap: () {
-                      controller.onVideoChat();
-                    },
-                    type: 'minor',
-                  ),
                 ),
               ],
             ),
           ),
         ),
-      );
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CustomButton(
+                text: '发消息',
+                onTap: controller.onToSendMsg,
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: CustomButton(
+                text: '音视通话',
+                onTap: () => Get.bottomSheet(
+                  backgroundColor: Colors.white,
+                  Wrap(
+                    children: [
+                      Center(
+                        child: TextButton(
+                          onPressed: () =>
+                              controller.onVideoChat(isOnlyAudio: true),
+                          child: Text(
+                            '语音通话',
+                            style: TextStyle(color: theme.primaryColor),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: TextButton(
+                          onPressed: () => controller.onVideoChat(),
+                          child: Text(
+                            '视频通话',
+                            style: TextStyle(color: theme.primaryColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                type: 'minor',
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

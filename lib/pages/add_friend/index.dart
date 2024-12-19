@@ -8,7 +8,7 @@ import 'package:linyu_mobile/components/custom_text_button/index.dart';
 import 'package:linyu_mobile/pages/add_friend/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
+class AddFriendPage extends CustomView<AddFriendLogic> {
   AddFriendPage({super.key});
 
   Widget _buildSearchItem(dynamic friend, [String? id]) => Material(
@@ -81,7 +81,7 @@ class AddFriendPage extends CustomWidgetNew<AddFriendLogic> {
 
   //添加好友页面
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
+  Widget buildView(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFFF9FBFF),
         appBar: AppBar(
             title: const AppBarTitle('好友搜索'),

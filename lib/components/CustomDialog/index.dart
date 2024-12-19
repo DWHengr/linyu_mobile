@@ -6,8 +6,8 @@ import 'package:linyu_mobile/utils/getx_config/GlobalThemeConfig.dart';
 class CustomDialog {
   static void showTipDialog(BuildContext context,
       {required String text,
-      required VoidCallback onOk,
-      required VoidCallback onCancel}) {
+        required VoidCallback onOk,
+        VoidCallback? onCancel}) {
     GlobalThemeConfig theme = Get.find<GlobalThemeConfig>();
     showDialog(
       context: context,
@@ -52,7 +52,7 @@ class CustomDialog {
                       child: CustomButton(
                         text: '取消',
                         onTap: () {
-                          onCancel();
+                          onCancel?.call();
                           Navigator.of(context).pop();
                         },
                         type: 'minor',
