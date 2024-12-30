@@ -11,7 +11,7 @@ import 'package:linyu_mobile/components/custom_text_field/index.dart';
 import 'package:linyu_mobile/pages/contacts/friend_information/set_group/logic.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 
-class SetGroupPage extends CustomWidgetNew<SetGroupLogic> {
+class SetGroupPage extends CustomView<SetGroupLogic> {
   SetGroupPage({super.key});
 
   void showAddAndUpdateGroupDialog(
@@ -127,7 +127,7 @@ class SetGroupPage extends CustomWidgetNew<SetGroupLogic> {
   }
 
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
+  Widget buildView(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFFF9FBFF),
         appBar: AppBar(
             backgroundColor: Colors.transparent,

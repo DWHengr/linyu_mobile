@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' show Get, GetNavigation;
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -9,8 +10,9 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
   MineQRCodePage({super.key});
 
   @override
-  Widget buildWidget(BuildContext context) {
-    return Scaffold(
+  Widget buildWidget(BuildContext context) => GestureDetector(
+    onTap: () => Get.back(),
+    child: Scaffold(
       body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -48,7 +50,8 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: CustomPortrait(
-                                url: controller.currentUserInfo['portrait'] ??
+                                url: controller
+                                    .currentUserInfo['portrait'] ??
                                     '',
                                 size: 80,
                                 radius: 40),
@@ -88,7 +91,7 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
                                       color: Colors.black,
                                     ),
                                     embeddedImageStyle:
-                                        const QrEmbeddedImageStyle(
+                                    const QrEmbeddedImageStyle(
                                       size: Size(50, 50),
                                     ),
                                   ),
@@ -117,6 +120,6 @@ class MineQRCodePage extends CustomWidget<MineQRCodeLogic> {
               const Text("扫描二维码，添加我为好友")
             ],
           )),
-    );
-  }
+    ),
+  );
 }

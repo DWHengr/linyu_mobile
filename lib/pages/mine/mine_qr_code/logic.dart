@@ -10,6 +10,7 @@ class MineQRCodeLogic extends GetxController {
 
   @override
   void onInit() async {
+    super.onInit();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentUserInfo['name'] = prefs.getString('username');
     currentUserInfo['portrait'] = prefs.getString('portrait');

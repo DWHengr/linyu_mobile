@@ -1,5 +1,6 @@
+import 'dart:convert';
+
 import 'package:custom_pop_up_menu_fork/custom_pop_up_menu.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linyu_mobile/components/custom_portrait/index.dart';
 import 'package:linyu_mobile/components/custom_text_button/index.dart';
@@ -18,18 +19,40 @@ import 'text.dart';
 typedef CallBack = dynamic Function(dynamic data);
 
 class ChatMessage extends StatelessThemeWidget {
-  final Map<String, dynamic> msg;
-  final Map<String, dynamic> chatInfo;
+  const ChatMessage({
+    super.key,
+    required this.msg,
+    required this.chatInfo,
+    required this.member,
+    this.chatPortrait = 'http://192.168.101.4:9000/linyu/default-portrait.jpg',
+    this.onTapCopy,
+    this.onTapRepost,
+    this.onTapDelete,
+    this.onTapRetract,
+    this.onTapCite,
+    this.onTapMsg,
+    this.reEdit,
+    this.onTapVoiceToText,
+    this.onTapVoiceHiddenText,
+    this.onTapMultipleChoice,
+    this.onTapRemind,
+    this.onTapSearch,
+    this.onTapFavorite,
+  });
+
+  final Map<String, dynamic> msg, chatInfo;
   final Map<String, dynamic>? member;
   final String? chatPortrait;
-  final void Function()? onTapMsg;
-  final void Function()? reEdit;
+  final void Function()? onTapMsg, reEdit;
 
   // 点击复制回调
   final CallBack? onTapCopy;
 
   // 点击转发回调
-  final CallBack? onTapRetransmission;
+  final CallBack? onTapRepost;
+
+  // 点击收藏回调
+  final CallBack? onTapFavorite;
 
   // 点击删除回调
   final CallBack? onTapDelete;
@@ -41,23 +64,19 @@ class ChatMessage extends StatelessThemeWidget {
   final CallBack? onTapCite;
 
   // 点击转文字回调
-  final CallBack? onTapVoice;
+  final CallBack? onTapVoiceToText;
 
-  const ChatMessage({
-    super.key,
-    this.chatPortrait = 'http://192.168.101.4:9000/linyu/default-portrait.jpg',
-    this.onTapCopy,
-    this.onTapRetransmission,
-    this.onTapDelete,
-    this.onTapRetract,
-    this.onTapCite,
-    this.onTapMsg,
-    this.reEdit,
-    this.onTapVoice,
-    required this.msg,
-    required this.chatInfo,
-    required this.member,
-  });
+  // 点击隐藏文字回调
+  final CallBack? onTapVoiceHiddenText;
+
+  // 点击多选回调
+  final CallBack? onTapMultipleChoice;
+
+  // 点击提醒回调
+  final CallBack? onTapRemind;
+
+  // 点击搜一搜回调
+  final CallBack? onTapSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -102,15 +121,14 @@ class ChatMessage extends StatelessThemeWidget {
                       ),
                     const SizedBox(height: 5),
                     // 动态组件
-                    // getComponentByType(msg['msgContent']['type'], isRight),
-                    getComponentByType(msg, isRight),
+                    _getComponentByType(msg, isRight),
                   ],
                 ),
                 if (msg['msgContent']['type'] == 'retraction' &&
                     isRight &&
                     msg['msgContent']['ext'] != null &&
                     msg['msgContent']['ext'] == 'text')
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 1.2),
                 if (msg['msgContent']['type'] == 'retraction' &&
                     isRight &&
                     msg['msgContent']['ext'] != null &&
@@ -127,6 +145,11 @@ class ChatMessage extends StatelessThemeWidget {
                     ],
                   ),
                 const SizedBox(width: 5),
+                if (isRight && msg['msgContent']['type'] != 'retraction')
+                  CustomPortrait(
+                    url: globalData.currentAvatarUrl ?? '',
+                    size: 40,
+                  ),
               ],
             ),
           ),
@@ -149,7 +172,7 @@ class ChatMessage extends StatelessThemeWidget {
                     ),
                   const SizedBox(width: 5),
                   // getComponentByType(msg['msgContent']['type'], isRight),
-                  getComponentByType(msg, isRight),
+                  _getComponentByType(msg, isRight),
                   if (msg['msgContent']['type'] == 'retraction' &&
                       isRight &&
                       msg['msgContent']['ext'] != null &&
@@ -162,15 +185,18 @@ class ChatMessage extends StatelessThemeWidget {
                     Column(
                       children: [
                         const SizedBox(height: 1.2),
-                        CustomTextButton('重新编辑',
-                            fontSize: 12,
-                            onTap: reEdit ??
-                                    () {
-                                  debugPrint("重新编辑");
-                                }),
+                        CustomTextButton('重新编辑', fontSize: 12, onTap: () {
+                          debugPrint("重新编辑");
+                          reEdit?.call();
+                        }),
                       ],
                     ),
                   const SizedBox(width: 5),
+                  if (isRight && msg['msgContent']['type'] != 'retraction')
+                    CustomPortrait(
+                      url: globalData.currentAvatarUrl ?? '',
+                      size: 38.7,
+                    ),
                 ],
               )),
         const SizedBox(height: 15),
@@ -179,86 +205,115 @@ class ChatMessage extends StatelessThemeWidget {
   }
 
   String _handlerGroupDisplayName() {
-    if (member == null) {
-      return msg['msgContent']?['formUserName'] ?? '';
-    }
-    if (member!.containsKey('groupName') && member!['groupName'] != null) {
-      return member!['groupName']!;
-    } else if (member!.containsKey('remark') && member!['remark'] != null) {
-      return member!['remark']!;
-    } else {
-      return member!['name'] ?? '';
+    // 检查 member 是否为 null
+    if (member == null) return msg['msgContent']?['formUserName'] ?? '';
+    // 尝试从 member 中获取优先属性
+    try {
+      return member?.containsKey('groupName') == true &&
+          member!['groupName'] != null
+          ? member!['groupName']!
+          : member?.containsKey('remark') == true && member!['remark'] != null
+          ? member!['remark']!
+          : member!['name'] ?? '';
+    } catch (e) {
+      // 异常处理：返回一个空字符串或增加日志记录
+      debugPrint('Error fetching display name: $e');
+      return '';
     }
   }
 
-  List<PopMenuItemModel> menuItems(String type) => [
-    // if (msg['msgContent']['type'] == 'text')
+  List<PopMenuItemModel> _menuItems(String type, {bool? toText = true}) => [
     if (type == 'text')
       PopMenuItemModel(
         title: '复制',
         icon: Icons.content_copy,
-        callback:
-        onTapCopy ?? (data) => debugPrint("data: ${data.toString()}"),
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapCopy?.call(data);
+        },
       ),
-    if (type == 'voice')
+    if (type == 'voice' && toText!)
       PopMenuItemModel(
         title: '转文字',
         icon: Icons.text_fields,
-        callback:
-        onTapVoice ?? (data) => debugPrint("data: ${data.toString()}"),
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapVoiceToText?.call(data);
+        },
       ),
+    if (type == 'voice' && !toText!)
+      PopMenuItemModel(
+        title: '隐藏',
+        icon: Icons.high_quality,
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapVoiceHiddenText?.call(data);
+        },
+      ),
+    if (type != 'call')
+      PopMenuItemModel(
+          title: '转发',
+          icon: Icons.send_sharp,
+          callback: (data) {
+            debugPrint("data: ${data.toString()}");
+            onTapRepost?.call(data);
+          }),
     PopMenuItemModel(
-        title: '转发',
-        icon: Icons.send,
-        callback: onTapRetransmission ??
-                (data) => debugPrint("data: ${data.toString()}")),
-    // PopMenuItemModel(
-    //     title: '收藏',
-    //     icon: Icons.collections,
-    //     callback: (data) {
-    //       debugPrint("data: " + data);
-    //     }),
+        title: '收藏',
+        icon: Icons.collections,
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapFavorite?.call(data);
+        }),
     PopMenuItemModel(
         title: '删除',
         icon: Icons.delete,
-        callback: onTapDelete ??
-                (data) => debugPrint("data: ${data.toString()}")),
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapDelete?.call(data);
+        }),
     if (msg['fromId'] == globalData.currentUserId)
       PopMenuItemModel(
           title: '撤回',
-          icon: Icons.reply,
-          callback: onTapRetract ??
-                  (data) => debugPrint("data: ${data.toString()}")),
-    // PopMenuItemModel(
-    //     title: '多选',
-    //     icon: Icons.playlist_add_check,
-    //     callback:  (data) {
-    //       debugPrint("data: ${data.toString()}");
-    //     }),
+          icon: Icons.reply_all,
+          callback: (data) {
+            debugPrint("data: ${data.toString()}");
+            onTapRetract?.call(data);
+          }),
+    PopMenuItemModel(
+        title: '多选',
+        icon: Icons.playlist_add_check,
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapMultipleChoice?.call(data);
+        }),
     PopMenuItemModel(
         title: '引用',
         icon: Icons.format_quote,
-        callback:
-        onTapCite ?? (data) => debugPrint("data: ${data.toString()}")),
-    // PopMenuItemModel(
-    //     title: '提醒',
-    //     icon: Icons.add_alert,
-    //     callback: (data) {
-    //       debugPrint("data: " + data);
-    //     }),
-    // PopMenuItemModel(
-    //     title: '搜一搜',
-    //     icon: Icons.search,
-    //     callback: (data) {
-    //       debugPrint("data: " + data);
-    //     }),
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapCite?.call(data);
+        }),
+    PopMenuItemModel(
+        title: '提醒',
+        icon: Icons.add_alert,
+        callback: (data) {
+          debugPrint("data: ${data.toString()}");
+          onTapRemind?.call(data);
+        }),
+    PopMenuItemModel(
+        title: '搜一搜',
+        icon: Icons.search,
+        callback: (data) {
+          debugPrint("data: ${data.toString()} ");
+          onTapSearch?.call(data);
+        }),
   ];
 
-  Widget getComponentByType(Map<String, dynamic> msg, bool isRight) {
-    if (kDebugMode) {
-      print('msg: ${msg['msgContent']['ext']}');
-    }
+  Widget _getComponentByType(Map<String, dynamic> msg, bool isRight) {
     String? type = msg['msgContent']['type'];
+    Map<String, dynamic>? content;
+    if (type == 'voice') content = jsonDecode(msg['msgContent']['content']);
     final messageMap = {
       'text': (String? username) => TextMessage(value: msg, isRight: isRight),
       'file': (String? username) => FileMessage(value: msg, isRight: isRight),
@@ -278,18 +333,23 @@ class ChatMessage extends StatelessThemeWidget {
           ? messageWidget
           : QuickPopUpMenu(
         showArrow: true,
-        useGridView: false,
+        // useGridView: false,
+        useGridView: true,
+        darkMode: true,
         pressType: PressType.longPress,
-        menuItems: menuItems(type!),
+        menuItems: _menuItems(type!,
+            toText: content != null
+                ? content['text'] == null || content['text'].isEmpty
+                : false),
         dataObj: messageWidget,
         child: GestureDetector(
           onTap: onTapMsg,
           child: messageWidget,
         ),
       );
-    } else {
+    } else
       // 异常处理
       return const Text('暂不支持该消息类型');
-    }
   }
 }
+

@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:label="林语">
+            android:name="${applicationName}"
+            android:icon="@mipmap/ic_launcher"
+            android:usesCleartextTraffic="true"
+            tools:targetApi="m"
+            android:label="林语">
         <activity
             android:name=".MainActivity"
             android:usesCleartextTraffic="true"

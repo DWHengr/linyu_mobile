@@ -7,12 +7,12 @@ import 'package:linyu_mobile/utils/date.dart';
 import 'package:linyu_mobile/utils/getx_config/config.dart';
 import 'logic.dart';
 
-class SearchInfoPage extends CustomWidgetNew<SearchInfoLogic> {
+class SearchInfoPage extends CustomView<SearchInfoLogic> {
   SearchInfoPage({super.key});
 
   //好友搜索详情页
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
+  Widget buildView(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFFF9FBFF),
         appBar: AppBar(
           backgroundColor: const Color(0xFFF9FBFF),
